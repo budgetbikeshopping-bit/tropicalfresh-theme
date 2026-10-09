@@ -1,0 +1,11 @@
+/*
+Theme Name: Scent in Motion
+Theme URI: https://tropicalfresh.nl
+Author: Tropical Fresh
+Description: Premium WooCommerce-thema voor Tropical Fresh. Grafiet, mineraalwit en chlorofyl-groen; Archivo, Instrument Sans en IBM Plex Mono. Gebouwd bovenop de bestaande WooCommerce-backend zonder die te wijzigen.
+Version: 1.0.0
+Requires PHP: 8.0
+Text Domain: scentinmotion
+*/
+
+/* Alle styling staat in assets/css/main.css (enqueued via functions.php). */

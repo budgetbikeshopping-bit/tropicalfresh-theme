@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Tropical Fresh monogram">
+  <!-- TF-monogram: T en F delen de stam; balken lossen naar rechts op in segmenten
+       (luchtstroom / geurverspreiding). Werkt in één kleur, ook op 16px. -->
+  <g fill="currentColor">
+    <!-- stam (gedeeld door T en F) -->
+    <rect x="16" y="10" width="8" height="44"/>
+    <!-- T-kap / F-toparm, oplossend naar rechts -->
+    <rect x="8"  y="10" width="34" height="7"/>
+    <rect x="45" y="10" width="6"  height="7"/>
+    <rect x="54" y="10" width="3"  height="7"/>
+    <!-- F-middenarm, oplossend naar rechts -->
+    <rect x="24" y="30" width="18" height="6"/>
+    <rect x="45" y="30" width="5"  height="6"/>
+    <rect x="53" y="30" width="2"  height="6"/>
+  </g>
+</svg>
