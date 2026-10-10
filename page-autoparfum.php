@@ -60,6 +60,7 @@ foreach ( $sim_slugs as $sim_slug ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/nieuwe-auto-geur/' ) ); ?>">De nieuwe-autogeur terughalen</a> &ndash; waar die showroomlucht vandaan komt en hoe je hem terugbrengt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-cadeau/' ) ); ?>">Autoparfum als cadeau</a> &ndash; voor wie het past en hoe je een geur kiest voor iemand anders.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">Hondengeur uit de auto halen</a> &ndash; grondig schoonmaken, drogen en fris houden als je hond meerijdt.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/condens-vocht-auto/' ) ); ?>">Vocht en condens in de auto</a> &ndash; waar het vocht zit, hoe je de auto droogt en de muffe lucht voorkomt.</li>
 			</ul>
 		</div>
 	</div>
