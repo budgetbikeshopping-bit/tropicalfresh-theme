@@ -723,7 +723,9 @@
   .pdp .stage { min-height: 0; height: 210px; }
   .pdp .stage .tilt { pointer-events: none; }
   .pdp .stage img.bottle { width: 240px; }
-  .pdp .stage .set-flesjes { --b: 31px; }
+  /* de drie cutouts zijn samen ongeveer 11,3 x --b breed (transparante rand
+     meegeteld); onder 8,6vw blijft dat binnen het scherm, ook op 320 px */
+  .pdp .stage .set-flesjes { --b: min(31px, 8.6vw); }
   .pdp .stage .set-flesjes .vrij-tag { bottom: -8px; font-size: 9px; padding: 3px 7px; }
   .pdp-info .mono-label { margin-bottom: 8px; }
   .pdp-info h1 { margin-bottom: 6px; }
