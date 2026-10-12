@@ -100,6 +100,23 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 }, 1000 );
 
+/**
+ * Pijlerpagina en geurwijzer tonen prijzen en voorraad, maar vallen niet onder de
+ * standaard LiteSpeed-purge bij een productwijziging. Purge ze mee zodra een product
+ * of een voorraadstatus verandert, anders blijft er een oude prijs in de cache staan.
+ * Zonder LiteSpeed Cache doet do_action hier niets.
+ */
+function sim_purge_prijspaginas() {
+	foreach ( array( 'autoparfum', 'geurwijzer' ) as $sim_pad ) {
+		$sim_pagina = get_page_by_path( $sim_pad );
+		if ( $sim_pagina ) {
+			do_action( 'litespeed_purge_post', $sim_pagina->ID );
+		}
+	}
+}
+add_action( 'woocommerce_update_product', 'sim_purge_prijspaginas' );
+add_action( 'woocommerce_product_set_stock_status', 'sim_purge_prijspaginas' );
+
 /* ---------- helpers ---------- */
 
 /**

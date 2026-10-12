@@ -456,6 +456,33 @@
 .page-content .art-beeld { margin: 24px 0; }
 .page-content .art-beeld img { border-radius: 4px; width: min(360px, 100%); height: auto; }
 
+/* koopstrook pijlerpagina: geuren en prijzen direct onder de H1, zonder beelden (snel) */
+.koopstrook { display: grid; gap: 8px; margin: 0 0 30px; }
+.koopstrook .ks-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 4px;
+  color: var(--ink);
+  transition: border-color var(--fast) var(--ease);
+}
+.koopstrook .ks-item:hover, .koopstrook .ks-item:focus-visible { border-color: var(--chloro-deep); }
+.koopstrook .ks-item.is-set { border-color: rgba(35, 102, 47, 0.45); }
+.koopstrook .ks-stip { width: 14px; height: 14px; border-radius: 50%; background: var(--alu); }
+.koopstrook .is-vanilla .ks-stip { background: #d6bb84; }
+.koopstrook .is-apple .ks-stip { background: #92c48a; }
+.koopstrook .is-set .ks-stip { background: linear-gradient(90deg, #d6bb84 50%, #92c48a 50%); }
+.koopstrook .ks-naam { display: flex; flex-direction: column; min-width: 0; line-height: 1.35; }
+.koopstrook .ks-naam b { font-family: var(--display); font-weight: 640; font-size: 16px; }
+.koopstrook .ks-naam span { font-size: 12.5px; color: var(--ink-soft); }
+.koopstrook .ks-prijs { font-family: var(--display); font-weight: 640; font-size: 18px; white-space: nowrap; }
+.koopstrook .ks-pijl { color: var(--chloro-deep); font-size: 15px; }
+.koopstrook .ks-noot { margin: 2px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+
 /* screenreader */
 .screen-reader-text {
   clip: rect(1px, 1px, 1px, 1px);
