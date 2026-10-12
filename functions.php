@@ -51,6 +51,55 @@ add_action( 'wp_head', function () {
 	}
 }, 2 );
 
+/**
+ * Snelheid: render-blokkerende CSS die op de pagina niets doet uit de wachtrij
+ * (PSI mobiel 12 okt: ruim 750 ms aan blokkerende verzoeken). Alleen wat aantoonbaar
+ * ongebruikt is; de WooCommerce-basis-CSS blijft staan en LiteSpeed-combinatie blijft uit.
+ * - Blokbibliotheek en Stackable: alleen weg op templates die geen post-inhoud tonen.
+ * - Contact Form 7: alleen laden op pagina's met een formulier.
+ * - Adres-autocomplete: hoort bij afrekenen, account en winkelwagen.
+ * - Merkstijlen: het thema toont nergens merkblokken.
+ * - Express-checkout-CSS op de PDP: de bijbehorende scripts gaan daar al uit (zie verderop).
+ */
+function sim_toont_geen_postinhoud() {
+	if ( is_front_page() || is_page( array( 'autoparfum', 'geurwijzer' ) ) ) {
+		return true;
+	}
+	return function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() );
+}
+
+/** Staat er een Contact Form 7-formulier op deze pagina? */
+function sim_pagina_heeft_cf7() {
+	if ( is_page( array( 'contact', 'retourneren' ) ) ) {
+		return true;
+	}
+	$sim_obj = get_queried_object();
+	return is_singular() && $sim_obj instanceof WP_Post && false !== strpos( (string) $sim_obj->post_content, 'contact-form-7' );
+}
+
+add_action( 'wp_enqueue_scripts', function () {
+	if ( sim_toont_geen_postinhoud() ) {
+		wp_dequeue_style( 'wp-block-library' );
+		wp_dequeue_style( 'ugb-style-css' );
+		wp_dequeue_style( 'ugb-style-css-responsive' );
+	}
+	if ( ! sim_pagina_heeft_cf7() ) {
+		wp_dequeue_style( 'contact-form-7' );
+		wp_dequeue_script( 'contact-form-7' );
+		wp_dequeue_script( 'swv' );
+	}
+	$sim_adres = function_exists( 'is_checkout' ) && ( is_checkout() || is_account_page() || is_cart() );
+	if ( ! $sim_adres ) {
+		wp_dequeue_style( 'wc-address-autocomplete' );
+		wp_dequeue_script( 'wc-address-autocomplete' );
+		wp_dequeue_script( 'wc-address-autocomplete-common' );
+	}
+	wp_dequeue_style( 'brands-styles' );
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		wp_dequeue_style( 'WCPAY_EXPRESS_CHECKOUT_ECE' );
+	}
+}, 1000 );
+
 /* ---------- helpers ---------- */
 
 /** Vrijgestelde productfoto per slug; valt terug op de featured image. */
