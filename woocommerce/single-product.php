@@ -85,7 +85,11 @@ while ( have_posts() ) :
 		<div class="stage<?php echo ( $sim_is_duo && $sim_set_ok ) ? ' is-set' : ''; ?>" data-tilt="9" style="--tint: <?php echo esc_attr( $sim_tint ); ?>">
 			<div class="backplate"></div>
 			<div class="gridlines"></div>
-			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
+			<?php if ( $sim_is_duo && $sim_set_ok && $product->get_image_id() && get_post_meta( $product->get_image_id(), '_sim_studio_wit', true ) ) : ?>
+				<div class="tilt"><div class="float">
+					<div class="set-foto"><?php echo sim_product_visual( $product, 'woocommerce_single', true ); // phpcs:ignore ?><span class="set-badge">2+1 &middot; 3e flesje gratis</span></div>
+				</div></div>
+			<?php elseif ( $sim_is_duo && $sim_set_ok ) : ?>
 				<?php
 				// De set is drie flesjes; het duo-beeld toont er twee. Daarom hier de drie
 				// losse productfoto's naast elkaar, het derde flesje gemarkeerd als gratis.

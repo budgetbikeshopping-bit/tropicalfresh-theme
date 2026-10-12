@@ -82,7 +82,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 	<div class="stage" data-tilt="9" style="--tint: rgba(230,217,189,0.14)">
 		<div class="backplate"></div>
 		<div class="gridlines"></div>
-		<div class="tilt"><div class="float"><?php echo $hero ? sim_product_visual( $hero, 'woocommerce_single', true ) : ''; // phpcs:ignore ?></div></div>
+		<div class="tilt"><div class="float"><?php echo $hero ? sim_product_visual( $hero, 'woocommerce_single', true, false ) : ''; // phpcs:ignore ?></div></div>
 		<div class="shadow"></div>
 		<span class="spec">TF&nbsp;/&nbsp;01&nbsp;&middot;&nbsp;60&nbsp;ML</span>
 	</div>
@@ -120,12 +120,12 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3-720.mp4' ); ?>"
 			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3-800.jpg' ); ?>">
 			<div class="bottles">
-				<div class="b"><?php echo sim_product_visual( $sim_vanilla, 'woocommerce_thumbnail' ); // phpcs:ignore ?></div>
+				<div class="b"><?php echo sim_product_visual( $sim_vanilla, 'woocommerce_thumbnail', false, false ); // phpcs:ignore ?></div>
 				<span class="plus">+</span>
-				<div class="b"><?php echo sim_product_visual( $sim_apple, 'woocommerce_thumbnail' ); // phpcs:ignore ?></div>
+				<div class="b"><?php echo sim_product_visual( $sim_apple, 'woocommerce_thumbnail', false, false ); // phpcs:ignore ?></div>
 				<span class="plus">+</span>
 				<div class="b is-vrij">
-					<?php echo sim_product_visual( $sim_apple, 'woocommerce_thumbnail' ); // phpcs:ignore ?>
+					<?php echo sim_product_visual( $sim_apple, 'woocommerce_thumbnail', false, false ); // phpcs:ignore ?>
 					<span class="vrij-tag">Gratis</span>
 				</div>
 			</div>
