@@ -55,7 +55,8 @@ add_action( 'wp_head', function () {
  * Snelheid: render-blokkerende CSS die op de pagina niets doet uit de wachtrij
  * (PSI mobiel 12 okt: ruim 750 ms aan blokkerende verzoeken). Alleen wat aantoonbaar
  * ongebruikt is; de WooCommerce-basis-CSS blijft staan en LiteSpeed-combinatie blijft uit.
- * - Blokbibliotheek en Stackable: alleen weg op templates die geen post-inhoud tonen.
+ * - Blokbibliotheek en Stackable: alleen weg op templates die geen post-inhoud tonen;
+ *   de blokbibliotheek ook op productpagina's waarvan de beschrijving geen blokken bevat.
  * - Contact Form 7: alleen laden op pagina's met een formulier.
  * - Adres-autocomplete: hoort bij afrekenen, account en winkelwagen.
  * - Merkstijlen: het thema toont nergens merkblokken.
@@ -78,8 +79,12 @@ function sim_pagina_heeft_cf7() {
 }
 
 add_action( 'wp_enqueue_scripts', function () {
-	if ( sim_toont_geen_postinhoud() ) {
+	// PDP: de beschrijving is klassieke HTML; zodra er blokken in staan blijft de bibliotheek.
+	$sim_pdp_zonder_blokken = function_exists( 'is_product' ) && is_product() && ! has_blocks( get_queried_object_id() );
+	if ( sim_toont_geen_postinhoud() || $sim_pdp_zonder_blokken ) {
 		wp_dequeue_style( 'wp-block-library' );
+	}
+	if ( sim_toont_geen_postinhoud() ) {
 		wp_dequeue_style( 'ugb-style-css' );
 		wp_dequeue_style( 'ugb-style-css-responsive' );
 	}
