@@ -30,24 +30,53 @@ foreach ( $sim_products as $p ) {
 	}
 }
 $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
+
+/*
+ * Prijs- en aanbodregel: live uit WooCommerce, nooit een doorgestreepte prijs.
+ * De 2+1 set (Creamy Vanilla + Juicy Green Apple, extra Apple gratis) tonen we alleen
+ * als de gratis fles ook echt mee kan: sim_promo_reconcile() begrenst die op de
+ * Apple-voorraad, dus bij beheerde voorraad moeten er minstens 2 Apples zijn.
+ */
+$sim_drempel = 17.90; // gratis verzending vanaf; gelijk aan de verzendinstelling en de voortgangsbalk in de winkelwagen
+$sim_set_ok  = $sim_promo && $sim_vanilla && $sim_apple
+	&& ( ! $sim_apple->managing_stock() || (int) $sim_apple->get_stock_quantity() >= 2 );
+$sim_losse   = array();
+foreach ( array( $sim_vanilla, $sim_apple ) as $p ) {
+	if ( $p ) {
+		$sim_losse[] = (float) wc_get_price_to_display( $p );
+	}
+}
+$sim_set_som    = $sim_set_ok ? array_sum( $sim_losse ) : 0.0;
+$sim_set_gratis = $sim_set_som > 0 && (int) round( $sim_set_som * 100 ) >= (int) round( $sim_drempel * 100 );
+$sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round( $x * 100 ), $sim_losse ) ) );
 ?>
 
-<!-- 01 HERO -->
+<!-- 01 HERO: op mobiel eerst kop, prijs en knop; het podium volgt eronder -->
 <section class="hero wrap">
 	<div class="hero-copy">
-		<span class="mono-label">Nederlands autoparfum &middot; 60 ml sprays</span>
+		<span class="mono-label">Autoparfum &middot; 60 ml sprays</span>
 		<h1>Autoparfum dat je rit <span class="accent">verandert.</span></h1>
-		<p class="lead">Ontdek Creamy Vanilla en Juicy Green Apple. Twee geuren. E&eacute;n frisse rit.</p>
+		<?php if ( $sim_losse ) : ?>
+		<p class="hero-prijs">
+			<span><?php echo $sim_gelijk ? 'Per spray van 60 ml: ' : 'Vanaf '; ?><b><?php echo wp_kses_post( wc_price( min( $sim_losse ) ) ); ?></b><?php echo $sim_gelijk ? '' : ' per spray van 60 ml'; ?></span>
+			<?php if ( $sim_set_ok ) : ?>
+			<span class="hero-set">2+1 set: 3 flesjes voor <b><?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?></b><?php echo $sim_set_gratis ? ' met gratis&nbsp;verzending' : ''; ?></span>
+			<?php endif; ?>
+		</p>
+		<?php endif; ?>
+		<p class="lead">Creamy Vanilla, warm en zoet. Juicy Green Apple, fris en fruitig.</p>
 		<div class="cta-row">
+			<?php if ( $sim_set_ok ) : ?>
+			<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
+			<a class="btn btn-outline" href="#geuren">Bekijk de geuren</a>
+			<?php else : ?>
 			<a class="btn btn-primary" href="#geuren">Bekijk de geuren</a>
-			<?php if ( $sim_promo ) : ?>
-			<a class="btn btn-outline" href="#actie">Profiteer van de 2+1 actie</a>
 			<?php endif; ?>
 		</div>
 		<div class="hero-facts">
 			<span>60 ml per spray</span>
-			<span>Tot 2 dagen per spraybeurt</span>
-			<span>Vlekvrij op leer en stof</span>
+			<span>Tot 2 dagen geur per spraybeurt</span>
+			<span>Vlekvrij getest op leer, stof en kunststof</span>
 		</div>
 	</div>
 	<div class="stage" data-tilt="9" style="--tint: rgba(230,217,189,0.14)">
@@ -63,30 +92,33 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 <div class="trust">
 	<div class="wrap">
 		<div class="item"><b>Gratis verzending</b><span>bij bestellingen vanaf &euro; 17,90</span></div>
-		<div class="item"><b>Snelle levering</b><span>door heel Nederland</span></div>
+		<div class="item"><b>Bezorging</b><span>doorgaans in 2 tot 4 werkdagen</span></div>
 		<div class="item"><b>14 dagen retourrecht</b><span>ongebruikt en verzegeld</span></div>
-		<div class="item"><b>Vlekvrij</b><span>op leer, stof en kunststof</span></div>
+		<div class="item"><b>Vlekvrij getest</b><span>op leer, stof en kunststof</span></div>
 	</div>
 </div>
 
-<!-- 02 CAMPAGNE -->
-<?php if ( $sim_promo && $sim_vanilla && $sim_apple ) : ?>
+<!-- 02 2+1 SET (hoofdaanbod) -->
+<?php if ( $sim_set_ok ) : ?>
 <section id="actie" class="campaign">
 	<div class="wrap frame">
 		<div class="copy">
-			<span class="mono-label">Actie &middot; automatisch in je winkelwagen</span>
+			<span class="mono-label">2+1 set &middot; geen code nodig</span>
 			<h2 class="camp-title">2 kiezen.<br>3 ontvangen.</h2>
-			<p class="lead">Combineer Creamy Vanilla met Juicy Green Apple en ontvang een extra Juicy Green Apple van ons. Geen code nodig.</p>
+			<p class="lead">Combineer Creamy Vanilla met Juicy Green Apple en ontvang een extra Juicy Green Apple van ons. De gratis fles komt automatisch in je winkelwagen.</p>
 			<div class="camp-sum mono">
 				<span>01 &middot; Creamy Vanilla 60 ml</span>
 				<span>02 &middot; Juicy Green Apple 60 ml</span>
 				<span class="vrij">03 &middot; Juicy Green Apple 60 ml &middot; gratis</span>
 			</div>
-			<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Pak de 2+1 deal</a>
+			<p class="camp-prijs"><b><?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?></b> voor 3 flesjes<?php echo $sim_set_gratis ? ' &middot; gratis&nbsp;verzending' : ''; ?></p>
+			<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
 		</div>
 		<div class="camp-media"
 			data-sim-video="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3.mp4' ); ?>"
-			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3.jpg' ); ?>">
+			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3.jpg' ); ?>"
+			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3-720.mp4' ); ?>"
+			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3-800.jpg' ); ?>">
 			<div class="bottles">
 				<div class="b"><?php echo sim_product_visual( $sim_vanilla, 'woocommerce_thumbnail' ); // phpcs:ignore ?></div>
 				<span class="plus">+</span>
@@ -102,12 +134,18 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 </section>
 <script>
 /* Campagnevideo op alle schermformaten; alleen databesparing en reduced-motion
-   houden de flesjes-visual (dan wordt niets extra's gedownload). */
+   houden de flesjes-visual (dan wordt niets extra's gedownload). De video wordt
+   pas ingevoegd als de sectie in de buurt komt (wie niet scrolt, laadt niets) en
+   tot 1023px breed krijgt de bezoeker een lichtere versie (720 px breed) en poster. */
 (function () {
 	var m = document.querySelector('.camp-media');
 	if (!m || !window.matchMedia) return;
 	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 	if (navigator.connection && navigator.connection.saveData) return;
+	var klein = window.matchMedia('(max-width: 1023px)').matches;
+	function bron(naam) {
+		return (klein && m.getAttribute(naam + '-mobiel')) || m.getAttribute(naam);
+	}
 	var done = false;
 	function inject() {
 		if (done) return;
@@ -116,8 +154,8 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 		v.muted = true; v.loop = true; v.playsInline = true;
 		v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
 		v.preload = 'metadata';
-		v.poster = m.getAttribute('data-sim-poster');
-		v.src = m.getAttribute('data-sim-video');
+		v.poster = bron('data-sim-poster');
+		v.src = bron('data-sim-video');
 		v.className = 'camp-video';
 		v.setAttribute('aria-label', 'Promovideo van Tropical Fresh autoparfum');
 		m.classList.add('has-video');
@@ -146,7 +184,17 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 			v.play && v.play().catch(function () {});
 		}
 	}
-	inject();
+	if ('IntersectionObserver' in window) {
+		var nabij = new IntersectionObserver(function (es) {
+			if (es[0].isIntersecting) {
+				nabij.disconnect();
+				inject();
+			}
+		}, { rootMargin: '300px 0px' });
+		nabij.observe(m);
+	} else {
+		inject();
+	}
 })();
 </script>
 <?php endif; ?>
@@ -182,12 +230,12 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 			<div class="mod-copy">
 				<span class="mono-label"><?php echo esc_html( sprintf( '%02d / %s', $sim_i, strtoupper( preg_replace( '/^(Creamy|Juicy)\s+/i', '', sim_short_name( $p ) ) ) ) ); ?></span>
 				<h3><?php echo esc_html( sim_short_name( $p ) ); ?></h3>
-				<?php if ( $sim_promo && 'juicy-green-apple-autoparfum' === $p->get_slug() ) : ?>
+				<?php if ( $sim_set_ok && 'juicy-green-apple-autoparfum' === $p->get_slug() ) : ?>
 					<span class="promo-chip">2+1: extra Apple gratis</span>
 				<?php endif; ?>
 				<p class="woorden"><?php echo esc_html( implode( ' ', $sim_woorden ) ); ?></p>
 				<div class="mod-foot">
-					<span class="price"><?php echo wp_kses_post( $p->get_price_html() ); ?><span class="per">60 ml</span></span>
+					<span class="price"><?php echo wp_kses_post( wc_price( wc_get_price_to_display( $p ) ) ); ?><span class="per">60 ml</span></span>
 					<div class="mod-acties">
 						<a href="<?php echo esc_url( $p->add_to_cart_url() ); ?>" data-quantity="1"
 							class="btn btn-primary add_to_cart_button ajax_add_to_cart"
@@ -213,8 +261,8 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 			<div class="why reveal">
 				<span class="mono-label">Waarom spray</span>
 				<h2 style="margin: 16px 0 20px;">Geen hangertje aan je spiegel.</h2>
-				<p class="lead">Een spray werkt direct en laat niets aan je interieur bungelen. Jij bepaalt zelf de intensiteit: meer sprays voor een vollere geur, minder voor subtiel.</p>
-				<p class="lead">Elke geur is getest op leer, stof en kunststof en laat geen vlekken of resten achter.</p>
+				<p class="lead">Een spray laat niets aan je interieur bungelen. Jij bepaalt zelf de intensiteit: meer sprays voor een vollere geur, minder voor subtiel.</p>
+				<p class="lead">Elke geur is vlekvrij getest op leer, stof en kunststof.</p>
 			</div>
 			<div class="steps reveal">
 				<div class="step"><span class="n">STAP 01</span><div><h3>Spray</h3><p>Twee tot drie keer in het interieur, bijvoorbeeld op de matten of onder de stoel.</p></div></div>
@@ -232,13 +280,15 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 			<span class="mono-label">Ons verhaal</span>
 			<h2 style="margin: 16px 0 20px;">Klein merk. E&eacute;n obsessie.</h2>
 			<p class="lead">Tropical Fresh is een Nederlands merk uit Leiden met &eacute;&eacute;n overtuiging: je auto is een ruimte waar je echt tijd doorbrengt, dus de geur verdient dezelfde aandacht als het interieur.</p>
-			<p class="lead">Daarom houden we de collectie klein en testen we elke geur uitvoerig in echte auto's voordat hij in de shop komt.</p>
+			<p class="lead">Daarom houden we de collectie klein en is elke geur vlekvrij getest op leer, stof en kunststof.</p>
 		</div>
 		<div class="facts reveal">
-			<div><span>Merk</span><b>Tropical Fresh B.V.</b></div>
+			<div><span>Merk</span><b>Tropical Fresh</b></div>
+			<div><span>Onderneming</span><b>Budget Bike XL B.V.</b></div>
 			<div><span>Thuisbasis</span><b>Leiden, Nederland</b></div>
 			<div><span>Formaat</span><b>60 ml spray</b></div>
-			<div><span>Contact</span><b>info@tropicalfresh.nl</b></div>
+			<div><span>KvK</span><b>68069758</b></div>
+			<div><span>Contact</span><b><a href="mailto:info@tropicalfresh.nl">info@tropicalfresh.nl</a></b></div>
 		</div>
 	</div>
 </section>
@@ -251,12 +301,29 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
 			<h2>Voordat je bestelt.</h2>
 		</div>
 		<div class="list reveal">
-			<details class="acc"><summary>Hoe gebruik ik autoparfum?</summary><div class="body">Spray twee tot drie keer in het interieur van je auto. De geur verspreidt zich direct en blijft tot twee dagen hangen. Meer uitleg vind je op onze <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a>.</div></details>
-			<details class="acc"><summary>Hoe werkt de 2+1 actie?</summary><div class="body">Leg Creamy Vanilla en Juicy Green Apple samen in je winkelwagen; wij voegen automatisch een extra Juicy Green Apple van &euro; 0,00 toe. Geen code nodig, en de actie geldt per combinatie.</div></details>
-			<details class="acc"><summary>Waar spray ik het?</summary><div class="body">Op leer, stof of kunststof, bijvoorbeeld op de matten of onder de stoel. De sprays zijn vlekvrij en laten geen resten achter.</div></details>
-			<details class="acc"><summary>Hoe lang blijft de geur hangen?</summary><div class="body">Tot twee dagen per spraybeurt. Met normaal gebruik doe je ongeveer twee maanden met &eacute;&eacute;n flesje van 60 ml.</div></details>
-			<details class="acc"><summary>Hoe snel wordt mijn bestelling verzonden?</summary><div class="body">We verzenden snel door heel Nederland. Vanaf &euro; 17,90 is de verzending gratis; daaronder betaal je &euro; 4,95 verzendkosten.</div></details>
+			<details class="acc"><summary>Hoe gebruik ik autoparfum?</summary><div class="body">Spray twee tot drie keer in het interieur van je auto, bijvoorbeeld op de matten of onder de stoel. Je hebt tot twee dagen geur per spraybeurt. Meer uitleg vind je op onze <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a>.</div></details>
+			<?php if ( $sim_set_ok ) : ?>
+			<details class="acc"><summary>Hoe werkt de 2+1 set?</summary><div class="body">Leg Creamy Vanilla en Juicy Green Apple samen in je winkelwagen; wij voegen automatisch een extra Juicy Green Apple van &euro; 0,00 toe. Zo krijg je 3 flesjes voor <?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?><?php echo $sim_set_gratis ? ' met gratis verzending' : ''; ?>. Geen code nodig, en de 2+1 geldt per combinatie. Met de <a href="<?php echo esc_url( sim_duo_url() ); ?>">2+1 set</a> leg je beide geuren in &eacute;&eacute;n keer in je winkelwagen.</div></details>
+			<?php endif; ?>
+			<details class="acc"><summary>Waar spray ik het?</summary><div class="body">Bijvoorbeeld op de matten of onder de stoel. Elke geur is vlekvrij getest op leer, stof en kunststof.</div></details>
+			<details class="acc"><summary>Hoe lang blijft de geur hangen?</summary><div class="body">Tot twee dagen geur per spraybeurt. Daarna spray je gewoon opnieuw.</div></details>
+			<details class="acc"><summary>Hoe snel wordt mijn bestelling verzonden?</summary><div class="body">Je bestelling wordt doorgaans binnen 2 tot 4 werkdagen bezorgd, overal in Nederland. Vanaf &euro; 17,90 is de verzending gratis; daaronder betaal je &euro; 4,95 verzendkosten.</div></details>
 			<details class="acc"><summary>Wat als een geur niet bij mij past?</summary><div class="body">Je hebt 14 dagen retourrecht. Ongebruikte producten in originele, verzegelde verpakking kun je aanmelden via onze retourpagina.</div></details>
+		</div>
+	</div>
+</section>
+
+<!-- 08 VOLG ONS: na de FAQ, zodat bezoekers eerst producten en antwoorden zien -->
+<?php $sim_kanalen = sim_sociale_kanalen(); ?>
+<section class="light volg">
+	<div class="wrap volg-inner">
+		<div class="reveal">
+			<span class="mono-label">Volg ons</span>
+			<h2>Tropical Fresh op TikTok en Instagram.</h2>
+		</div>
+		<div class="reveal">
+			<?php echo sim_sociale_links( 'sociaal', array( 'tiktok', 'instagram' ), true ); // phpcs:ignore ?>
+			<p class="volg-yt">Ook op YouTube: <a href="<?php echo esc_url( $sim_kanalen['youtube']['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $sim_kanalen['youtube']['handle'] ); ?></a></p>
 		</div>
 	</div>
 </section>

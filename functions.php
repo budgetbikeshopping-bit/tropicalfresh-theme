@@ -82,7 +82,7 @@ function sim_product_character( $product ) {
 	$map = array(
 		'creamy-vanilla-autoparfum'    => 'Warm. Zacht. Vertrouwd. De geur van thuiskomen, ook onderweg.',
 		'juicy-green-apple-autoparfum' => 'Fris. Helder. Energiek. Frisse lucht op bestelling.',
-		'shiny-new-car-autoparfum'     => 'Clean. Modern. Herkenbaar. De iconische nieuwe-autogeur.',
+		'shiny-new-car-autoparfum'     => 'Strak. Modern. Herkenbaar. De geur van een nieuwe auto.',
 		'autoparfum-valuepack'         => 'Alle drie de geuren in één set.',
 		'tropical-fresh-duo'           => 'Vanilla en Apple samen, met een extra Apple gratis.',
 	);
@@ -132,6 +132,60 @@ function sim_pack_img( $key, $sizes = '(max-width: 767px) 92vw, 46vw', $eager = 
 function sim_logo_svg() {
 	return '<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><g fill="currentColor"><rect x="16" y="10" width="8" height="44"/><rect x="8" y="10" width="34" height="7"/><rect x="45" y="10" width="6" height="7"/><rect x="54" y="10" width="3" height="7"/><rect x="24" y="30" width="18" height="6"/><rect x="45" y="30" width="5" height="6"/><rect x="53" y="30" width="2" height="6"/></g></svg>';
 }
+
+/**
+ * Sociale kanalen van Tropical Fresh: een bron voor de footer, de homepage,
+ * de shortcode [sim_social] en het organisatieschema (sameAs).
+ * Bewust zonder volgersaantallen en zonder embeds (geen cookies van derden).
+ */
+function sim_sociale_kanalen() {
+	return array(
+		'tiktok'    => array(
+			'naam'   => 'TikTok',
+			'handle' => '@tropicalfresh_nl',
+			'url'    => 'https://www.tiktok.com/@tropicalfresh_nl',
+			'icoon'  => '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.69 5.69 0 1 0 5.69 5.68V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48z"/></svg>',
+		),
+		'instagram' => array(
+			'naam'   => 'Instagram',
+			'handle' => '@tropicalfresh.nl',
+			'url'    => 'https://www.instagram.com/tropicalfresh.nl/',
+			'icoon'  => '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/></svg>',
+		),
+		'youtube'   => array(
+			'naam'   => 'YouTube',
+			'handle' => 'Tropical Fresh',
+			'url'    => 'https://www.youtube.com/channel/UCqnlCEmGxS0Z-6bOJiOKSmA',
+			'icoon'  => '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M23 7.5s-.22-1.56-.9-2.24c-.86-.9-1.82-.9-2.26-.96C16.7 4.08 12 4.08 12 4.08h-.01s-4.7 0-7.84.22c-.44.05-1.4.06-2.26.96C1.21 5.94 1 7.5 1 7.5S.78 9.33.78 11.16v1.66C.78 14.66 1 16.5 1 16.5s.21 1.56.89 2.24c.86.9 2 .87 2.5.97 1.81.17 7.61.22 7.61.22s4.71-.01 7.84-.23c.44-.05 1.4-.06 2.26-.96.68-.68.9-2.24.9-2.24s.22-1.84.22-3.67v-1.67C23.22 9.33 23 7.5 23 7.5zM9.68 14.93V8.86l6.08 3.05-6.08 3.02z"/></svg>',
+		),
+	);
+}
+
+/**
+ * Lijst met sociale links: per kanaal het icoon plus de zichtbare naam, optioneel
+ * met het accountnaampje erachter. $kanalen beperkt de lijst (leeg = alle kanalen).
+ */
+function sim_sociale_links( $class = 'sociaal', $kanalen = array(), $met_handle = false ) {
+	$items = '';
+	foreach ( sim_sociale_kanalen() as $sleutel => $kanaal ) {
+		if ( $kanalen && ! in_array( $sleutel, $kanalen, true ) ) {
+			continue;
+		}
+		$items .= sprintf(
+			'<li><a href="%1$s" target="_blank" rel="noopener">%2$s<span class="s-naam">%3$s</span>%4$s</a></li>',
+			esc_url( $kanaal['url'] ),
+			$kanaal['icoon'],
+			esc_html( $kanaal['naam'] ),
+			$met_handle ? '<span class="s-handle">' . esc_html( $kanaal['handle'] ) . '</span>' : ''
+		);
+	}
+	return $items ? '<ul class="' . esc_attr( $class ) . '">' . $items . '</ul>' : '';
+}
+
+/** [sim_social]: de kanalen met naam, voor bijvoorbeeld de contactpagina of over ons. */
+add_shortcode( 'sim_social', function () {
+	return sim_sociale_links( 'sociaal', array(), true );
+} );
 
 /* ---------- WooCommerce presentatie ---------- */
 
@@ -264,11 +318,10 @@ add_filter( 'rank_math/json_ld', function ( $data ) {
 				'addressCountry'  => 'NL',
 			);
 			$data[ $sim_key ]['email'] = 'info@tropicalfresh.nl';
-			$data[ $sim_key ]['sameAs'] = array(
-				'https://www.tiktok.com/@tropicalfresh_nl',
-				'https://www.instagram.com/tropicalfresh.nl/',
-				'https://www.youtube.com/channel/UCqnlCEmGxS0Z-6bOJiOKSmA',
-			);
+			// Tropical Fresh is een handelsnaam van Budget Bike XL B.V. (KvK 68069758).
+			$data[ $sim_key ]['legalName'] = 'Budget Bike XL B.V.';
+			$data[ $sim_key ]['vatID']     = 'NL857288799B01';
+			$data[ $sim_key ]['sameAs'] = array_values( wp_list_pluck( sim_sociale_kanalen(), 'url' ) );
 			unset( $data[ $sim_key ]['openingHours'], $data[ $sim_key ]['openingHoursSpecification'] );
 		}
 	}

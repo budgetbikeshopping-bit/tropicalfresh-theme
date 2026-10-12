@@ -308,17 +308,31 @@ h3 { font-size: var(--t-h3); font-weight: 600; line-height: 1.15; letter-spacing
 .hero-copy h1 { margin-bottom: 26px; max-width: 13ch; }
 .hero-copy h1 .accent { color: inherit; }
 .hero-copy .lead { margin-bottom: 40px; }
+/* prijs- en aanbodregel direct onder de kop: groen is hier een echt signaal (prijs) */
+.hero-prijs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: -6px 0 22px;
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.5;
+  color: var(--mineral);
+}
+.hero-prijs b { font-family: var(--display); font-weight: 640; font-stretch: 106%; }
+.hero-prijs .hero-set { color: var(--chloro); }
 .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
 .hero-facts {
   margin-top: 56px;
   display: flex;
-  gap: 34px;
+  flex-wrap: wrap;
+  gap: 12px 34px;
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--alu-dark);
 }
+.hero-facts span { white-space: nowrap; }
 
 /* 3D-podium */
 .stage {
@@ -730,6 +744,41 @@ details.acc .body {
 .dark-acc details.acc .body,
 .pdp details.acc .body { color: var(--alu); }
 
+/* ---------- volg ons (homepage, na de FAQ) en [sim_social] ---------- */
+
+.volg { border-top: 1px solid var(--line-light); padding: clamp(48px, 7vh, 80px) 0; }
+.volg-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px 40px;
+  align-items: center;
+}
+.volg h2 { font-size: clamp(24px, 2.6vw, 34px); margin-top: 12px; }
+.volg-yt { margin-top: 12px; font-size: 13.5px; color: var(--ink-soft); }
+.volg-yt a { text-decoration: underline; text-underline-offset: 3px; }
+.volg-yt a:hover { color: var(--chloro-deep); }
+
+ul.sociaal, .page-content ul.sociaal { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.sociaal a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--line-dark-strong);
+  border-radius: 2px;
+  color: var(--mineral);
+  font-weight: 600;
+  font-size: 14.5px;
+  text-decoration: none;
+  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+.sociaal a:hover { border-color: var(--chloro); color: var(--chloro); }
+.sociaal .s-handle { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--alu); }
+.light .sociaal a { border-color: var(--line-light); color: var(--ink); text-decoration: none; }
+.light .sociaal a:hover { border-color: var(--chloro-deep); color: var(--chloro-deep); }
+.light .sociaal .s-handle { color: var(--alu-dark); }
+
 /* ---------- nieuwsbrief ---------- */
 
 .newsletter {
@@ -771,9 +820,19 @@ footer { background: var(--graphite-950); padding: clamp(48px, 7vh, 80px) 0 36px
   border-bottom: 1px solid var(--line-dark);
 }
 .foot-grid .brand { margin-bottom: 16px; }
-.foot-social { display: flex; gap: 18px; margin-top: 18px; }
-.foot-social a { color: var(--alu-dark); display: inline-flex; transition: color 0.2s ease; }
-.foot-social a:hover { color: var(--chlorophyl, #a3e635); }
+/* sociale kanalen: icoon plus zichtbare naam */
+.foot-grid h5.foot-volg { margin: 24px 0 8px; }
+.foot-social { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 22px; }
+.foot-grid .foot-social li { margin-bottom: 0; }
+.foot-grid .foot-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  color: var(--alu);
+  transition: color var(--fast) var(--ease);
+}
+.foot-grid .foot-social a:hover { color: var(--chloro); }
 .foot-grid > div > p { color: var(--alu-dark); font-size: 13.5px; max-width: 30ch; }
 .foot-grid h5 {
   font-family: var(--mono);
@@ -799,6 +858,8 @@ footer { background: var(--graphite-950); padding: clamp(48px, 7vh, 80px) 0 36px
   font-size: 11px;
   letter-spacing: 0.08em;
 }
+.foot-base .foot-bedrijf { max-width: 92ch; line-height: 1.7; color: var(--alu); }
+.foot-base .foot-bedrijf a:hover { color: var(--mineral); }
 
 /* ---------- productpagina ---------- */
 
@@ -940,8 +1001,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 @media (max-width: 1023px) {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero { grid-template-columns: 1fr; }
-  .hero-copy { order: 1; }
-  .hero .stage { order: 0; min-height: 340px; }
+  .hero-copy { order: 0; }
+  .hero .stage { order: 1; min-height: 340px; }
   .explorer .frame { grid-template-columns: 1fr; }
   .explorer .stage { border-left: 0; border-top: 1px solid var(--line-dark); min-height: 380px; }
   .valuepack .frame { grid-template-columns: 1fr; }
@@ -953,7 +1014,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .foot-grid { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 600px) {
+/* aankondigingsbalk blijft op een regel; de extra's passen pas vanaf 820px */
+@media (max-width: 819px) {
   .announce { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .announce .a-extra { display: none; }
 }
@@ -965,14 +1027,25 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .pdp .stage img.bottle { width: min(370px, 80vw); }
   .valuepack .stage img.bottle { width: min(400px, 82vw); }
   .card .photo img { width: min(200px, 52vw); }
-  .hero .stage { min-height: 400px; }
+  /* eerste scherm (390x664): kop, prijsregel en knop boven de vouw */
+  .hero { padding-top: 24px; gap: 0; }
+  .hero-copy .mono-label { margin-bottom: 12px; }
+  .hero-copy h1 { margin-bottom: 16px; }
+  .hero-copy .lead { margin-bottom: 20px; }
+  .hero .cta-row { gap: 10px; }
+  .hero .cta-row .btn { flex: 1 1 100%; }
+  .hero-facts { margin-top: 26px; }
+  .hero-facts span { white-space: normal; }
+  .hero .stage { min-height: 320px; }
+  .hero .tilt img.bottle { width: min(280px, 68vw); }
+  .volg-inner { grid-template-columns: 1fr; }
 
   .site-nav { display: none; }
   .head-tools a.hide-m { display: none; }
   .trust .wrap { grid-template-columns: 1fr 1fr; }
   .trust .item { padding: 16px 14px 16px 0; }
   .trust .item + .item { padding-left: 14px; }
-  .trust .item:nth-child(3) { border-left: 0; border-top: 1px solid var(--line-dark); }
+  .trust .item:nth-child(3) { border-left: 0; border-top: 1px solid var(--line-dark); padding-left: 0; }
   .trust .item:nth-child(4) { border-top: 1px solid var(--line-dark); }
   .cards { grid-template-columns: 1fr; }
   .card .character { min-height: 0; }
