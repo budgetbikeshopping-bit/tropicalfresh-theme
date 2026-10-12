@@ -339,40 +339,11 @@ add_filter( 'gettext', function ( $translation, $text, $domain ) {
 }, 10, 3 );
 
 /**
- * Google Ads-aankoopconversie op de bedankpagina: echt orderbedrag, ordernummer
- * als transactie-ID, en een metavlag zodat hij maar EEN keer per bestelling
- * vuurt (herladen telt niet dubbel). Verbeterde conversies: gtag hasht het
- * e-mailadres client-side voordat het naar Google gaat. De gtag-functie komt
- * van de Site Kit-tag; de shim vangt het geval dat die later laadt.
+ * Meting en schema: Google Ads-aankoopconversie, GA4-trechter, productschema
+ * (verzend- en retourinfo), Duo-prijs in de deelpreviews en noindex op de
+ * categoriearchieven. Zie inc/meting.php.
  */
-add_action( 'wp_head', function () {
-	if ( ! function_exists( 'is_order_received_page' ) || ! is_order_received_page() ) {
-		return;
-	}
-	$order_id = absint( get_query_var( 'order-received' ) );
-	$order    = $order_id ? wc_get_order( $order_id ) : false;
-	$key      = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : '';
-	if ( ! $order || ! $key || ! hash_equals( $order->get_order_key(), $key ) ) {
-		return;
-	}
-	if ( $order->get_meta( '_sim_aw_conversie' ) ) {
-		return;
-	}
-	$order->update_meta_data( '_sim_aw_conversie', (string) time() );
-	$order->save();
-	?>
-	<script>
-	window.gtag = window.gtag || function () { ( window.dataLayer = window.dataLayer || [] ).push( arguments ); };
-	gtag( 'set', 'user_data', { 'email': <?php echo wp_json_encode( $order->get_billing_email() ); ?> } );
-	gtag( 'event', 'conversion', {
-		'send_to': 'AW-18501908223/r50mCNzY5ZUdEP_tsvZE',
-		'value': <?php echo wp_json_encode( (float) $order->get_total() ); ?>,
-		'currency': <?php echo wp_json_encode( $order->get_currency() ); ?>,
-		'transaction_id': <?php echo wp_json_encode( (string) $order->get_order_number() ); ?>
-	} );
-	</script>
-	<?php
-}, 30 );
+require_once get_template_directory() . '/inc/meting.php';
 
 /** Vertrouwensregel direct onder de bestelknop, op het beslismoment zelf. */
 add_action( 'woocommerce_review_order_after_submit', function () {
@@ -475,16 +446,7 @@ add_action( 'wp_footer', function () {
  */
 add_filter( 'rank_math/snippet/rich_snippet_product_entity', function ( $entity ) {
 	$product = function_exists( 'wc_get_product' ) ? wc_get_product( get_the_ID() ) : null;
-	if ( ! $product || 'grouped' !== $product->get_type() || 'tropical-fresh-duo' !== $product->get_slug() ) {
-		return $entity;
-	}
-	$som = 0.0;
-	foreach ( $product->get_children() as $sim_child_id ) {
-		$c = wc_get_product( $sim_child_id );
-		if ( $c && $c->is_purchasable() && $c->is_in_stock() ) {
-			$som += (float) wc_get_price_to_display( $c );
-		}
-	}
+	$som     = $product ? sim_duo_setprijs( $product ) : 0.0; // 0 voor alles behalve de Duo (inc/meting.php)
 	if ( $som <= 0 || empty( $entity['offers'] ) ) {
 		return $entity;
 	}
