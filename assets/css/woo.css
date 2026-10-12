@@ -546,15 +546,6 @@
 .light .promo-chip { border-color: var(--chloro-deep); color: var(--chloro-deep); margin-bottom: 6px; }
 .duo-mods .mod-copy .promo-chip { margin: 2px 0 10px; }
 
-/* 2+1-regel direct onder de koopknop op de PDP */
-.promo-koop {
-  font-size: 13.5px;
-  color: var(--alu);
-  margin: 12px 0 0;
-  max-width: 52ch;
-}
-.promo-koop a { color: var(--chloro); text-decoration: underline; white-space: nowrap; }
-
 /* Duo = vaste combi-set: overzicht + een knop, geen losse aantallen */
 .duo-set {
   display: flex;
@@ -586,6 +577,192 @@
   color: var(--alu);
   margin: 4px 0 6px;
   max-width: 52ch;
+}
+
+/* koopkeuze op de PDP: 1 flesje of de 2+1 set, elk met een eigen knop */
+.koopkeuze { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+.keuze {
+  border: 1px solid var(--line-dark-strong);
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 var(--edge-light);
+  background: var(--graphite-900);
+  padding: 16px 18px;
+}
+.keuze.is-set { border-color: rgba(163, 230, 53, 0.5); }
+.keuze-kop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 14px;
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  color: var(--alu);
+}
+.keuze-kop b {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 640;
+  font-size: 17px;
+  color: var(--mineral);
+}
+.keuze-kop .woocommerce-Price-amount { color: var(--mineral); font-weight: 600; }
+.set-tag {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--chloro);
+  color: var(--graphite-950);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.set-inhoud { font-size: 13.5px; color: var(--alu); margin: -4px 0 12px; max-width: 52ch; }
+.keuze form.cart { margin-bottom: 0; }
+.keuze .set-add { width: 100%; padding: 0 16px; letter-spacing: 0.12em; }
+.duo-set .duo-add { padding: 0 16px; letter-spacing: 0.12em; }
+.duo-uitleg b { color: var(--mineral); font-weight: 600; }
+
+/* levertijd, betalen en verzending direct onder de koopknoppen */
+.koop-info {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 18px;
+  margin: 0 0 30px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--alu);
+}
+.koop-info li { position: relative; padding-left: 14px; }
+.koop-info li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--chloro);
+}
+.koop-info .woocommerce-Price-amount { color: var(--mineral); }
+
+/* accordeons: onderrand op de groep, zodat een verborgen reviewblok geen rand kost */
+.pdp-accs { border-bottom: 1px solid var(--line-dark); }
+.pdp-accs details.acc:last-of-type { border-bottom: 0; }
+.pdp-accs details.acc { scroll-margin-top: 84px; }
+.sim-reviews .rv-echtheid { font-size: 12.5px; color: var(--alu-dark); margin: 0 0 12px; max-width: 60ch; }
+
+/* sociale kanalen onder de beschrijving */
+.pdp-social { margin-top: 28px; }
+.pdp-social .mono-label { display: block; margin-bottom: 12px; }
+.pdp-social .ps-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.pdp-social .ps-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line-dark-strong);
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--mineral);
+  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+.pdp-social .ps-links a:hover { border-color: var(--chloro); color: var(--chloro); }
+.pdp-social .ps-links i { font-style: normal; font-weight: 400; font-size: 12.5px; color: var(--alu-dark); }
+.pdp-social .ps-yt { margin-top: 10px; font-size: 12.5px; color: var(--alu-dark); }
+.pdp-social .ps-yt a { text-decoration: underline; }
+.pdp-social .ps-yt a:hover { color: var(--mineral); }
+
+/* Duo-podium: de drie flesjes van de set naast elkaar. De cutouts zijn 900x900
+   met een smalle fles in het midden (110x668 px); --b is de zichtbare flesbreedte. */
+.pdp .stage .set-flesjes {
+  --b: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  transform: translateZ(50px);
+}
+.pdp .stage .set-flesjes .fl {
+  position: relative;
+  width: calc(var(--b) * 1.55);
+  height: calc(var(--b) * 6.07);
+}
+.pdp .stage .set-flesjes img {
+  position: absolute;
+  max-width: none;
+  width: calc(var(--b) * 8.18);
+  height: auto;
+  left: calc(var(--b) * -3.342);
+  top: calc(var(--b) * -1.181);
+  filter: drop-shadow(0 30px 36px rgba(0, 0, 0, 0.5));
+}
+.pdp .stage .set-flesjes .vrij-tag {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--chloro);
+  color: var(--graphite-950);
+  padding: 4px 9px;
+  border-radius: 2px;
+}
+
+/* stickybalk met keuze: twee even brede knoppen */
+.stickybuy.is-keuze { gap: 10px; }
+.stickybuy.is-keuze .btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+/* mobiel: koopknop in het eerste scherm (390x664). Compacter podium, kleinere
+   tussenruimtes en aantal + knop op een rij. */
+@media (max-width: 767px) {
+  .single-product .crumbs { padding-top: 12px; }
+  .pdp { gap: 12px; padding-top: 12px; }
+  .pdp .stage { min-height: 0; height: 210px; }
+  .pdp .stage .tilt { pointer-events: none; }
+  .pdp .stage img.bottle { width: 240px; }
+  /* de drie cutouts zijn samen ongeveer 11,3 x --b breed (transparante rand
+     meegeteld); onder 8,6vw blijft dat binnen het scherm, ook op 320 px */
+  .pdp .stage .set-flesjes { --b: min(31px, 8.6vw); }
+  .pdp .stage .set-flesjes .vrij-tag { bottom: -8px; font-size: 9px; padding: 3px 7px; }
+  .pdp-info .mono-label { margin-bottom: 8px; }
+  .pdp-info h1 { margin-bottom: 6px; }
+  .pdp-info .price-row { margin-bottom: 10px; }
+  .pdp-info .price { line-height: 1.25; }
+  .duo-uitleg { margin: 0 0 10px; }
+  .keuze { padding: 12px 14px; }
+  .keuze-kop { margin-bottom: 10px; }
+  .buy-block form.cart { flex-wrap: nowrap; gap: 10px; }
+  .buy-block form.cart .quantity input.qty { width: 60px; }
+  .buy-block form.cart .single_add_to_cart_button { min-width: 0; padding: 0 10px; letter-spacing: 0.1em; }
+  .keuze .set-add, .duo-set .duo-add { padding: 0 10px; letter-spacing: 0.1em; }
+  .duo-set { padding: 14px; gap: 12px; }
+  .duo-set .duo-add { order: -1; }
+  .koop-info { grid-template-columns: 1fr; margin-bottom: 24px; }
+  .pdp-social .ps-links i { display: none; }
+  .pdp-info .lead { margin: 0 0 20px; }
+  .spec-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .spec-strip .cell { padding: 12px 10px; }
+  .spec-strip .cell + .cell { border-top: 0; border-left: 1px solid var(--line-dark); }
+  .spec-strip b { font-size: 12.5px; }
+  /* ruimte voor de stickybalk, zodat hij de footer niet afdekt */
+  .single-product footer { padding-bottom: calc(36px + 76px + env(safe-area-inset-bottom)); }
 }
 
 /* galerij met campagne-/sfeerbeelden op de PDP */

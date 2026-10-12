@@ -19,15 +19,58 @@ while ( have_posts() ) :
 	);
 	$sim_tint   = $sim_tints[ $product->get_slug() ] ?? 'rgba(230,217,189,0.12)';
 	$sim_short  = sim_short_name( $product );
+	$sim_is_duo = 'tropical-fresh-duo' === $product->get_slug();
+
+	/*
+	 * Verzendbedragen: dezelfde waarden als de verzendinstelling in WooCommerce
+	 * (gratis vanaf 17,90, daaronder 4,95). Eén plek in dit template, zodat alle
+	 * teksten op de productpagina hetzelfde zeggen.
+	 */
+	$sim_gratis_vanaf  = (float) apply_filters( 'sim_gratis_verzending_vanaf', 17.90 );
+	$sim_verzendkosten = (float) apply_filters( 'sim_verzendkosten', 4.95 );
+
+	/*
+	 * 2+1 set: Creamy Vanilla + Juicy Green Apple, de extra Juicy Green Apple komt
+	 * gratis via de winkelwagenlogica. De setprijs is wat de klant echt betaalt
+	 * (de twee betaalde flesjes), zonder doorgestreepte van-prijs. Drie flesjes
+	 * beloven we alleen als het gratis flesje ook echt mee kan: sim_promo_reconcile
+	 * begrenst het gratis flesje op de Apple-voorraad, dus beheerde voorraad moet
+	 * minstens 2 zijn (1 betaald + 1 gratis).
+	 */
+	$sim_ids       = function_exists( 'sim_promo_ids' ) ? sim_promo_ids() : array( 'vanilla' => 0, 'apple' => 0 );
+	$sim_set_v     = $sim_ids['vanilla'] ? wc_get_product( $sim_ids['vanilla'] ) : null;
+	$sim_set_a     = $sim_ids['apple'] ? wc_get_product( $sim_ids['apple'] ) : null;
+	$sim_set_prijs = 0.0;
+	$sim_set_ok    = false;
+	if ( $sim_set_v && $sim_set_a ) {
+		$sim_set_prijs = (float) wc_get_price_to_display( $sim_set_v ) + (float) wc_get_price_to_display( $sim_set_a );
+		$sim_set_ok    = function_exists( 'sim_promo_active' ) && sim_promo_active()
+			&& $sim_set_v->is_purchasable() && $sim_set_a->is_purchasable()
+			&& ( ! $sim_set_a->managing_stock() || (int) $sim_set_a->get_stock_quantity() >= 2 );
+	}
+	// Op centen afgerond vergelijken, net als de gratis-verzendingsregel van WooCommerce,
+	// zodat een afrondingsverschil in de floats de drempel niet ongemerkt mist.
+	$sim_set_gratis_verzending = round( $sim_set_prijs, 2 ) >= round( $sim_gratis_vanaf, 2 );
+	$sim_set_url               = home_url( '/?sim_duo=1' );
+
+	// Koopkeuze (1 flesje of de 2+1 set) op de productpagina's van Vanilla en Apple.
+	$sim_in_promo = in_array( $product->get_id(), array( (int) $sim_ids['vanilla'], (int) $sim_ids['apple'] ), true );
+	$sim_keuze    = $sim_set_ok && $sim_in_promo && $product->is_type( 'simple' )
+		&& $product->is_purchasable() && $product->is_in_stock();
+	$sim_los_prijs = (float) wc_get_price_to_display( $product );
+
 	$sim_inhoud_map = array(
 		'autoparfum-valuepack' => '3 &times; 60 ml',
-		'tropical-fresh-duo'   => '3 &times; 60 ml',
+		'tropical-fresh-duo'   => $sim_set_ok ? '3 &times; 60 ml' : '2 &times; 60 ml',
 	);
 	$sim_is_set = isset( $sim_inhoud_map[ $product->get_slug() ] );
 	$sim_inhoud = $sim_inhoud_map[ $product->get_slug() ] ?? '60 ml';
-	$sim_is_duo = 'tropical-fresh-duo' === $product->get_slug();
-	$sim_in_promo = function_exists( 'sim_promo_active' ) && sim_promo_active()
-		&& in_array( $product->get_id(), array_values( sim_promo_ids() ), true );
+
+	$sim_verzend_regel = sprintf(
+		'Gratis verzending vanaf %s, daaronder %s',
+		wc_price( $sim_gratis_vanaf ),
+		wc_price( $sim_verzendkosten )
+	);
 	?>
 
 	<?php do_action( 'woocommerce_before_single_product' ); // notices ?>
@@ -39,10 +82,25 @@ while ( have_posts() ) :
 	</nav>
 
 	<section class="pdp wrap">
-		<div class="stage" data-tilt="9" style="--tint: <?php echo esc_attr( $sim_tint ); ?>">
+		<div class="stage<?php echo ( $sim_is_duo && $sim_set_ok ) ? ' is-set' : ''; ?>" data-tilt="9" style="--tint: <?php echo esc_attr( $sim_tint ); ?>">
 			<div class="backplate"></div>
 			<div class="gridlines"></div>
-			<div class="tilt"><div class="float"><?php echo sim_product_visual( $product, 'woocommerce_single', true ); // phpcs:ignore ?></div></div>
+			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
+				<?php
+				// De set is drie flesjes; het duo-beeld toont er twee. Daarom hier de drie
+				// losse productfoto's naast elkaar, het derde flesje gemarkeerd als gratis.
+				$sim_img_dir = get_template_directory_uri() . '/assets/img/';
+				?>
+				<div class="tilt"><div class="float">
+					<div class="set-flesjes">
+						<span class="fl"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_vanilla.webp' ); ?>" width="900" height="900" alt="Creamy Vanilla autoparfum 60 ml" fetchpriority="high"></span>
+						<span class="fl"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_apple.webp' ); ?>" width="900" height="900" alt="Juicy Green Apple autoparfum 60 ml" fetchpriority="high"></span>
+						<span class="fl is-vrij"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_apple.webp' ); ?>" width="900" height="900" alt="Extra Juicy Green Apple autoparfum 60 ml, gratis in de 2+1 set"><span class="vrij-tag">Gratis</span></span>
+					</div>
+				</div></div>
+			<?php else : ?>
+				<div class="tilt"><div class="float"><?php echo sim_product_visual( $product, 'woocommerce_single', true ); // phpcs:ignore ?></div></div>
+			<?php endif; ?>
 			<div class="shadow"></div>
 			<span class="spec">TF&nbsp;/&nbsp;<?php echo esc_html( $product->get_sku() ?: '60 ML' ); ?></span>
 		</div>
@@ -53,48 +111,68 @@ while ( have_posts() ) :
 				<?php echo $product->is_in_stock() ? 'Op voorraad' : 'Tijdelijk uitverkocht'; ?>
 			</span>
 			<h1><?php echo esc_html( $sim_short ); ?></h1>
-			<?php if ( $sim_in_promo ) : ?>
-				<span class="promo-chip">Onderdeel van de 2+1 actie</span>
-			<?php endif; ?>
 			<div class="price-row">
 				<span class="price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
 				<span class="price-note">incl. btw</span>
 			</div>
-			<?php if ( $sim_is_duo ) : ?>
-				<p class="duo-uitleg">Je betaalt twee flesjes: Creamy Vanilla en Juicy Green Apple. De derde, een extra Juicy Green Apple, gaat automatisch gratis mee in je winkelwagen.</p>
-			<?php endif; ?>
-			<?php if ( $product->get_short_description() ) : ?>
-				<div class="lead"><?php echo wp_kses_post( wpautop( $product->get_short_description() ) ); ?></div>
+			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
+				<p class="duo-uitleg"><b>2+1 set:</b> 3 flesjes van 60 ml, je betaalt er 2<?php echo $sim_set_gratis_verzending ? ', met gratis verzending' : ''; ?>.</p>
 			<?php endif; ?>
 
-			<div class="spec-strip">
-				<div class="cell"><span>Inhoud</span><b><?php echo $sim_inhoud; // phpcs:ignore ?></b></div>
-				<div class="cell"><span>Werking</span><b>Tot 2 dagen per spraybeurt</b></div>
-				<div class="cell"><span>Geschikt voor</span><b>Leer, stof, kunststof</b></div>
-			</div>
-
-			<div class="buy-block">
-				<?php
-				// Duo = vaste combi-set: geen losse aantallen per geur. We laten de
-				// structured data staan maar vervangen het grouped-formulier door
-				// een set-overzicht met een knop die de complete set toevoegt.
-				if ( $sim_is_duo ) {
-					remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
-				}
-				do_action( 'woocommerce_single_product_summary' ); // add-to-cart + structured data
-				if ( $sim_is_duo ) {
-					add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
-				}
-				?>
+			<?php
+			// Duo = vaste combi-set: geen losse aantallen per geur. We laten de
+			// structured data staan maar vervangen het grouped-formulier door
+			// een set-overzicht met een knop die de complete set toevoegt.
+			if ( $sim_is_duo ) {
+				remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+			}
+			ob_start();
+			do_action( 'woocommerce_single_product_summary' ); // add-to-cart + structured data
+			$sim_summary = ob_get_clean();
+			if ( $sim_is_duo ) {
+				add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+			}
+			?>
+			<div class="buy-block" id="koop">
+				<?php if ( $sim_keuze ) : ?>
+					<?php
+					// Koopkeuze direct onder de prijs: 1 flesje of de 2+1 set, elk met een
+					// eigen knop. Geen voorselectie; de klant kiest zelf.
+					$sim_los_verzending = round( $sim_los_prijs, 2 ) < round( $sim_gratis_vanaf, 2 )
+						? sprintf( '%s + %s verzending', wc_price( $sim_los_prijs ), wc_price( $sim_verzendkosten ) )
+						: sprintf( '%s, gratis verzending', wc_price( $sim_los_prijs ) );
+					$sim_set_inhoud = 'juicy-green-apple-autoparfum' === $product->get_slug()
+						? 'Deze Juicy Green Apple en een Creamy Vanilla, plus een extra Juicy Green Apple gratis.'
+						: 'Deze Creamy Vanilla en een Juicy Green Apple, plus een extra Juicy Green Apple gratis.';
+					?>
+					<div class="koopkeuze">
+						<div class="keuze is-los">
+							<p class="keuze-kop"><b>1 flesje</b><span><?php echo wp_kses_post( $sim_los_verzending ); ?></span></p>
+							<?php echo $sim_summary; // phpcs:ignore -- WooCommerce-hookuitvoer (koopformulier) ?>
+						</div>
+						<div class="keuze is-set">
+							<p class="keuze-kop"><b><span class="set-tag">2+1 set</span> 3 flesjes</b><span><?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?><?php echo $sim_set_gratis_verzending ? ' &middot; gratis verzending' : ''; ?></span></p>
+							<p class="set-inhoud"><?php echo esc_html( $sim_set_inhoud ); ?></p>
+							<a class="btn btn-primary set-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span>3 flesjes toevoegen &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
+						</div>
+					</div>
+				<?php else : ?>
+					<?php echo $sim_summary; // phpcs:ignore -- WooCommerce-hookuitvoer (koopformulier) ?>
+				<?php endif; ?>
 				<?php if ( $sim_is_duo && $product->is_in_stock() ) : ?>
 					<div class="duo-set">
 						<div class="set-rows">
 							<span>01 &middot; Creamy Vanilla &middot; 60 ml</span>
 							<span>02 &middot; Juicy Green Apple &middot; 60 ml</span>
-							<span class="vrij">03 &middot; Juicy Green Apple &middot; 60 ml &middot; gratis</span>
+							<?php if ( $sim_set_ok ) : ?>
+								<span class="vrij">03 &middot; Juicy Green Apple &middot; 60 ml &middot; gratis</span>
+							<?php endif; ?>
 						</div>
-						<a class="btn btn-primary duo-add" rel="nofollow" href="<?php echo esc_url( home_url( '/?sim_duo=1' ) ); ?>">Voeg de complete set toe</a>
-						<p class="duo-set-note">Vaste combi-set. Het gratis flesje verschijnt automatisch in je winkelwagen.</p>
+						<?php // Aantal en prijs alleen in de knop als de 2+1 echt geleverd kan worden. ?>
+						<a class="btn btn-primary duo-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span><?php echo $sim_set_ok ? '3 flesjes toevoegen &middot; ' . wp_kses_post( wc_price( $sim_set_prijs ) ) : 'Voeg de complete set toe'; // phpcs:ignore ?></span></a>
+						<?php if ( $sim_set_ok ) : ?>
+							<p class="duo-set-note">Vaste combi-set. Het gratis flesje verschijnt automatisch in je winkelwagen.</p>
+						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 				<?php if ( ! $product->is_in_stock() ) : ?>
@@ -118,18 +196,26 @@ while ( have_posts() ) :
 						<p class="oos-alt">Lees ondertussen <a href="<?php echo esc_url( home_url( '/autoparfum/nieuwe-auto-geur/' ) ); ?>">waar de nieuwe-autogeur vandaan komt en hoe je hem terughaalt</a>.</p>
 					<?php endif; ?>
 				<?php endif; ?>
-				<?php if ( $sim_in_promo && $product->is_in_stock() ) : ?>
-					<p class="promo-koop">
-						<?php if ( 'juicy-green-apple-autoparfum' === $product->get_slug() ) : ?>
-							2+1 actie: combineer met Creamy Vanilla en ontvang een extra Juicy Green Apple gratis.
-						<?php else : ?>
-							2+1 actie: combineer met Juicy Green Apple en ontvang er nog een Juicy Green Apple gratis bij.
-						<?php endif; ?>
-						<a href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
-					</p>
-				<?php endif; ?>
 			</div>
-			<p class="ship-note">Bestel voor <b>&euro; 17,90</b> of meer en de verzending is gratis; daaronder is de verzending &euro; 4,95.</p>
+			<?php if ( $product->is_in_stock() ) : ?>
+				<?php // Levertijd volgt de algemene voorwaarden letterlijk (art. 8: doorgaans 2 tot 4 werkdagen). ?>
+				<ul class="koop-info">
+					<li>Doorgaans binnen 2 tot 4 werkdagen geleverd</li>
+					<li>Veilig betalen met iDEAL | Wero of creditcard</li>
+					<li><?php echo wp_kses_post( $sim_verzend_regel ); ?></li>
+					<li>14 dagen retourrecht</li>
+				</ul>
+			<?php endif; ?>
+
+			<?php if ( $product->get_short_description() ) : ?>
+				<div class="lead"><?php echo wp_kses_post( wpautop( $product->get_short_description() ) ); ?></div>
+			<?php endif; ?>
+
+			<div class="spec-strip">
+				<div class="cell"><span>Inhoud</span><b><?php echo $sim_inhoud; // phpcs:ignore ?></b></div>
+				<div class="cell"><span>Werking</span><b>Tot 2 dagen per spraybeurt</b></div>
+				<div class="cell"><span>Geschikt voor</span><b>Leer, stof, kunststof</b></div>
+			</div>
 
 			<div class="pdp-accs">
 				<details class="acc" open>
@@ -146,24 +232,76 @@ while ( have_posts() ) :
 				</details>
 				<details class="acc">
 					<summary>Verzending &amp; retour</summary>
-					<div class="body">Snelle levering door heel Nederland. Gratis verzending vanaf &euro; 17,90, daaronder &euro; 4,95. Niet tevreden? Je hebt 14 dagen retourrecht op ongebruikte producten in originele, verzegelde verpakking. Aanmelden kan via de retourpagina.</div>
+					<div class="body">Doorgaans binnen 2 tot 4 werkdagen geleverd, door heel Nederland. <?php echo wp_kses_post( $sim_verzend_regel ); ?>. Niet tevreden? Je hebt 14 dagen retourrecht op ongebruikte producten in originele, verzegelde verpakking. Aanmelden kan via de <a href="<?php echo esc_url( home_url( '/retourneren/' ) ); ?>">retourpagina</a>.</div>
 				</details>
-				<?php if ( comments_open() || $product->get_review_count() > 0 ) : ?>
-				<details class="acc" id="reviews">
-					<summary>Reviews (<?php echo esc_html( $product->get_review_count() ); ?>)</summary>
-					<div class="body sim-reviews"><?php comments_template(); ?></div>
+				<?php
+				$sim_reviews_n = (int) $product->get_review_count();
+				if ( comments_open() || $sim_reviews_n > 0 ) :
+					/*
+					 * Echtheid van reviews (Omnibus): de zin volgt de werkelijke instellingen,
+					 * zodat hij nooit meer belooft dan de winkel doet.
+					 */
+					if ( 'yes' === get_option( 'woocommerce_review_rating_verification_required' ) ) {
+						$sim_rv_echt = 'Alleen klanten die dit product bij ons kochten, kunnen een review plaatsen.';
+					} elseif ( 'yes' === get_option( 'woocommerce_review_rating_verification_label' ) ) {
+						$sim_rv_echt = 'Reviews met het label "geverifieerde eigenaar" zijn geschreven door klanten die dit product bij ons kochten. Bij andere reviews kunnen we niet controleren of de schrijver het product heeft gekocht.';
+					} else {
+						$sim_rv_echt = 'We controleren niet of de schrijver van een review dit product bij ons heeft gekocht.';
+					}
+					if ( '1' === (string) get_option( 'comment_moderation' ) ) {
+						$sim_rv_echt .= ' Alle reviews worden voor plaatsing handmatig bekeken.';
+					}
+					// Zolang er 0 reviews zijn tonen we geen lege 'Reviews (0)'. Het blok blijft
+					// wel in de pagina: lux.js opent het alsnog als iemand via een reviewlink komt.
+					?>
+				<details class="acc" id="reviews"<?php echo 0 === $sim_reviews_n ? ' hidden' : ''; ?>>
+					<summary><?php echo $sim_reviews_n > 0 ? esc_html( sprintf( 'Reviews (%d)', $sim_reviews_n ) ) : 'Schrijf de eerste review'; ?></summary>
+					<div class="body sim-reviews">
+						<?php if ( $sim_reviews_n > 0 ) : ?>
+							<p class="rv-echtheid"><?php echo esc_html( $sim_rv_echt ); ?></p>
+						<?php endif; ?>
+						<?php comments_template(); ?>
+					</div>
 				</details>
 				<?php endif; ?>
+			</div>
+
+			<?php // Sociale kanalen: compact onder de beschrijving, bewust niet bij de koopknop. ?>
+			<div class="pdp-social">
+				<span class="mono-label">Volg Tropical Fresh</span>
+				<div class="ps-links">
+					<a href="https://www.tiktok.com/@tropicalfresh_nl" target="_blank" rel="noopener">
+						<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.69 5.69 0 1 0 5.69 5.68V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48z"/></svg>
+						<span>TikTok <i>@tropicalfresh_nl</i></span>
+					</a>
+					<a href="https://www.instagram.com/tropicalfresh.nl/" target="_blank" rel="noopener">
+						<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/></svg>
+						<span>Instagram <i>@tropicalfresh.nl</i></span>
+					</a>
+				</div>
+				<p class="ps-yt">Ook op <a href="https://www.youtube.com/channel/UCqnlCEmGxS0Z-6bOJiOKSmA" target="_blank" rel="noopener">YouTube</a>.</p>
 			</div>
 		</div>
 	</section>
 
 	<?php if ( $product->is_in_stock() && ( $sim_is_duo || $product->is_purchasable() ) ) : ?>
-	<!-- mobiele sticky-koopbalk: verschijnt zodra het koopblok uit beeld scrolt -->
-	<div class="stickybuy">
-		<div><span class="t"><?php echo esc_html( $sim_short ); ?></span><span class="p price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span></div>
-		<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_is_duo ? home_url( '/?sim_duo=1' ) : $product->add_to_cart_url() ); ?>">Toevoegen</a>
+	<!-- mobiele sticky-koopbalk: verschijnt zodra geen koopknop van de pagina meer in beeld is -->
+	<?php if ( $sim_keuze ) : ?>
+	<div class="stickybuy is-keuze">
+		<?php // Zonder JavaScript werkt de link zoals voorheen; lux.js stuurt hem door het echte koopformulier. ?>
+		<a class="btn btn-outline" rel="nofollow" data-sim-koop="1" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"><span>1 flesje &middot; <?php echo wp_kses_post( wc_price( $sim_los_prijs ) ); ?></span></a>
+		<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span>3 flesjes &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
 	</div>
+	<?php else : ?>
+	<div class="stickybuy">
+		<div><span class="t"><?php echo esc_html( ( $sim_is_duo && $sim_set_ok ) ? '2+1 set, 3 flesjes' : $sim_short ); ?></span><span class="p price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span></div>
+		<?php if ( $sim_is_duo ) : ?>
+			<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>">Toevoegen</a>
+		<?php else : ?>
+			<a class="btn btn-primary" rel="nofollow" data-sim-koop="" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>">Toevoegen</a>
+		<?php endif; ?>
+	</div>
+	<?php endif; ?>
 	<?php endif; ?>
 
 	<?php
