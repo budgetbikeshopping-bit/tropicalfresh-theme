@@ -491,10 +491,4 @@ add_filter( 'rank_math/frontend/breadcrumb/items', function ( $crumbs ) {
 	return array_values( $crumbs );
 } );
 
-/*
- * Google for WooCommerce (GLA) alleen voor de productfeed naar Merchant Center gebruiken:
- * geen eigen gtag en geen eigen aankoopconversie, want GLA hangt nog aan het oude
- * Ads-account 4531978103 en de Google-tag GT-55JZBGWC dekt GA4 en Ads al. Zo telt
- * een aankoop nooit dubbel.
- */
-add_filter( 'woocommerce_gla_disable_gtag_tracking', '__return_true' );
+/* GLA-gtag staat uit via de mu-plugin tf-gla-geen-gtag.php (het filter moet vóór plugins_loaded bestaan). */
