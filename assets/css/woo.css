@@ -119,6 +119,20 @@
   margin-bottom: 30px;
 }
 .campaign .camp-sum .vrij { color: var(--chloro); }
+/* setprijs: live uit WooCommerce, zonder doorgestreepte van-prijs */
+.campaign .camp-prijs {
+  margin: -8px 0 24px;
+  font-size: 15px;
+  color: var(--mineral);
+}
+.campaign .camp-prijs b {
+  font-family: var(--display);
+  font-weight: 640;
+  font-stretch: 106%;
+  font-size: clamp(24px, 2.4vw, 32px);
+  color: var(--chloro);
+  margin-right: 6px;
+}
 .campaign .bottles {
   display: flex;
   align-items: center;
