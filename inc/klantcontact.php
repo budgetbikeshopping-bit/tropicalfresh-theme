@@ -409,3 +409,112 @@ function sim_winkelwagen_2plus1() {
 	);
 }
 add_action( 'woocommerce_before_cart', 'sim_winkelwagen_2plus1', 15 );
+
+/* ---------- afrekenen ---------- */
+
+/** Minder velden: geen bedrijfsnaam en geen adresregel 2; het e-mailadres komt bovenaan. */
+add_filter( 'woocommerce_checkout_fields', function ( $fields ) {
+	foreach ( array( 'billing', 'shipping' ) as $sim_groep ) {
+		unset( $fields[ $sim_groep ][ $sim_groep . '_company' ], $fields[ $sim_groep ][ $sim_groep . '_address_2' ] );
+	}
+	if ( isset( $fields['billing']['billing_email'] ) ) {
+		$fields['billing']['billing_email']['priority'] = 5;
+	}
+	return $fields;
+}, 20 );
+
+/** Geen bestelnotities: voor een flesje autoparfum overbodig. */
+add_filter( 'woocommerce_enable_order_notes_field', '__return_false' );
+
+/** Provincie is in Nederland niet nodig voor de bezorging. */
+add_filter( 'woocommerce_get_country_locale', function ( $locale ) {
+	$locale['NL']['state'] = array_merge(
+		isset( $locale['NL']['state'] ) ? (array) $locale['NL']['state'] : array(),
+		array(
+			'required' => false,
+			'hidden'   => true,
+		)
+	);
+	return $locale;
+} );
+
+/** Knoptekst die zegt wat er gebeurt: bestellen met betaalverplichting. */
+add_filter( 'woocommerce_order_button_text', fn() => 'Bestellen en betalen' );
+
+/** Kortingscodeveld: zelfde woord als in de welkomstmail en het nieuwsbriefblok. */
+add_filter( 'gettext', function ( $vertaling, $tekst, $domein ) {
+	if ( 'woocommerce' !== $domein ) {
+		return $vertaling;
+	}
+	static $sim_map = array(
+		'Have a coupon?'                                   => 'Heb je een kortingscode?',
+		'Click here to enter your code'                     => 'Vul hem hier in',
+		'Enter your coupon code'                            => 'Vul je kortingscode in',
+		'If you have a coupon code, please apply it below.' => 'Vul je kortingscode hieronder in.',
+		'Coupon:'                                           => 'Kortingscode:',
+		'Coupon code'                                       => 'Kortingscode',
+		'Apply coupon'                                      => 'Code toepassen',
+	);
+	return $sim_map[ $tekst ] ?? $vertaling;
+}, 10, 3 );
+
+/**
+ * De privacylink in de afrekentekst was leeg: de ingestelde privacypagina bestaat niet
+ * meer. Val terug op /privacybeleid/ zolang Instellingen > Privacy niet goed staat.
+ */
+add_filter( 'woocommerce_privacy_policy_page_id', function ( $id ) {
+	if ( $id && 'publish' === get_post_status( $id ) ) {
+		return $id;
+	}
+	$pagina = get_page_by_path( 'privacybeleid' );
+	return ( $pagina && 'publish' === $pagina->post_status ) ? (int) $pagina->ID : $id;
+} );
+
+/** Tekst van de nieuwsbrieftoestemming. Bij een wijziging het versienummer ophogen: hij wordt bij de order bewaard. */
+function sim_optin_tekst() {
+	return 'v1: Ja, mail me af en toe over nieuwe geuren en aanbiedingen. Afmelden kan altijd.';
+}
+
+/** Opt-in boven de bestelknop: niet vooraf aangevinkt, niet verplicht. */
+add_action( 'woocommerce_review_order_before_submit', function () {
+	// WooCommerce ververst dit blok bij elke adreswijziging; neem dan de eigen keuze van de klant over.
+	$aan = false;
+	if ( isset( $_POST['post_data'] ) && is_string( $_POST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		parse_str( wp_unslash( $_POST['post_data'] ), $sim_post ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$aan = ! empty( $sim_post['sim_nieuwsbrief'] );
+	}
+	?>
+	<p class="form-row sim-optin">
+		<label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox" for="sim_nieuwsbrief">
+			<input type="checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" name="sim_nieuwsbrief" id="sim_nieuwsbrief" value="1"<?php checked( $aan ); ?>>
+			<span>Ja, mail me af en toe over nieuwe geuren en aanbiedingen. Afmelden kan altijd. Zie ons <a href="<?php echo esc_url( home_url( '/privacybeleid/' ) ); ?>" target="_blank" rel="noopener">privacybeleid</a>.</span>
+		</label>
+	</p>
+	<?php
+} );
+
+/** Bewijs van toestemming bij de order: tijdstip en de getoonde tekst. */
+add_action( 'woocommerce_checkout_create_order', function ( $order ) {
+	if ( empty( $_POST['sim_nieuwsbrief'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce controleerde de checkout-nonce al
+		return;
+	}
+	$order->update_meta_data( '_sim_nieuwsbrief', time() );
+	$order->update_meta_data( '_sim_nieuwsbrief_tekst', sim_optin_tekst() );
+} );
+
+/** Met toestemming op de nieuwsbrieflijst; nooit een adres van de afmeldlijst. Er gaat geen mail uit. */
+add_action( 'woocommerce_checkout_order_processed', function ( $order_id, $data = array(), $order = null ) {
+	$order = $order instanceof WC_Order ? $order : wc_get_order( $order_id );
+	if ( ! $order || ! $order->get_meta( '_sim_nieuwsbrief' ) ) {
+		return;
+	}
+	$email = strtolower( $order->get_billing_email() );
+	if ( ! is_email( $email ) || sim_klant_afgemeld( $email ) ) {
+		return;
+	}
+	$lijst = get_option( 'sim_nieuwsbrief_lijst', array() );
+	if ( ! isset( $lijst[ $email ] ) ) {
+		$lijst[ $email ] = time();
+		update_option( 'sim_nieuwsbrief_lijst', $lijst, false );
+	}
+}, 10, 3 );
