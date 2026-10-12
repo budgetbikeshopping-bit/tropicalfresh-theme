@@ -442,3 +442,51 @@ add_filter( 'rank_math/opengraph/slack_enhanced_data', function ( $data ) {
 	}
 	return $data;
 } );
+
+/* ---------- categoriearchief en kruimelpad ---------- */
+
+/**
+ * Productcategorie- en tagarchieven (zoals /product-category/autoparfum/) zijn
+ * een kopie van /shop/ met dezelfde productkaarten: noindex, links wel volgen.
+ */
+add_filter( 'rank_math/frontend/robots', function ( $robots ) {
+	if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() && is_array( $robots ) ) {
+		$robots['index']  = 'noindex';
+		$robots['follow'] = 'follow';
+	}
+	return $robots;
+}, 20 );
+
+/**
+ * Het schema-kruimelpad op productpagina's wees op positie 2 naar het
+ * categoriearchief, terwijl het zichtbare kruimelpad naar /shop/ linkt.
+ * Categorieschakels gaan nu naar /shop/; staat /shop/ er al in, dan vervalt de
+ * categorieschakel, zodat er geen dubbele stap ontstaat.
+ */
+add_filter( 'rank_math/frontend/breadcrumb/items', function ( $crumbs ) {
+	if ( ! is_array( $crumbs ) || ! function_exists( 'is_product' ) || ! is_product() ) {
+		return $crumbs;
+	}
+	$shop       = wc_get_page_permalink( 'shop' );
+	$pl         = wc_get_permalink_structure();
+	$basis      = '/' . trim( ! empty( $pl['category_rewrite_slug'] ) ? $pl['category_rewrite_slug'] : 'product-category', '/' ) . '/';
+	$heeft_shop = false;
+	foreach ( $crumbs as $sim_crumb ) {
+		if ( ! empty( $sim_crumb[1] ) && untrailingslashit( $sim_crumb[1] ) === untrailingslashit( $shop ) ) {
+			$heeft_shop = true;
+		}
+	}
+	foreach ( $crumbs as $sim_i => $sim_crumb ) {
+		$pad = ! empty( $sim_crumb[1] ) ? (string) wp_parse_url( $sim_crumb[1], PHP_URL_PATH ) : '';
+		if ( '' === $pad || false === strpos( $pad, $basis ) ) {
+			continue;
+		}
+		if ( $heeft_shop ) {
+			unset( $crumbs[ $sim_i ] );
+		} else {
+			$crumbs[ $sim_i ][1] = $shop;
+			$heeft_shop          = true;
+		}
+	}
+	return array_values( $crumbs );
+} );
