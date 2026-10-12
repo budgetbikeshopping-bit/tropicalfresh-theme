@@ -232,7 +232,7 @@ while ( have_posts() ) :
 				</details>
 				<details class="acc">
 					<summary>Verzending &amp; retour</summary>
-					<div class="body">Doorgaans binnen 2 tot 4 werkdagen geleverd, door heel Nederland. <?php echo wp_kses_post( $sim_verzend_regel ); ?>. Niet tevreden? Je hebt 14 dagen retourrecht op ongebruikte producten in originele, verzegelde verpakking. Aanmelden kan via de <a href="<?php echo esc_url( home_url( '/retourneren/' ) ); ?>">retourpagina</a>.</div>
+					<div class="body">Doorgaans binnen 2 tot 4 werkdagen geleverd, door heel Nederland. <?php echo wp_kses_post( $sim_verzend_regel ); ?>. Niet tevreden? Je hebt 14 dagen retourrecht na ontvangst. Aanmelden kan via de <a href="<?php echo esc_url( home_url( '/retourneren/' ) ); ?>">retourpagina</a>.</div>
 				</details>
 				<?php
 				$sim_reviews_n = (int) $product->get_review_count();

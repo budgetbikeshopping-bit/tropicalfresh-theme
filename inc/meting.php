@@ -167,6 +167,7 @@ function sim_ga_winkelwagen_data() {
 		} elseif ( isset( $regel['line_total'], $regel['line_subtotal'] ) ) {
 			$totaal  = (float) $regel['line_total'] + ( $incl ? (float) ( $regel['line_tax'] ?? 0 ) : 0.0 );
 			$sub     = (float) $regel['line_subtotal'] + ( $incl ? (float) ( $regel['line_subtotal_tax'] ?? 0 ) : 0.0 );
+			$totaal  = round( $totaal, wc_get_price_decimals() ); // per regel afronden, net als de kassa
 			$prijs   = $totaal / $aantal;
 			$korting = max( 0.0, ( $sub - $totaal ) / $aantal );
 		} else {
@@ -177,7 +178,7 @@ function sim_ga_winkelwagen_data() {
 			$item['discount'] = round( $korting, 2 );
 		}
 		$items[] = $item;
-		$waarde += $prijs * $aantal; // onafgerond, zodat de waarde gelijk is aan het echte regeltotaal
+		$waarde += $prijs * $aantal; // per regel afgerond, dus gelijk aan wat de kassa toont
 	}
 	if ( ! $items ) {
 		return null;
@@ -436,9 +437,16 @@ add_filter( 'rank_math/opengraph/slack_enhanced_data', function ( $data ) {
 		return $data;
 	}
 	$som     = sim_duo_setprijs( wc_get_product( get_queried_object_id() ) );
-	$sleutel = __( 'Price', 'rank-math' ); // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- de sleutel die Rank Math zelf gebruikt ("Prijs").
-	if ( $som > 0 && isset( $data[ $sleutel ] ) ) {
-		$data[ $sleutel ] = wp_strip_all_tags( wc_price( $som ) );
+	if ( $som <= 0 ) {
+		return $data;
+	}
+	// Rank Math vertaalt de sleutel ("Prijs"); de text domain verschilt per versie, dus alle varianten proberen.
+	$sleutels = array_unique( array( __( 'Price', 'seo-by-rank-math' ), __( 'Price', 'rank-math' ), 'Prijs', 'Price' ) ); // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+	foreach ( $sleutels as $sleutel ) {
+		if ( isset( $data[ $sleutel ] ) ) {
+			$data[ $sleutel ] = wp_strip_all_tags( wc_price( $som ) );
+			break;
+		}
 	}
 	return $data;
 } );

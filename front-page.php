@@ -93,7 +93,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 	<div class="wrap">
 		<div class="item"><b>Gratis verzending</b><span>bij bestellingen vanaf &euro; 17,90</span></div>
 		<div class="item"><b>Bezorging</b><span>doorgaans in 2 tot 4 werkdagen</span></div>
-		<div class="item"><b>14 dagen retourrecht</b><span>ongebruikt en verzegeld</span></div>
+		<div class="item"><b>14 dagen retourrecht</b><span>bedenktijd na ontvangst</span></div>
 		<div class="item"><b>Vlekvrij getest</b><span>op leer, stof en kunststof</span></div>
 	</div>
 </div>
@@ -308,7 +308,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<details class="acc"><summary>Waar spray ik het?</summary><div class="body">Bijvoorbeeld op de matten of onder de stoel. Elke geur is vlekvrij getest op leer, stof en kunststof.</div></details>
 			<details class="acc"><summary>Hoe lang blijft de geur hangen?</summary><div class="body">Tot twee dagen geur per spraybeurt. Daarna spray je gewoon opnieuw.</div></details>
 			<details class="acc"><summary>Hoe snel wordt mijn bestelling verzonden?</summary><div class="body">Je bestelling wordt doorgaans binnen 2 tot 4 werkdagen bezorgd, overal in Nederland. Vanaf &euro; 17,90 is de verzending gratis; daaronder betaal je &euro; 4,95 verzendkosten.</div></details>
-			<details class="acc"><summary>Wat als een geur niet bij mij past?</summary><div class="body">Je hebt 14 dagen retourrecht. Ongebruikte producten in originele, verzegelde verpakking kun je aanmelden via onze retourpagina.</div></details>
+			<details class="acc"><summary>Wat als een geur niet bij mij past?</summary><div class="body">Je hebt 14 dagen retourrecht na ontvangst. Je mag een flesje uitproberen zoals in een winkel; is het meer gebruikt dan nodig om het te beoordelen, dan rekenen we de waardevermindering. Aanmelden kan via onze retourpagina.</div></details>
 		</div>
 	</div>
 </section>

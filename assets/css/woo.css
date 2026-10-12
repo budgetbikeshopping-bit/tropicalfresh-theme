@@ -881,3 +881,24 @@
     width: 100%;
   }
 }
+
+/* ---------- 1.5.1: WooCommerce-knoppen in themastijl, 2+1 set als eerste keuze, gelijke vinkjes ---------- */
+.woocommerce .promo-note a.button,
+.woocommerce .return-to-shop a.button,
+.woocommerce-message a.button,
+.woocommerce-info a.button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 44px; padding: 0 20px; border-radius: 2px; border: 1px solid transparent;
+  background: var(--chloro); color: var(--graphite-950);
+  font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none; transition: background var(--fast) var(--ease);
+}
+.woocommerce .promo-note a.button:hover,
+.woocommerce .return-to-shop a.button:hover,
+.woocommerce-message a.button:hover,
+.woocommerce-info a.button:hover { background: #b5f04e; color: var(--graphite-950); }
+/* Het hoofdaanbod (2+1 set, gratis verzending) staat bovenaan de koopkeuze, ook op mobiel in het eerste scherm. */
+.koopkeuze .keuze.is-set { order: -1; }
+/* Voorwaardenvinkje even groot en even zwaar als het nieuwsbriefvinkje. */
+.woocommerce form .form-row.validate-required .woocommerce-form__label-for-checkbox { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; font-weight: 400; line-height: 1.5; }
+.woocommerce form .form-row .woocommerce-form__input-checkbox#terms { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--chloro-deep); }

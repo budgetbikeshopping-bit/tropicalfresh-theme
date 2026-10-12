@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.0' );
+define( 'SIM_VERSION', '1.5.1' );
 
 /* ---------- setup ---------- */
 
@@ -331,6 +331,10 @@ add_filter( 'woocommerce_checkout_fields', function ( $fields ) {
 add_filter( 'gettext', function ( $translation, $text, $domain ) {
 	if ( 'woocommerce' === $domain && 'I have read and agree to the website %s' === $text ) {
 		return 'Ik heb de %s gelezen en ga ermee akkoord';
+	}
+	$sim_vertaal = array( 'Update cart' => 'Winkelwagen bijwerken', 'Login' => 'Inloggen', 'Log in' => 'Inloggen' );
+	if ( 'woocommerce' === $domain && isset( $sim_vertaal[ $text ] ) ) {
+		return $sim_vertaal[ $text ];
 	}
 	if ( 'woocommerce' === $domain && '[Remove]' === $text ) {
 		return '[Verwijderen]';
@@ -694,3 +698,16 @@ add_action( 'woocommerce_before_cart', function () {
 } );
 
 /* Het reviewverzoek na levering staat in inc/klantcontact.php. */
+
+/**
+ * Toevoegknoppen bouwen hun URL op de huidige request-URL. Op een gecachte pagina
+ * kregen alle bezoekers zo de utm- of klik-ID's van de eerste bezoeker mee. Die
+ * parameters halen we eruit; add-to-cart zelf blijft staan.
+ */
+add_filter( 'woocommerce_product_add_to_cart_url', function ( $url ) {
+	return remove_query_arg( array( 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'gclid', 'gbraid', 'wbraid', 'fbclid', 'msclkid', 'ttclid' ), $url );
+} );
+
+/* WordPress-emoji's zijn niet nodig: scheelt een script en een stijlblok op elke pagina. */
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
