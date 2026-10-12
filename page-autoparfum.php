@@ -59,7 +59,8 @@ foreach ( $sim_slugs as $sim_slug ) {
 			<p>Autoparfum komt het best tot zijn recht in een auto die al schoon en droog is. Ruikt je auto muf, naar rook of naar je hond, dan maskeert een geur dat hooguit even. Pak daarom eerst de bron aan en voeg pas daarna een nieuwe geur toe.</p>
 			<ul>
 				<li><strong>Muffe lucht of beslagen ruiten:</strong> bijna altijd vocht. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/condens-vocht-auto/' ) ); ?>">vocht en condens uit de auto haalt</a>.</li>
-				<li><strong>Rooklucht of een hardnekkige vieze geur:</strong> volg het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan om vieze geur te verwijderen</a>.</li>
+				<li><strong>Rooklucht:</strong> die zit in bekleding, hemel en interieurfilter. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">rooklucht uit de auto haalt</a>.</li>
+				<li><strong>Een andere hardnekkige vieze geur:</strong> volg het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan om vieze geur te verwijderen</a>.</li>
 				<li><strong>Hondengeur:</strong> grondig zuigen, reinigen en dekens goed laten drogen. Alles staat in <a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">hondengeur uit de auto halen</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
@@ -72,7 +73,7 @@ foreach ( $sim_slugs as $sim_slug ) {
 
 			<h2>Veelgestelde vragen over autoparfum</h2>
 			<h3>Hoe lang blijft autoparfum ruiken?</h3>
-			<p>Tot twee dagen per spraybeurt, afhankelijk van je auto, ventilatie en hoeveel je sprayt.</p>
+			<p>Tot twee dagen per spraybeurt, afhankelijk van je auto, ventilatie en hoeveel je sprayt. Wat de duur precies bepaalt, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">hoe lang blijft autoparfum hangen</a>.</p>
 			<h3>Is autoparfum veilig voor mijn interieur?</h3>
 			<p>Onze sprays zijn getest op leer, stof en kunststof en zijn vlekvrij. Spray niet direct op schermen of glas; dat is niet nodig voor de werking.</p>
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
@@ -92,6 +93,8 @@ foreach ( $sim_slugs as $sim_slug ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-cadeau/' ) ); ?>">Autoparfum als cadeau</a> &ndash; voor wie het past en hoe je een geur kiest voor iemand anders.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">Hondengeur uit de auto halen</a> &ndash; grondig schoonmaken, drogen en fris houden als je hond meerijdt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/condens-vocht-auto/' ) ); ?>">Vocht en condens in de auto</a> &ndash; waar het vocht zit, hoe je de auto droogt en de muffe lucht voorkomt.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">Hoe lang blijft autoparfum hangen?</a> &ndash; wat warmte, ventilatie en geurgewenning met je autogeur doen.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">Rooklucht uit de auto halen</a> &ndash; reinigen, interieurfilter vervangen en de restgeur laten absorberen.</li>
 			</ul>
 		</div>
 	</div>
