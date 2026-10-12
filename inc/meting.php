@@ -415,3 +415,30 @@ add_filter( 'rank_math/json_ld', function ( $data ) {
 	}
 	return $data;
 }, 21 );
+
+/* ---------- Duo: setprijs in de deelpreviews ---------- */
+
+/**
+ * Rank Math zet in Open Graph de laagste kindprijs (8,95) van de Duo; de pagina
+ * en het schema vragen 17,90. product:price:amount krijgt de setprijs.
+ */
+add_filter( 'rank_math/opengraph/facebook/product_price_amount', function ( $prijs ) {
+	if ( ! function_exists( 'wc_get_product' ) || ! is_singular( 'product' ) ) {
+		return $prijs;
+	}
+	$som = sim_duo_setprijs( wc_get_product( get_queried_object_id() ) );
+	return $som > 0 ? number_format( $som, 2, '.', '' ) : $prijs;
+} );
+
+/** Ook de prijsregel in de Slack/X-preview (twitter:label1 "Prijs"). */
+add_filter( 'rank_math/opengraph/slack_enhanced_data', function ( $data ) {
+	if ( ! is_array( $data ) || ! function_exists( 'wc_get_product' ) || ! is_singular( 'product' ) ) {
+		return $data;
+	}
+	$som     = sim_duo_setprijs( wc_get_product( get_queried_object_id() ) );
+	$sleutel = __( 'Price', 'rank-math' ); // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- de sleutel die Rank Math zelf gebruikt ("Prijs").
+	if ( $som > 0 && isset( $data[ $sleutel ] ) ) {
+		$data[ $sleutel ] = wp_strip_all_tags( wc_price( $som ) );
+	}
+	return $data;
+} );

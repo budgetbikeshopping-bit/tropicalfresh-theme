@@ -307,16 +307,7 @@ add_action( 'wp_footer', function () {
  */
 add_filter( 'rank_math/snippet/rich_snippet_product_entity', function ( $entity ) {
 	$product = function_exists( 'wc_get_product' ) ? wc_get_product( get_the_ID() ) : null;
-	if ( ! $product || 'grouped' !== $product->get_type() || 'tropical-fresh-duo' !== $product->get_slug() ) {
-		return $entity;
-	}
-	$som = 0.0;
-	foreach ( $product->get_children() as $sim_child_id ) {
-		$c = wc_get_product( $sim_child_id );
-		if ( $c && $c->is_purchasable() && $c->is_in_stock() ) {
-			$som += (float) wc_get_price_to_display( $c );
-		}
-	}
+	$som     = $product ? sim_duo_setprijs( $product ) : 0.0; // 0 voor alles behalve de Duo (inc/meting.php)
 	if ( $som <= 0 || empty( $entity['offers'] ) ) {
 		return $entity;
 	}
