@@ -324,13 +324,15 @@ h3 { font-size: var(--t-h3); font-weight: 600; line-height: 1.15; letter-spacing
 .hero-facts {
   margin-top: 56px;
   display: flex;
-  gap: 34px;
+  flex-wrap: wrap;
+  gap: 12px 34px;
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--alu-dark);
 }
+.hero-facts span { white-space: nowrap; }
 
 /* 3D-podium */
 .stage {
@@ -1012,7 +1014,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .foot-grid { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 600px) {
+/* aankondigingsbalk blijft op een regel; de extra's passen pas vanaf 820px */
+@media (max-width: 819px) {
   .announce { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .announce .a-extra { display: none; }
 }
@@ -1032,6 +1035,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .hero .cta-row { gap: 10px; }
   .hero .cta-row .btn { flex: 1 1 100%; }
   .hero-facts { margin-top: 26px; }
+  .hero-facts span { white-space: normal; }
   .hero .stage { min-height: 320px; }
   .hero .tilt img.bottle { width: min(280px, 68vw); }
   .volg-inner { grid-template-columns: 1fr; }
