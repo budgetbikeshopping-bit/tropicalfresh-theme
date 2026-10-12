@@ -46,7 +46,7 @@ add_action( 'wp_head', function () {
 	if ( is_front_page() ) {
 		printf(
 			'<link rel="preload" as="image" href="%s" type="image/webp" fetchpriority="high">' . "\n",
-			esc_url( get_template_directory_uri() . '/assets/img/cutout_vanilla.webp' )
+			esc_url( get_template_directory_uri() . '/assets/img/cutout_vanilla.webp?v=' . SIM_VERSION )
 		);
 	}
 }, 2 );
@@ -147,7 +147,7 @@ function sim_product_visual( $product, $size = 'woocommerce_single', $eager = fa
 	if ( isset( $map[ $slug ] ) ) {
 		return sprintf(
 			'<img class="bottle" src="%s" alt="%s" width="900" height="900" %s>',
-			esc_url( get_template_directory_uri() . '/assets/img/' . $map[ $slug ] ),
+			esc_url( get_template_directory_uri() . '/assets/img/' . $map[ $slug ] . '?v=' . SIM_VERSION ),
 			esc_attr( $product->get_name() ),
 			$eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'
 		);

@@ -93,9 +93,9 @@ while ( have_posts() ) :
 				?>
 				<div class="tilt"><div class="float">
 					<div class="set-flesjes">
-						<span class="fl"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_vanilla.webp' ); ?>" width="900" height="900" alt="Creamy Vanilla autoparfum 60 ml" fetchpriority="high"></span>
-						<span class="fl"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_apple.webp' ); ?>" width="900" height="900" alt="Juicy Green Apple autoparfum 60 ml" fetchpriority="high"></span>
-						<span class="fl is-vrij"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_apple.webp' ); ?>" width="900" height="900" alt="Extra Juicy Green Apple autoparfum 60 ml, gratis in de 2+1 set"><span class="vrij-tag">Gratis</span></span>
+						<span class="fl"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_vanilla.webp?v=' . SIM_VERSION ); ?>" width="900" height="900" alt="Creamy Vanilla autoparfum 60 ml" fetchpriority="high"></span>
+						<span class="fl"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_apple.webp?v=' . SIM_VERSION ); ?>" width="900" height="900" alt="Juicy Green Apple autoparfum 60 ml" fetchpriority="high"></span>
+						<span class="fl is-vrij"><img src="<?php echo esc_url( $sim_img_dir . 'cutout_apple.webp?v=' . SIM_VERSION ); ?>" width="900" height="900" alt="Extra Juicy Green Apple autoparfum 60 ml, gratis in de 2+1 set"><span class="vrij-tag">Gratis</span></span>
 					</div>
 				</div></div>
 			<?php else : ?>
