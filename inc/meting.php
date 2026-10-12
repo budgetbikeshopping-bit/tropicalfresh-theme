@@ -177,7 +177,7 @@ function sim_ga_winkelwagen_data() {
 			$item['discount'] = round( $korting, 2 );
 		}
 		$items[] = $item;
-		$waarde += $item['price'] * $aantal;
+		$waarde += $prijs * $aantal; // onafgerond, zodat de waarde gelijk is aan het echte regeltotaal
 	}
 	if ( ! $items ) {
 		return null;
