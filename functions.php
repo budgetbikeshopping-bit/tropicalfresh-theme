@@ -82,7 +82,7 @@ function sim_product_character( $product ) {
 	$map = array(
 		'creamy-vanilla-autoparfum'    => 'Warm. Zacht. Vertrouwd. De geur van thuiskomen, ook onderweg.',
 		'juicy-green-apple-autoparfum' => 'Fris. Helder. Energiek. Frisse lucht op bestelling.',
-		'shiny-new-car-autoparfum'     => 'Clean. Modern. Herkenbaar. De geur van een nieuwe auto.',
+		'shiny-new-car-autoparfum'     => 'Strak. Modern. Herkenbaar. De geur van een nieuwe auto.',
 		'autoparfum-valuepack'         => 'Alle drie de geuren in één set.',
 		'tropical-fresh-duo'           => 'Vanilla en Apple samen, met een extra Apple gratis.',
 	);

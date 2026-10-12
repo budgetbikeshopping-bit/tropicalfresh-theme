@@ -39,7 +39,7 @@ get_header();
 		<div class="cat-tekst">
 			<h2>Autoparfum kopen bij Tropical Fresh</h2>
 			<p>Onze autoparfums zijn sprays van 60 ml: twee tot drie sprays in het interieur en je hebt tot twee dagen geur per spraybeurt. Geen hangertje aan je spiegel; elke geur is vlekvrij getest op leer, stof en kunststof. Jij bepaalt zelf de intensiteit door vaker of minder vaak te sprayen.</p>
-			<p>De collectie is bewust klein: Creamy Vanilla voor warm en huiselijk en Juicy Green Apple voor fris en energiek. Twijfel je? De <a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">geurwijzer</a> helpt je in &eacute;&eacute;n vraag kiezen. Vanaf &euro; 17,90 is de verzending gratis en je hebt altijd 14 dagen retourrecht. Tropical Fresh is een Nederlands merk uit Leiden.</p>
+			<p>De collectie is bewust klein: Creamy Vanilla is warm en zoet, Juicy Green Apple fris en fruitig. Twijfel je? De <a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">geurwijzer</a> helpt je in &eacute;&eacute;n vraag kiezen. Vanaf &euro; 17,90 is de verzending gratis en je hebt 14 dagen retourrecht. Tropical Fresh is een Nederlands merk uit Leiden.</p>
 		</div>
 		<?php endif; ?>
 	</div>

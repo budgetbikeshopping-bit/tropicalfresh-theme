@@ -76,7 +76,7 @@ foreach ( $sim_slugs as $sim_slug ) {
 			<h3>Is autoparfum veilig voor mijn interieur?</h3>
 			<p>Onze sprays zijn getest op leer, stof en kunststof en zijn vlekvrij. Spray niet direct op schermen of glas; dat is niet nodig voor de werking.</p>
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
-			<p>Veel luchtverfrissers voor de auto, zoals hangers en clips, geven passief en doorlopend geur af. Autoparfum is een spray die je zelf doseert: twee tot drie sprays op de matten of onder de stoel, en je hebt tot twee dagen geur per spraybeurt.</p>
+			<p>Een klassieke luchtverfrisser of geurhanger geeft continu geur af, of je dat nu wilt of niet. Autoparfum doseer je zelf, net als een parfum: jij bepaalt hoeveel en waar je sprayt.</p>
 			<h3>Waar spray je autoparfum het beste?</h3>
 			<p>Op de matten, onder de stoelen of op stoffen bekleding. Daar verdeelt de geur zich rustig door de auto terwijl je rijdt. Schermen en glas sla je over.</p>
 			<h3>Helpt autoparfum tegen een muffe lucht?</h3>
