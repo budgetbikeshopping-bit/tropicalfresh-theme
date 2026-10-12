@@ -307,31 +307,35 @@ while ( have_posts() ) :
 	<?php
 	// Campagne-/sfeerbeelden per geur (pack 8 sep, allemaal 60 ml). Het primaire
 	// productshot blijft de originele cutout; dit is aanvullend beeld.
+	// De bronnen zijn 1000 tot 1400 px breed: op desktop blijven de tegels in een raster van
+	// vier (ca. 300 px), groter worden ze onscherp. Bij Apple vult de 2+1-banner de andere helft.
 	$sim_gal = array(
 		'creamy-vanilla-autoparfum'    => array( 'hero' => '01', 'grid' => array( '02', '03', '04', '05' ) ),
 		'juicy-green-apple-autoparfum' => array( 'hero' => '06', 'grid' => array( '07', '09' ), 'actie' => '08' ),
-		'tropical-fresh-duo'           => array( 'hero' => '08', 'grid' => array( '09', '07' ) ),
+		'tropical-fresh-duo'           => array( 'hero' => '08', 'grid' => array( '09', '07', '02', '04' ) ),
 	);
 	$sim_g = $sim_gal[ $product->get_slug() ] ?? null;
-	if ( $sim_g && function_exists( 'sim_pack_img' ) ) : ?>
+	if ( $sim_g && function_exists( 'sim_pack_img' ) ) :
+		$sim_g_actie = ! empty( $sim_g['actie'] ) && function_exists( 'sim_promo_active' ) && sim_promo_active();
+		?>
 	<section class="pdp-galerij">
 		<div class="wrap">
 			<div class="section-head">
 				<span class="mono-label">In beeld</span>
 				<h2>Van dichtbij.</h2>
 			</div>
-			<div class="gal-hero"><?php echo sim_pack_img( $sim_g['hero'], '92vw' ); // phpcs:ignore ?></div>
+			<div class="gal-hero"><?php echo sim_pack_img( $sim_g['hero'], '(max-width: 1347px) 92vw, 1240px' ); // phpcs:ignore ?></div>
 			<?php if ( ! empty( $sim_g['grid'] ) ) : ?>
-			<div class="gal-grid<?php echo count( $sim_g['grid'] ) < 3 ? ' is-2' : ''; ?>">
+			<div class="gal-grid<?php echo ( count( $sim_g['grid'] ) < 3 && ! $sim_g_actie ) ? ' is-2' : ''; ?>">
 				<?php foreach ( $sim_g['grid'] as $sim_g_key ) : ?>
-					<figure><?php echo sim_pack_img( $sim_g_key, '(max-width: 767px) 46vw, 23vw' ); // phpcs:ignore ?></figure>
+					<figure><?php echo sim_pack_img( $sim_g_key, '(max-width: 767px) 46vw, (max-width: 1347px) 23vw, 300px' ); // phpcs:ignore ?></figure>
 				<?php endforeach; ?>
-			</div>
-			<?php endif; ?>
-			<?php if ( ! empty( $sim_g['actie'] ) && function_exists( 'sim_promo_active' ) && sim_promo_active() ) : ?>
-			<div class="gal-actie">
-				<?php echo sim_pack_img( $sim_g['actie'], '92vw' ); // phpcs:ignore ?>
-				<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
+				<?php if ( $sim_g_actie ) : ?>
+				<div class="gal-actie">
+					<?php echo sim_pack_img( $sim_g['actie'], '(max-width: 767px) 92vw, (max-width: 1347px) 46vw, 620px' ); // phpcs:ignore ?>
+					<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
+				</div>
+				<?php endif; ?>
 			</div>
 			<?php endif; ?>
 		</div>

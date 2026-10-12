@@ -858,7 +858,8 @@
   gap: 14px;
   margin-top: 14px;
 }
-.pdp-galerij .gal-grid.is-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* twee tegels zonder banner: zelfde tegelmaat als het raster van vier, niet opgeblazen */
+.pdp-galerij .gal-grid.is-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: calc(50% - 7px); }
 .pdp-galerij .gal-grid figure {
   margin: 0;
   aspect-ratio: 3 / 4;
@@ -867,14 +868,17 @@
   border: 1px solid var(--line-dark);
 }
 .pdp-galerij .gal-grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pdp-galerij .gal-actie { position: relative; margin-top: clamp(28px, 4vh, 44px); }
+/* 2+1-banner als laatste cel van het raster: op desktop de rechterhelft, verticaal gecentreerd */
+.pdp-galerij .gal-actie { position: relative; grid-column: span 2; align-self: center; }
 .pdp-galerij .gal-actie .btn {
   position: absolute;
-  right: clamp(16px, 3vw, 40px);
-  bottom: clamp(16px, 3vw, 36px);
+  right: clamp(14px, 2vw, 24px);
+  bottom: clamp(14px, 2vw, 22px);
 }
 @media (max-width: 767px) {
   .pdp-galerij .gal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pdp-galerij .gal-grid.is-2 { max-width: none; }
+  .pdp-galerij .gal-actie { grid-column: 1 / -1; margin-top: 18px; }
   .pdp-galerij .gal-actie .btn {
     position: static;
     margin-top: 12px;
