@@ -60,7 +60,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		<p class="hero-prijs">
 			<span><?php echo $sim_gelijk ? 'Per spray van 60 ml: ' : 'Vanaf '; ?><b><?php echo wp_kses_post( wc_price( min( $sim_losse ) ) ); ?></b><?php echo $sim_gelijk ? '' : ' per spray van 60 ml'; ?></span>
 			<?php if ( $sim_set_ok ) : ?>
-			<span class="hero-set">2+1 set: 3 flesjes voor <b><?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?></b><?php echo $sim_set_gratis ? ' met gratis verzending' : ''; ?></span>
+			<span class="hero-set">2+1 set: 3 flesjes voor <b><?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?></b><?php echo $sim_set_gratis ? ' met gratis&nbsp;verzending' : ''; ?></span>
 			<?php endif; ?>
 		</p>
 		<?php endif; ?>
@@ -111,7 +111,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 				<span>02 &middot; Juicy Green Apple 60 ml</span>
 				<span class="vrij">03 &middot; Juicy Green Apple 60 ml &middot; gratis</span>
 			</div>
-			<p class="camp-prijs"><b><?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?></b> voor 3 flesjes<?php echo $sim_set_gratis ? ' &middot; gratis verzending' : ''; ?></p>
+			<p class="camp-prijs"><b><?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?></b> voor 3 flesjes<?php echo $sim_set_gratis ? ' &middot; gratis&nbsp;verzending' : ''; ?></p>
 			<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
 		</div>
 		<div class="camp-media"
@@ -136,7 +136,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 /* Campagnevideo op alle schermformaten; alleen databesparing en reduced-motion
    houden de flesjes-visual (dan wordt niets extra's gedownload). De video wordt
    pas ingevoegd als de sectie in de buurt komt (wie niet scrolt, laadt niets) en
-   tot 1023px breed krijgt de bezoeker een lichtere 720p-versie en poster. */
+   tot 1023px breed krijgt de bezoeker een lichtere versie (720 px breed) en poster. */
 (function () {
 	var m = document.querySelector('.camp-media');
 	if (!m || !window.matchMedia) return;
