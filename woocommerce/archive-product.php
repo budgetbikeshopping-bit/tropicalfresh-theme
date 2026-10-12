@@ -24,10 +24,13 @@ get_header();
 		<?php if ( woocommerce_product_loop() ) : ?>
 			<div class="cards">
 				<?php
+				// Het beeld van de eerste kaart is het LCP-element: direct laden, niet lazy.
+				$GLOBALS['sim_eerste_kaart_eager'] = true;
 				while ( have_posts() ) :
 					the_post();
 					wc_get_template_part( 'content', 'product' );
 				endwhile;
+				$GLOBALS['sim_eerste_kaart_eager'] = false;
 				?>
 			</div>
 			<?php do_action( 'woocommerce_after_shop_loop' ); ?>

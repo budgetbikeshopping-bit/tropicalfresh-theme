@@ -51,10 +51,91 @@ add_action( 'wp_head', function () {
 	}
 }, 2 );
 
+/**
+ * Snelheid: render-blokkerende CSS die op de pagina niets doet uit de wachtrij
+ * (PSI mobiel 12 okt: ruim 750 ms aan blokkerende verzoeken). Alleen wat aantoonbaar
+ * ongebruikt is; de WooCommerce-basis-CSS blijft staan en LiteSpeed-combinatie blijft uit.
+ * - Blokbibliotheek en Stackable: alleen weg op templates die geen post-inhoud tonen;
+ *   de blokbibliotheek ook op productpagina's waarvan de beschrijving geen blokken bevat.
+ * - Contact Form 7: alleen laden op pagina's met een formulier.
+ * - Adres-autocomplete: hoort bij afrekenen, account en winkelwagen.
+ * - Merkstijlen: het thema toont nergens merkblokken.
+ * - Express-checkout-CSS op de PDP: de bijbehorende scripts gaan daar al uit (zie verderop).
+ */
+function sim_toont_geen_postinhoud() {
+	if ( is_front_page() || is_page( array( 'autoparfum', 'geurwijzer' ) ) ) {
+		return true;
+	}
+	return function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() );
+}
+
+/** Staat er een Contact Form 7-formulier op deze pagina? */
+function sim_pagina_heeft_cf7() {
+	if ( is_page( array( 'contact', 'retourneren' ) ) ) {
+		return true;
+	}
+	$sim_obj = get_queried_object();
+	return is_singular() && $sim_obj instanceof WP_Post && false !== strpos( (string) $sim_obj->post_content, 'contact-form-7' );
+}
+
+add_action( 'wp_enqueue_scripts', function () {
+	// PDP: de beschrijving is klassieke HTML; zodra er blokken in staan blijft de bibliotheek.
+	$sim_pdp_zonder_blokken = function_exists( 'is_product' ) && is_product() && ! has_blocks( get_queried_object_id() );
+	if ( sim_toont_geen_postinhoud() || $sim_pdp_zonder_blokken ) {
+		wp_dequeue_style( 'wp-block-library' );
+	}
+	if ( sim_toont_geen_postinhoud() ) {
+		wp_dequeue_style( 'ugb-style-css' );
+		wp_dequeue_style( 'ugb-style-css-responsive' );
+	}
+	if ( ! sim_pagina_heeft_cf7() ) {
+		wp_dequeue_style( 'contact-form-7' );
+		wp_dequeue_script( 'contact-form-7' );
+		wp_dequeue_script( 'swv' );
+	}
+	$sim_adres = function_exists( 'is_checkout' ) && ( is_checkout() || is_account_page() || is_cart() );
+	if ( ! $sim_adres ) {
+		wp_dequeue_style( 'wc-address-autocomplete' );
+		wp_dequeue_script( 'wc-address-autocomplete' );
+		wp_dequeue_script( 'wc-address-autocomplete-common' );
+	}
+	wp_dequeue_style( 'brands-styles' );
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		wp_dequeue_style( 'WCPAY_EXPRESS_CHECKOUT_ECE' );
+	}
+}, 1000 );
+
+/**
+ * Pijlerpagina en geurwijzer tonen prijzen en voorraad, maar vallen niet onder de
+ * standaard LiteSpeed-purge bij een productwijziging. Purge ze mee zodra een product
+ * of een voorraadstatus verandert, anders blijft er een oude prijs in de cache staan.
+ * Zonder LiteSpeed Cache doet do_action hier niets.
+ */
+function sim_purge_prijspaginas() {
+	foreach ( array( 'autoparfum', 'geurwijzer' ) as $sim_pad ) {
+		$sim_pagina = get_page_by_path( $sim_pad );
+		if ( $sim_pagina ) {
+			do_action( 'litespeed_purge_post', $sim_pagina->ID );
+		}
+	}
+}
+add_action( 'woocommerce_update_product', 'sim_purge_prijspaginas' );
+add_action( 'woocommerce_product_set_stock_status', 'sim_purge_prijspaginas' );
+
 /* ---------- helpers ---------- */
 
-/** Vrijgestelde productfoto per slug; valt terug op de featured image. */
+/**
+ * Vrijgestelde productfoto per slug; valt terug op de featured image.
+ * Alle cutouts zijn 900x900: de vaste afmetingen reserveren de ruimte (geen layout
+ * shift), de weergavebreedte komt uit de CSS (img.bottle krijgt height: auto).
+ * Zet een template $GLOBALS['sim_eerste_kaart_eager'] op true, dan laadt het
+ * eerstvolgende beeld direct (LCP) in plaats van lazy.
+ */
 function sim_product_visual( $product, $size = 'woocommerce_single', $eager = false ) {
+	if ( ! $eager && ! empty( $GLOBALS['sim_eerste_kaart_eager'] ) ) {
+		$eager                             = true;
+		$GLOBALS['sim_eerste_kaart_eager'] = false;
+	}
 	$map = array(
 		'creamy-vanilla-autoparfum'    => 'cutout_vanilla.webp',
 		'juicy-green-apple-autoparfum' => 'cutout_apple.webp',
@@ -65,14 +146,19 @@ function sim_product_visual( $product, $size = 'woocommerce_single', $eager = fa
 	$slug = $product ? $product->get_slug() : '';
 	if ( isset( $map[ $slug ] ) ) {
 		return sprintf(
-			'<img class="bottle" src="%s" alt="%s" %s>',
+			'<img class="bottle" src="%s" alt="%s" width="900" height="900" %s>',
 			esc_url( get_template_directory_uri() . '/assets/img/' . $map[ $slug ] ),
 			esc_attr( $product->get_name() ),
-			$eager ? 'fetchpriority="high"' : 'loading="lazy"'
+			$eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'
 		);
 	}
 	if ( $product && $product->get_image_id() ) {
-		return wp_get_attachment_image( $product->get_image_id(), $size, false, array( 'class' => 'bottle' ) );
+		$sim_attr = array( 'class' => 'bottle' );
+		if ( $eager ) {
+			$sim_attr['loading']       = false;
+			$sim_attr['fetchpriority'] = 'high';
+		}
+		return wp_get_attachment_image( $product->get_image_id(), $size, false, $sim_attr );
 	}
 	return '';
 }
