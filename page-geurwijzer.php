@@ -72,23 +72,29 @@ $sim_snc_ok   = $sim_snc && 'publish' === $sim_snc->get_status() && $sim_snc->is
 	</div>
 </section>
 
+<?php
+// Zonder 2+1 is er altijd een van beide geuren uitverkocht (zie sim_promo_active):
+// dan geen "allebei", maar een neutrale kop boven de leverbare geuren.
+$sim_all = $sim_products;
+if ( $sim_duo && $sim_promo ) {
+	$sim_all[] = $sim_duo;
+}
+?>
+<?php if ( $sim_all ) : ?>
 <section class="light collection" style="padding-top: 0;">
 	<div class="wrap">
 		<div class="section-head">
+			<?php if ( $sim_promo ) : ?>
 			<span class="mono-label">Niet kiezen?</span>
 			<h2>Dan gewoon allebei.</h2>
-			<?php if ( $sim_promo ) : ?>
 			<p class="lead">Met de 2+1 set neem je Creamy Vanilla en Juicy Green Apple samen en krijg je automatisch een extra Juicy Green Apple gratis. Twee karakters, drie flesjes.</p>
 			<?php else : ?>
-			<p class="lead">Twee karakters: warm en zoet of fris en fruitig. Wissel per seizoen of per stemming.</p>
+			<span class="mono-label">De collectie</span>
+			<h2>Kies je geur.</h2>
 			<?php endif; ?>
 		</div>
 		<div class="cards">
 			<?php
-			$sim_all = $sim_products;
-			if ( $sim_duo && $sim_promo ) {
-				$sim_all[] = $sim_duo;
-			}
 			foreach ( $sim_all as $p ) :
 				$post_object = get_post( $p->get_id() );
 				setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore
@@ -99,5 +105,6 @@ $sim_snc_ok   = $sim_snc && 'publish' === $sim_snc->get_status() && $sim_snc->is
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
 <?php get_footer(); ?>
