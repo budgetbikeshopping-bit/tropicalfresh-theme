@@ -902,36 +902,3 @@
 /* Voorwaardenvinkje even groot en even zwaar als het nieuwsbriefvinkje. */
 .woocommerce form .form-row.validate-required .woocommerce-form__label-for-checkbox { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; font-weight: 400; line-height: 1.5; }
 .woocommerce form .form-row .woocommerce-form__input-checkbox#terms { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--chloro-deep); }
-
-/* ---------- 1.5.3: witte studiofoto's (hoge resolutie) als productbeeld ---------- */
-img.bottle.foto-wit {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #e9eaec;
-}
-/* geen zweef- en kantelanimatie en geen losse schaduw onder een foto */
-.tilt .float:has(img.foto-wit) { animation: none; }
-.stage:has(img.foto-wit) .shadow { display: none; }
-.tilt img.bottle.foto-wit { width: min(460px, 34vw); transform: none; filter: none; box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45); }
-.pdp .stage img.bottle.foto-wit { width: min(520px, 38vw); }
-.pdp .stage .set-foto { position: relative; }
-.pdp .stage .set-foto .set-badge {
-  position: absolute; left: 14px; top: 14px;
-  padding: 6px 10px; border-radius: 2px;
-  background: var(--chloro); color: var(--graphite-950);
-  font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-}
-.card .photo img.foto-wit { width: min(240px, 100%); filter: none; box-shadow: 0 14px 28px rgba(19, 21, 19, 0.18); }
-.card .photo:has(img.foto-wit)::before { display: none; }
-.result img.foto-wit { width: 140px; flex: none; }
-@media (max-width: 767px) {
-  .pdp .stage { height: auto; min-height: 0; padding: 4px 0; }
-  .pdp .stage img.bottle.foto-wit { width: min(230px, 62vw); }
-  .tilt img.bottle.foto-wit { width: min(300px, 76vw); }
-  .card .photo img.foto-wit { width: min(200px, 100%); }
-  .pdp .stage .set-foto .set-badge { left: 8px; top: 8px; font-size: 9px; padding: 4px 7px; }
-}

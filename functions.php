@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.3' );
+define( 'SIM_VERSION', '1.5.4' );
 
 /* ---------- setup ---------- */
 
@@ -125,31 +125,16 @@ add_action( 'woocommerce_product_set_stock_status', 'sim_purge_prijspaginas' );
 /* ---------- helpers ---------- */
 
 /**
- * Productbeeld. Heeft het product een witte studiofoto als uitgelicht beeld (attachmentmeta
- * _sim_studio_wit), dan is dat het beeld (hoge resolutie, met srcset). Met $foto = false,
- * of zonder studiofoto, de vrijgestelde fles (cutout) voor de decoratieve composities.
  * Vrijgestelde productfoto per slug; valt terug op de featured image.
  * Alle cutouts zijn 900x900: de vaste afmetingen reserveren de ruimte (geen layout
  * shift), de weergavebreedte komt uit de CSS (img.bottle krijgt height: auto).
  * Zet een template $GLOBALS['sim_eerste_kaart_eager'] op true, dan laadt het
  * eerstvolgende beeld direct (LCP) in plaats van lazy.
  */
-function sim_product_visual( $product, $size = 'woocommerce_single', $eager = false, $foto = true ) {
+function sim_product_visual( $product, $size = 'woocommerce_single', $eager = false ) {
 	if ( ! $eager && ! empty( $GLOBALS['sim_eerste_kaart_eager'] ) ) {
 		$eager                             = true;
 		$GLOBALS['sim_eerste_kaart_eager'] = false;
-	}
-	$sim_beeld_id = $product ? (int) $product->get_image_id() : 0;
-	if ( $foto && $sim_beeld_id && get_post_meta( $sim_beeld_id, '_sim_studio_wit', true ) ) {
-		$sim_attr = array(
-			'class' => 'bottle foto-wit',
-			'sizes' => 'woocommerce_single' === $size ? '(max-width: 767px) 70vw, 520px' : '(max-width: 767px) 46vw, 300px',
-		);
-		if ( $eager ) {
-			$sim_attr['loading']       = false;
-			$sim_attr['fetchpriority'] = 'high';
-		}
-		return wp_get_attachment_image( $sim_beeld_id, 'woocommerce_single' === $size ? 'large' : 'woocommerce_single', false, $sim_attr );
 	}
 	$map = array(
 		'creamy-vanilla-autoparfum'    => 'cutout_vanilla.webp',
