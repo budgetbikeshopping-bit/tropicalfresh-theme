@@ -303,3 +303,109 @@ add_action( 'sim_na_artikel', function () {
 	}
 	echo sim_nieuwsbrief_blok( 'artikel' ); // phpcs:ignore
 } );
+
+/* ---------- winkelwagen: de 2+1 met een klik compleet ---------- */
+
+/**
+ * /?sim_add=apple of /?sim_add=vanilla voegt 1 flesje toe en stuurt door naar de
+ * winkelwagen (post/redirect/get zoals sim_duo), zodat verversen niets dubbel toevoegt.
+ */
+add_action( 'template_redirect', function () {
+	if ( empty( $_GET['sim_add'] ) || ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return;
+	}
+	$wie = sanitize_key( wp_unslash( $_GET['sim_add'] ) );
+	$ids = sim_promo_ids();
+	if ( ! empty( $ids[ $wie ] ) ) {
+		WC()->cart->add_to_cart( $ids[ $wie ], 1 );
+	}
+	// Deze doorverwijzing hoort nooit in de paginacache.
+	nocache_headers();
+	do_action( 'litespeed_control_set_nocache', 'sim_add voegt toe aan de winkelwagen' );
+	wp_safe_redirect( wc_get_cart_url() );
+	exit;
+} );
+
+/**
+ * 2+1-melding boven de winkelwagen, met een knop die het ontbrekende flesje direct
+ * toevoegt. Belooft alleen wat sim_promo_reconcile echt geeft: een gratis Juicy
+ * Green Apple, en alleen als de voorraad dat toelaat.
+ */
+function sim_winkelwagen_2plus1() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || ! sim_promo_active() ) {
+		return;
+	}
+	$ids    = sim_promo_ids();
+	$v      = 0;
+	$a      = 0;
+	$gratis = 0;
+	foreach ( WC()->cart->get_cart() as $item ) {
+		if ( ! empty( $item['sim_gratis'] ) ) {
+			$gratis += (int) $item['quantity'];
+			continue;
+		}
+		if ( (int) $item['product_id'] === $ids['vanilla'] ) {
+			$v += (int) $item['quantity'];
+		}
+		if ( (int) $item['product_id'] === $ids['apple'] ) {
+			$a += (int) $item['quantity'];
+		}
+	}
+	if ( $gratis > 0 ) {
+		$txt = 1 === $gratis
+			? 'Je 2+1 set is compleet: de gratis Juicy Green Apple zit erbij.'
+			: sprintf( 'Je 2+1 sets zijn compleet: de %d gratis Juicy Green Apples zitten erbij.', $gratis );
+		echo '<div class="promo-note is-actief">' . esc_html( $txt ) . '</div>';
+		return;
+	}
+	if ( $v > 0 && $a > 0 ) {
+		return; // al gecombineerd maar geen gratis regel: dan is er geen voorraad voor, dus niets beloven
+	}
+
+	// Is er na toevoegen nog een Juicy Green Apple over om weg te geven? (zelfde regel als sim_promo_reconcile)
+	$apple = wc_get_product( $ids['apple'] );
+	$vrij  = function ( $betaalde_apples ) use ( $apple ) {
+		return $apple && ( ! $apple->managing_stock() || (int) $apple->get_stock_quantity() - $betaalde_apples >= 1 );
+	};
+
+	if ( 0 === $v && 0 === $a ) {
+		if ( $vrij( 1 ) ) {
+			printf(
+				'<div class="promo-note"><p>Combineer Creamy Vanilla met Juicy Green Apple in de 2+1 set: je krijgt er een extra Juicy Green Apple gratis bij.</p><a class="button" rel="nofollow" href="%s">Voeg de 2+1 set toe</a></div>',
+				esc_url( home_url( '/?sim_duo=1' ) )
+			);
+		}
+		return;
+	}
+
+	$wie   = $v > 0 ? 'apple' : 'vanilla';
+	$naam  = 'apple' === $wie ? 'Juicy Green Apple' : 'Creamy Vanilla';
+	$ander = wc_get_product( $ids[ $wie ] );
+	if ( ! $ander || ! $ander->is_purchasable() || ! $ander->is_in_stock() || ! $vrij( 'apple' === $wie ? $a + 1 : $a ) ) {
+		return;
+	}
+
+	$cart    = WC()->cart;
+	$prijs   = (float) wc_get_price_to_display( $ander );
+	$sub     = (float) $cart->get_displayed_subtotal(); // zelfde maatstaf als de verzendbalk
+	$drempel = sim_verzend_drempel();
+	$tekst   = sprintf( 'Maak er de 2+1 set van: voeg %s toe en je krijgt er een extra Juicy Green Apple gratis bij.', esc_html( $naam ) );
+	// Het voordeel alleen voorrekenen als het klopt: onder de drempel nu, erboven na toevoegen, zonder kortingscode.
+	if ( $sub < $drempel && $sub + $prijs >= $drempel && ! $cart->get_applied_coupons() ) {
+		$verzending = (float) $cart->get_shipping_total() + (float) $cart->get_shipping_tax();
+		$tekst      = ( $verzending > 0 ? sprintf( 'Nu %s inclusief verzending. ', wc_price( $cart->get_total( 'edit' ) ) ) : '' )
+			. sprintf(
+				'Maak er de 2+1 set van: voeg %1$s toe voor %2$s en je krijgt er een extra Juicy Green Apple gratis bij. Je totaal wordt dan %3$s, met gratis verzending.',
+				esc_html( $naam ),
+				wc_price( $prijs ),
+				wc_price( $sub + $prijs )
+			);
+	}
+	printf(
+		'<div class="promo-note"><p>%s</p><a class="button" rel="nofollow" href="%s">%s</a></div>',
+		wp_kses_post( $tekst ),
+		esc_url( home_url( '/?sim_add=' . $wie ) ),
+		esc_html( 'Voeg ' . $naam . ' toe' )
+	);
+}
+add_action( 'woocommerce_before_cart', 'sim_winkelwagen_2plus1', 15 );

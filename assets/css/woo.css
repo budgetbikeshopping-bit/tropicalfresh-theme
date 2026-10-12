@@ -187,6 +187,9 @@
 }
 .promo-note a { color: var(--chloro-deep); text-decoration: underline; }
 .promo-note.is-actief { font-weight: 600; color: var(--chloro-deep); }
+/* 2+1-upsell: de knop voegt het ontbrekende flesje direct toe */
+.promo-note p { margin: 0; max-width: 70ch; }
+.promo-note .button { margin-top: 12px; min-height: 44px; }
 
 /* gratis actieregel in de cart */
 .sim-gratis-tag {

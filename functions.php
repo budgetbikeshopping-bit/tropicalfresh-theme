@@ -534,7 +534,7 @@ add_action( 'woocommerce_before_calculate_totals', function ( $cart ) {
 
 /** Presentatie van de gratis regel. */
 add_filter( 'woocommerce_cart_item_name', function ( $name, $item ) {
-	return empty( $item['sim_gratis'] ) ? $name : $name . ' <span class="sim-gratis-tag">Gratis actieproduct</span>';
+	return empty( $item['sim_gratis'] ) ? $name : $name . ' <span class="sim-gratis-tag">Gratis bij de 2+1</span>';
 }, 10, 2 );
 add_filter( 'woocommerce_cart_item_quantity', function ( $qty_html, $key, $item ) {
 	return empty( $item['sim_gratis'] ) ? $qty_html : '<span class="sim-qty-vast">' . (int) $item['quantity'] . '</span>';
@@ -544,7 +544,7 @@ add_filter( 'woocommerce_cart_item_remove_link', function ( $link, $key ) {
 	return ( $item && ! empty( $item['sim_gratis'] ) ) ? '' : $link;
 }, 10, 2 );
 add_filter( 'woocommerce_order_item_name', function ( $name, $item ) {
-	return ( is_object( $item ) && method_exists( $item, 'get_meta' ) && $item->get_meta( '_sim_gratis' ) ) ? $name . ' (gratis actieproduct)' : $name;
+	return ( is_object( $item ) && method_exists( $item, 'get_meta' ) && $item->get_meta( '_sim_gratis' ) ) ? $name . ' (gratis bij de 2+1)' : $name;
 }, 10, 2 );
 add_action( 'woocommerce_checkout_create_order_line_item', function ( $line_item, $cart_item_key, $values ) {
 	if ( ! empty( $values['sim_gratis'] ) ) {
@@ -552,38 +552,7 @@ add_action( 'woocommerce_checkout_create_order_line_item', function ( $line_item
 	}
 }, 10, 3 );
 
-/** Actiemelding in de winkelwagen, premium toon. */
-add_action( 'woocommerce_before_cart', function () {
-	if ( ! sim_promo_active() ) {
-		return;
-	}
-	$ids = sim_promo_ids();
-	$v = 0;
-	$a = 0;
-	$gratis = 0;
-	foreach ( WC()->cart->get_cart() as $item ) {
-		if ( ! empty( $item['sim_gratis'] ) ) {
-			$gratis += (int) $item['quantity'];
-			continue;
-		}
-		if ( (int) $item['product_id'] === $ids['vanilla'] ) {
-			$v += (int) $item['quantity'];
-		}
-		if ( (int) $item['product_id'] === $ids['apple'] ) {
-			$a += (int) $item['quantity'];
-		}
-	}
-	if ( $gratis > 0 ) {
-		$txt = 1 === $gratis ? 'Je gratis Juicy Green Apple is toegevoegd.' : sprintf( 'Je %d gratis Juicy Green Apples zijn toegevoegd.', $gratis );
-		echo '<div class="promo-note is-actief">' . esc_html( $txt ) . '</div>';
-	} elseif ( $v > 0 && 0 === $a ) {
-		printf( '<div class="promo-note">Voeg <a href="%s">Juicy Green Apple</a> toe en ontvang er nog een gratis bij.</div>', esc_url( get_permalink( $ids['apple'] ) ) );
-	} elseif ( $a > 0 && 0 === $v ) {
-		printf( '<div class="promo-note">Voeg <a href="%s">Creamy Vanilla</a> toe en ontvang een extra Juicy Green Apple gratis.</div>', esc_url( get_permalink( $ids['vanilla'] ) ) );
-	} else {
-		printf( '<div class="promo-note">Combineer <a href="%s">Creamy Vanilla</a> met <a href="%s">Juicy Green Apple</a> en ontvang een extra Apple gratis.</div>', esc_url( get_permalink( $ids['vanilla'] ) ), esc_url( get_permalink( $ids['apple'] ) ) );
-	}
-}, 15 );
+/* De 2+1-melding in de winkelwagen (met directe toevoegknop) staat in inc/klantcontact.php. */
 
 /** Snelkoppeling: beide geuren in een klik in de winkelwagen (2+1 wordt dan automatisch toegepast). */
 add_action( 'template_redirect', function () {
