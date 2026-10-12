@@ -41,7 +41,7 @@
 			</div>
 		</div>
 		<div class="foot-base">
-			<span class="foot-bedrijf">&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Tropical Fresh is een handelsnaam van Budget Bike XL B.V. &middot; Flevoweg 6E, 2318 BZ Leiden &middot; KvK 68069758 &middot; btw NL857288799B01 &middot; <a href="mailto:info@tropicalfresh.nl">info@tropicalfresh.nl</a></span>
+			<span class="foot-bedrijf">&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Tropical Fresh &middot; Hogewoerd 71, 2311 HG Leiden &middot; KvK 27371332 &middot; btw NL002422235B29 &middot; <a href="mailto:info@tropicalfresh.nl">info@tropicalfresh.nl</a></span>
 			<span>Veilig betalen: iDEAL &middot; Wero &middot; creditcard</span>
 		</div>
 	</div>

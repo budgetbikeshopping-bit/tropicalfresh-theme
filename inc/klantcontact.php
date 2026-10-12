@@ -24,7 +24,7 @@ function sim_verzend_drempel() {
 
 /** Bedrijfsgegevens voor onder aan klantmails. */
 function sim_klant_bedrijfsregel() {
-	return 'Tropical Fresh is een handelsnaam van Budget Bike XL B.V. · Flevoweg 6E, 2318 BZ Leiden · KvK 68069758 · btw NL857288799B01 · info@tropicalfresh.nl';
+	return 'Tropical Fresh · Hogewoerd 71, 2311 HG Leiden · KvK 27371332 · btw NL002422235B29 · info@tropicalfresh.nl';
 }
 
 /** Persoonlijke afmeldlink; dezelfde hmac als de afmeldhandler in functions.php. */
