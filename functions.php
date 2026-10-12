@@ -318,6 +318,9 @@ add_filter( 'rank_math/json_ld', function ( $data ) {
 				'addressCountry'  => 'NL',
 			);
 			$data[ $sim_key ]['email'] = 'info@tropicalfresh.nl';
+			// Tropical Fresh is een handelsnaam van Budget Bike XL B.V. (KvK 68069758).
+			$data[ $sim_key ]['legalName'] = 'Budget Bike XL B.V.';
+			$data[ $sim_key ]['vatID']     = 'NL857288799B01';
 			$data[ $sim_key ]['sameAs'] = array_values( wp_list_pluck( sim_sociale_kanalen(), 'url' ) );
 			unset( $data[ $sim_key ]['openingHours'], $data[ $sim_key ]['openingHoursSpecification'] );
 		}

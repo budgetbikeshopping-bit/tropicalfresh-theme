@@ -856,6 +856,8 @@ footer { background: var(--graphite-950); padding: clamp(48px, 7vh, 80px) 0 36px
   font-size: 11px;
   letter-spacing: 0.08em;
 }
+.foot-base .foot-bedrijf { max-width: 92ch; line-height: 1.7; color: var(--alu); }
+.foot-base .foot-bedrijf a:hover { color: var(--mineral); }
 
 /* ---------- productpagina ---------- */
 

@@ -265,10 +265,12 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<p class="lead">Daarom houden we de collectie klein en is elke geur vlekvrij getest op leer, stof en kunststof.</p>
 		</div>
 		<div class="facts reveal">
-			<div><span>Merk</span><b>Tropical Fresh B.V.</b></div>
+			<div><span>Merk</span><b>Tropical Fresh</b></div>
+			<div><span>Onderneming</span><b>Budget Bike XL B.V.</b></div>
 			<div><span>Thuisbasis</span><b>Leiden, Nederland</b></div>
 			<div><span>Formaat</span><b>60 ml spray</b></div>
-			<div><span>Contact</span><b>info@tropicalfresh.nl</b></div>
+			<div><span>KvK</span><b>68069758</b></div>
+			<div><span>Contact</span><b><a href="mailto:info@tropicalfresh.nl">info@tropicalfresh.nl</a></b></div>
 		</div>
 	</div>
 </section>
