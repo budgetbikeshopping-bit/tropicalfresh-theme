@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.1' );
+define( 'SIM_VERSION', '1.5.2' );
 
 /* ---------- setup ---------- */
 
