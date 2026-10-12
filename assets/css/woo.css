@@ -201,6 +201,9 @@
 }
 .promo-note a { color: var(--chloro-deep); text-decoration: underline; }
 .promo-note.is-actief { font-weight: 600; color: var(--chloro-deep); }
+/* 2+1-upsell: de knop voegt het ontbrekende flesje direct toe */
+.promo-note p { margin: 0; max-width: 70ch; }
+.promo-note .button { margin-top: 12px; min-height: 44px; }
 
 /* gratis actieregel in de cart */
 .sim-gratis-tag {
@@ -319,6 +322,50 @@
 #payment li { padding: 8px 0; }
 #payment .place-order .button { width: 100%; background: var(--chloro-deep); border-color: var(--chloro-deep); min-height: 54px; }
 
+/* nieuwsbrief-opt-in boven de bestelknop (niet vooraf aangevinkt) */
+.sim-optin { margin: 14px 0 6px; }
+/* zwaarder dan woocommerce.css (.woocommerce form .form-row label: line-height 2; .input-checkbox: margin -2px 8px 0 0) */
+.woocommerce form .form-row.sim-optin label { display: flex; gap: 10px; align-items: flex-start; margin: 0; font-size: 13.5px; font-weight: 400; line-height: 1.5; }
+.woocommerce form .form-row.sim-optin input[type="checkbox"] { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--chloro-deep); }
+.sim-optin a { color: var(--chloro-deep); text-decoration: underline; }
+
+/* bedankpagina: wat gebeurt er nu, en volg ons */
+.sim-bedankt {
+  margin: 28px 0 36px;
+  padding: clamp(22px, 3vw, 32px);
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-left: 3px solid var(--chloro-deep);
+  border-radius: 2px;
+}
+.sim-bedankt h2 { font-size: clamp(22px, 2.4vw, 28px); margin: 0 0 14px; }
+.sim-stappen { display: grid; gap: 10px; padding-left: 20px; font-size: 15px; color: var(--ink-soft); }
+.sim-stappen b { color: var(--ink); }
+.sim-stappen a, .sim-volg-yt a { color: var(--chloro-deep); text-decoration: underline; }
+.sim-volg { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line-light); }
+.sim-volg p { font-size: 15px; color: var(--ink-soft); }
+.sim-volg p b { color: var(--ink); }
+.sim-volg-knoppen { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 10px; }
+.sim-volg-knoppen a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.sim-volg-knoppen a:hover { border-color: var(--chloro-deep); color: var(--chloro-deep); }
+.sim-volg .sim-volg-yt { font-size: 13.5px; }
+
 /* account */
 .woocommerce-MyAccount-navigation ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
 .woocommerce-MyAccount-navigation a {
@@ -436,6 +483,8 @@
   cursor: pointer;
 }
 .sim-reviews p.stars a { color: var(--chloro); }
+/* reviewlink uit de mail landt op het formulier, niet onder de vaste kop */
+#review_form, .pdp details.acc { scroll-margin-top: 90px; }
 
 /* shop-paginatie */
 .woocommerce-pagination { margin-top: 40px; text-align: center; }

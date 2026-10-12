@@ -16,6 +16,9 @@ $sim_wide = function_exists( 'is_cart' ) && ( is_cart() || is_checkout() || is_a
 			</article>
 			<?php
 		endwhile;
+
+		// Plek voor een blok onder het artikel (o.a. het nieuwsbriefblok onder /autoparfum/-artikelen).
+		do_action( 'sim_na_artikel' );
 		?>
 	</div>
 </section>

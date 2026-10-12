@@ -544,48 +544,14 @@ add_filter( 'woocommerce_get_price_html', function ( $html, $product ) {
 	return wc_price( $som );
 }, 10, 2 );
 
-/* ---------- formulieren (nieuwsbrief + voorraadmelding) ---------- */
+/* ---------- klantcontact ---------- */
 
-function sim_handle_form( $type ) {
-	if ( ! isset( $_POST['sim_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['sim_nonce'] ), 'sim_form' ) ) {
-		wp_safe_redirect( wp_get_referer() ?: home_url( '/' ) );
-		exit;
-	}
-	$email = isset( $_POST['sim_email'] ) ? sanitize_email( wp_unslash( $_POST['sim_email'] ) ) : '';
-	$extra = isset( $_POST['sim_product'] ) ? sanitize_text_field( wp_unslash( $_POST['sim_product'] ) ) : '';
-	// honeypot
-	if ( ! empty( $_POST['sim_website'] ) || ! is_email( $email ) ) {
-		wp_safe_redirect( add_query_arg( 'sim', 'invalid', wp_get_referer() ?: home_url( '/' ) ) );
-		exit;
-	}
-	// Duurzame opslag: inschrijvingen leefden eerst alleen als notificatiemail.
-	if ( 'nieuwsbrief' === $type ) {
-		$sim_lijst = get_option( 'sim_nieuwsbrief_lijst', array() );
-		$sim_lijst[ strtolower( $email ) ] = time();
-		update_option( 'sim_nieuwsbrief_lijst', $sim_lijst, false );
-	} else {
-		$sim_bis   = get_option( 'sim_bis_lijst', array() );
-		$sim_bis[] = array( 'email' => strtolower( $email ), 'product' => $extra, 'tijd' => time() );
-		update_option( 'sim_bis_lijst', $sim_bis, false );
-	}
-	$subject = 'nieuwsbrief' === $type ? 'Nieuwsbrief-aanmelding via de site' : 'Voorraadmelding-aanvraag: ' . $extra;
-	wp_mail(
-		get_option( 'admin_email' ),
-		'[Tropical Fresh] ' . $subject,
-		"E-mail: {$email}\nType: {$type}\nProduct: {$extra}\nPagina: " . ( wp_get_referer() ?: '-' )
-	);
-	// Welkomstmail met de beloofde 10%-code naar de inschrijver zelf.
-	if ( 'nieuwsbrief' === $type ) {
-		wp_mail(
-			$email,
-			'Je 10% welkomstkorting bij Tropical Fresh',
-			"Hoi,\n\nWelkom bij Tropical Fresh. Dit is je persoonlijke welkomstkorting van 10% op je eerste bestelling:\n\nWELKOM10\n\nVul de code in bij het afrekenen op https://tropicalfresh.nl. De code werkt op het hele assortiment en is eenmalig per klant geldig.\n\nTot snel onderweg,\nTropical Fresh\nFlevoweg 6E, Leiden",
-			array( 'From: Tropical Fresh <info@tropicalfresh.nl>' )
-		);
-	}
-	wp_safe_redirect( add_query_arg( 'sim', 'ok', wp_get_referer() ?: home_url( '/' ) ) );
-	exit;
-}
+/**
+ * Nieuwsbrief, voorraadmelding, afrekenen, bedankpagina, 2+1-upsell in de
+ * winkelwagen en het reviewverzoek staan samen in inc/klantcontact.php.
+ */
+require_once get_template_directory() . '/inc/klantcontact.php';
+
 /**
  * Afmelden voor mailings: /?sim_afmelden=<base64 e-mail>&k=<hmac>. De hmac voorkomt
  * dat iemand anders je kan afmelden. Afmeldingen gaan op een suppressielijst die
@@ -615,11 +581,6 @@ add_action( 'template_redirect', function () {
 		array( 'response' => 200 )
 	);
 } );
-
-add_action( 'admin_post_sim_newsletter', fn() => sim_handle_form( 'nieuwsbrief' ) );
-add_action( 'admin_post_nopriv_sim_newsletter', fn() => sim_handle_form( 'nieuwsbrief' ) );
-add_action( 'admin_post_sim_stock', fn() => sim_handle_form( 'voorraad' ) );
-add_action( 'admin_post_nopriv_sim_stock', fn() => sim_handle_form( 'voorraad' ) );
 
 /* ---------- 2+1 actie: Vanilla + Apple = extra Apple gratis ---------- */
 
@@ -712,7 +673,7 @@ add_action( 'woocommerce_before_calculate_totals', function ( $cart ) {
 
 /** Presentatie van de gratis regel. */
 add_filter( 'woocommerce_cart_item_name', function ( $name, $item ) {
-	return empty( $item['sim_gratis'] ) ? $name : $name . ' <span class="sim-gratis-tag">Gratis actieproduct</span>';
+	return empty( $item['sim_gratis'] ) ? $name : $name . ' <span class="sim-gratis-tag">Gratis bij de 2+1</span>';
 }, 10, 2 );
 add_filter( 'woocommerce_cart_item_quantity', function ( $qty_html, $key, $item ) {
 	return empty( $item['sim_gratis'] ) ? $qty_html : '<span class="sim-qty-vast">' . (int) $item['quantity'] . '</span>';
@@ -722,7 +683,7 @@ add_filter( 'woocommerce_cart_item_remove_link', function ( $link, $key ) {
 	return ( $item && ! empty( $item['sim_gratis'] ) ) ? '' : $link;
 }, 10, 2 );
 add_filter( 'woocommerce_order_item_name', function ( $name, $item ) {
-	return ( is_object( $item ) && method_exists( $item, 'get_meta' ) && $item->get_meta( '_sim_gratis' ) ) ? $name . ' (gratis actieproduct)' : $name;
+	return ( is_object( $item ) && method_exists( $item, 'get_meta' ) && $item->get_meta( '_sim_gratis' ) ) ? $name . ' (gratis bij de 2+1)' : $name;
 }, 10, 2 );
 add_action( 'woocommerce_checkout_create_order_line_item', function ( $line_item, $cart_item_key, $values ) {
 	if ( ! empty( $values['sim_gratis'] ) ) {
@@ -730,38 +691,7 @@ add_action( 'woocommerce_checkout_create_order_line_item', function ( $line_item
 	}
 }, 10, 3 );
 
-/** Actiemelding in de winkelwagen, premium toon. */
-add_action( 'woocommerce_before_cart', function () {
-	if ( ! sim_promo_active() ) {
-		return;
-	}
-	$ids = sim_promo_ids();
-	$v = 0;
-	$a = 0;
-	$gratis = 0;
-	foreach ( WC()->cart->get_cart() as $item ) {
-		if ( ! empty( $item['sim_gratis'] ) ) {
-			$gratis += (int) $item['quantity'];
-			continue;
-		}
-		if ( (int) $item['product_id'] === $ids['vanilla'] ) {
-			$v += (int) $item['quantity'];
-		}
-		if ( (int) $item['product_id'] === $ids['apple'] ) {
-			$a += (int) $item['quantity'];
-		}
-	}
-	if ( $gratis > 0 ) {
-		$txt = 1 === $gratis ? 'Je gratis Juicy Green Apple is toegevoegd.' : sprintf( 'Je %d gratis Juicy Green Apples zijn toegevoegd.', $gratis );
-		echo '<div class="promo-note is-actief">' . esc_html( $txt ) . '</div>';
-	} elseif ( $v > 0 && 0 === $a ) {
-		printf( '<div class="promo-note">Voeg <a href="%s">Juicy Green Apple</a> toe en ontvang er nog een gratis bij.</div>', esc_url( get_permalink( $ids['apple'] ) ) );
-	} elseif ( $a > 0 && 0 === $v ) {
-		printf( '<div class="promo-note">Voeg <a href="%s">Creamy Vanilla</a> toe en ontvang een extra Juicy Green Apple gratis.</div>', esc_url( get_permalink( $ids['vanilla'] ) ) );
-	} else {
-		printf( '<div class="promo-note">Combineer <a href="%s">Creamy Vanilla</a> met <a href="%s">Juicy Green Apple</a> en ontvang een extra Apple gratis.</div>', esc_url( get_permalink( $ids['vanilla'] ) ), esc_url( get_permalink( $ids['apple'] ) ) );
-	}
-}, 15 );
+/* De 2+1-melding in de winkelwagen (met directe toevoegknop) staat in inc/klantcontact.php. */
 
 /** Snelkoppeling: beide geuren in een klik in de winkelwagen (2+1 wordt dan automatisch toegepast). */
 add_action( 'template_redirect', function () {
@@ -798,51 +728,4 @@ add_action( 'woocommerce_before_cart', function () {
 	}
 } );
 
-/* ---------- reviewverzoek na levering ---------- */
-
-/** Plan 7 dagen na afronding van een bestelling een reviewverzoek in. */
-add_action( 'woocommerce_order_status_completed', function ( $order_id ) {
-	if ( ! wp_next_scheduled( 'sim_review_request', array( $order_id ) ) ) {
-		wp_schedule_single_event( time() + 7 * DAY_IN_SECONDS, 'sim_review_request', array( $order_id ) );
-	}
-} );
-
-add_action( 'sim_review_request', function ( $order_id ) {
-	$order = wc_get_order( $order_id );
-	if ( ! $order || ! $order->get_billing_email() ) {
-		return;
-	}
-	$regels = array();
-	foreach ( $order->get_items() as $item ) {
-		$p = $item->get_product();
-		if ( $p ) {
-			$regels[] = '- ' . $p->get_name() . ': ' . $p->get_permalink() . '#reviews';
-		}
-	}
-	if ( ! $regels ) {
-		return;
-	}
-	wp_mail(
-		$order->get_billing_email(),
-		'Hoe bevalt je Tropical Fresh?',
-		"Hoi " . $order->get_billing_first_name() . ",\n\nJe bestelling is nu ruim een week binnen. Hoe ruikt je auto?\n\nEen korte review helpt ons enorm en duurt een minuutje:\n" . implode( "\n", $regels ) . "\n\nDank je wel en tot de volgende rit,\nTropical Fresh\ntropicalfresh.nl",
-		array( 'From: Tropical Fresh <info@tropicalfresh.nl>' )
-	);
-} );
-
-/** Herbruikbaar e-mailformulier. */
-function sim_email_form( $action, $button, $product_name = '' ) {
-	$ok = isset( $_GET['sim'] ) && 'ok' === $_GET['sim'];
-	ob_start(); ?>
-	<form class="bis" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-		<input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>">
-		<input type="hidden" name="sim_nonce" value="<?php echo esc_attr( wp_create_nonce( 'sim_form' ) ); ?>">
-		<?php if ( $product_name ) : ?><input type="hidden" name="sim_product" value="<?php echo esc_attr( $product_name ); ?>"><?php endif; ?>
-		<input type="text" name="sim_website" value="" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
-		<input type="email" name="sim_email" placeholder="je@email.nl" aria-label="E-mailadres" required>
-		<button class="btn btn-primary" type="submit"><?php echo esc_html( $button ); ?></button>
-		<?php if ( $ok ) : ?><span class="mono-label" role="status">Gelukt, je staat op de lijst.</span><?php endif; ?>
-	</form>
-	<?php
-	return ob_get_clean();
-}
+/* Het reviewverzoek na levering staat in inc/klantcontact.php. */

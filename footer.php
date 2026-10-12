@@ -1,16 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 </main>
 
-<section class="newsletter">
-	<div class="wrap inner">
-		<div>
-			<span class="mono-label">Nieuwsbrief</span>
-			<h2>Nieuwe geuren als eerste ruiken?</h2>
-			<p class="fine">Schrijf je in en ontvang 10% korting op je eerste bestelling.</p>
-		</div>
-		<?php echo sim_email_form( 'sim_newsletter', 'Aanmelden' ); // phpcs:ignore ?>
-	</div>
-</section>
+<?php echo sim_nieuwsbrief_blok( 'footer' ); // phpcs:ignore -- opmaak en copy staan in inc/klantcontact.php ?>
 
 <footer>
 	<div class="wrap">
