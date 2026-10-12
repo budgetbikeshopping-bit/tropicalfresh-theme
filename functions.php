@@ -660,6 +660,9 @@ add_action( 'template_redirect', function () {
 	if ( ! isset( $_GET['sim_duo'] ) || ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return;
 	}
+	// Nooit cachen: anders serveert LiteSpeed de redirect zonder dat er iets in de winkelwagen komt.
+	nocache_headers();
+	do_action( 'litespeed_control_set_nocache', 'sim_duo voegt de 2+1 set toe aan de winkelwagen' );
 	$ids = sim_promo_ids();
 	if ( $ids['vanilla'] && $ids['apple'] ) {
 		WC()->cart->add_to_cart( $ids['vanilla'], 1 );
