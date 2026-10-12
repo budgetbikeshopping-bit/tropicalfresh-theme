@@ -116,7 +116,9 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		</div>
 		<div class="camp-media"
 			data-sim-video="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3.mp4' ); ?>"
-			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3.jpg' ); ?>">
+			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3.jpg' ); ?>"
+			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3-720.mp4' ); ?>"
+			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3-800.jpg' ); ?>">
 			<div class="bottles">
 				<div class="b"><?php echo sim_product_visual( $sim_vanilla, 'woocommerce_thumbnail' ); // phpcs:ignore ?></div>
 				<span class="plus">+</span>
@@ -132,12 +134,18 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 </section>
 <script>
 /* Campagnevideo op alle schermformaten; alleen databesparing en reduced-motion
-   houden de flesjes-visual (dan wordt niets extra's gedownload). */
+   houden de flesjes-visual (dan wordt niets extra's gedownload). De video wordt
+   pas ingevoegd als de sectie in de buurt komt (wie niet scrolt, laadt niets) en
+   tot 1023px breed krijgt de bezoeker een lichtere 720p-versie en poster. */
 (function () {
 	var m = document.querySelector('.camp-media');
 	if (!m || !window.matchMedia) return;
 	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 	if (navigator.connection && navigator.connection.saveData) return;
+	var klein = window.matchMedia('(max-width: 1023px)').matches;
+	function bron(naam) {
+		return (klein && m.getAttribute(naam + '-mobiel')) || m.getAttribute(naam);
+	}
 	var done = false;
 	function inject() {
 		if (done) return;
@@ -146,8 +154,8 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		v.muted = true; v.loop = true; v.playsInline = true;
 		v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
 		v.preload = 'metadata';
-		v.poster = m.getAttribute('data-sim-poster');
-		v.src = m.getAttribute('data-sim-video');
+		v.poster = bron('data-sim-poster');
+		v.src = bron('data-sim-video');
 		v.className = 'camp-video';
 		v.setAttribute('aria-label', 'Promovideo van Tropical Fresh autoparfum');
 		m.classList.add('has-video');
@@ -176,7 +184,17 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			v.play && v.play().catch(function () {});
 		}
 	}
-	inject();
+	if ('IntersectionObserver' in window) {
+		var nabij = new IntersectionObserver(function (es) {
+			if (es[0].isIntersecting) {
+				nabij.disconnect();
+				inject();
+			}
+		}, { rootMargin: '300px 0px' });
+		nabij.observe(m);
+	} else {
+		inject();
+	}
 })();
 </script>
 <?php endif; ?>
