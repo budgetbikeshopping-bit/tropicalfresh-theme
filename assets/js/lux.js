@@ -135,6 +135,28 @@
     bio.observe(buyBtn);
   }
 
+  /* reviews: bij 0 reviews staat het blok verborgen (geen lege 'Reviews (0)'). Komt
+     iemand via een reviewlink of na het plaatsen van een review (#reviews,
+     #review_form, #comment-12), dan tonen en openen we het alsnog. */
+  var rvBody = document.querySelector(".pdp-accs .sim-reviews");
+  var rvAcc = rvBody && rvBody.closest("details");
+  if (rvAcc && rvAcc.hidden) {
+    var toonReviews = function () {
+      var h = window.location.hash;
+      if (!/^#(reviews|sim-reviews|review_form|review_form_wrapper|respond|comments|comment-\d+)$/.test(h)) return;
+      rvAcc.hidden = false;
+      rvAcc.open = true;
+      (document.querySelector(h) || rvAcc).scrollIntoView({ block: "start" });
+    };
+    // pas na het parsen: de Turnstile-lader in de footer luistert dan al naar 'toggle'
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", toonReviews);
+    } else {
+      toonReviews();
+    }
+    window.addEventListener("hashchange", toonReviews);
+  }
+
   /* formulieren in prototype: nog niet gekoppeld */
   document.querySelectorAll("form[data-proto]").forEach(function (f) {
     f.addEventListener("submit", function (ev) {

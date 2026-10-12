@@ -148,12 +148,52 @@ while ( have_posts() ) :
 					<summary>Verzending &amp; retour</summary>
 					<div class="body">Snelle levering door heel Nederland. Gratis verzending vanaf &euro; 17,90, daaronder &euro; 4,95. Niet tevreden? Je hebt 14 dagen retourrecht op ongebruikte producten in originele, verzegelde verpakking. Aanmelden kan via de retourpagina.</div>
 				</details>
-				<?php if ( comments_open() || $product->get_review_count() > 0 ) : ?>
-				<details class="acc" id="reviews">
-					<summary>Reviews (<?php echo esc_html( $product->get_review_count() ); ?>)</summary>
-					<div class="body sim-reviews"><?php comments_template(); ?></div>
+				<?php
+				$sim_reviews_n = (int) $product->get_review_count();
+				if ( comments_open() || $sim_reviews_n > 0 ) :
+					/*
+					 * Echtheid van reviews (Omnibus): de zin volgt de werkelijke instellingen,
+					 * zodat hij nooit meer belooft dan de winkel doet.
+					 */
+					if ( 'yes' === get_option( 'woocommerce_review_rating_verification_required' ) ) {
+						$sim_rv_echt = 'Alleen klanten die dit product bij ons kochten, kunnen een review plaatsen.';
+					} elseif ( 'yes' === get_option( 'woocommerce_review_rating_verification_label' ) ) {
+						$sim_rv_echt = 'Reviews met het label "geverifieerde eigenaar" zijn geschreven door klanten die dit product bij ons kochten. Bij andere reviews kunnen we niet controleren of de schrijver het product heeft gekocht.';
+					} else {
+						$sim_rv_echt = 'We controleren niet of de schrijver van een review dit product bij ons heeft gekocht.';
+					}
+					if ( '1' === (string) get_option( 'comment_moderation' ) ) {
+						$sim_rv_echt .= ' Alle reviews worden voor plaatsing handmatig bekeken.';
+					}
+					// Zolang er 0 reviews zijn tonen we geen lege 'Reviews (0)'. Het blok blijft
+					// wel in de pagina: lux.js opent het alsnog als iemand via een reviewlink komt.
+					?>
+				<details class="acc" id="reviews"<?php echo 0 === $sim_reviews_n ? ' hidden' : ''; ?>>
+					<summary><?php echo $sim_reviews_n > 0 ? esc_html( sprintf( 'Reviews (%d)', $sim_reviews_n ) ) : 'Schrijf de eerste review'; ?></summary>
+					<div class="body sim-reviews">
+						<?php if ( $sim_reviews_n > 0 ) : ?>
+							<p class="rv-echtheid"><?php echo esc_html( $sim_rv_echt ); ?></p>
+						<?php endif; ?>
+						<?php comments_template(); ?>
+					</div>
 				</details>
 				<?php endif; ?>
+			</div>
+
+			<?php // Sociale kanalen: compact onder de beschrijving, bewust niet bij de koopknop. ?>
+			<div class="pdp-social">
+				<span class="mono-label">Volg Tropical Fresh</span>
+				<div class="ps-links">
+					<a href="https://www.tiktok.com/@tropicalfresh_nl" target="_blank" rel="noopener">
+						<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.69 5.69 0 1 0 5.69 5.68V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48z"/></svg>
+						<span>TikTok <i>@tropicalfresh_nl</i></span>
+					</a>
+					<a href="https://www.instagram.com/tropicalfresh.nl/" target="_blank" rel="noopener">
+						<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/></svg>
+						<span>Instagram <i>@tropicalfresh.nl</i></span>
+					</a>
+				</div>
+				<p class="ps-yt">Ook op <a href="https://www.youtube.com/channel/UCqnlCEmGxS0Z-6bOJiOKSmA" target="_blank" rel="noopener">YouTube</a>.</p>
 			</div>
 		</div>
 	</section>
