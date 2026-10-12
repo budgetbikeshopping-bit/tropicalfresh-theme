@@ -109,3 +109,218 @@ add_action( 'wp_head', function () {
 	</script>
 	<?php
 }, 30 );
+
+/* ---------- GA4-trechter ---------- */
+
+/**
+ * GA4-item in hetzelfde formaat als Site Kit: het WooCommerce-product-ID als
+ * item_id (zonder het gla_-voorvoegsel van Merchant Center, zodat de
+ * itemrapporten aansluiten op de add_to_cart en purchase van Site Kit), de
+ * productnaam en de productcategorieen.
+ */
+function sim_ga_item( $product, $aantal = 1, $prijs = null ) {
+	$sim_id = $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id();
+	$item   = array(
+		'item_id'   => $sim_id,
+		'item_name' => $product->get_title(),
+		'price'     => round( (float) ( null === $prijs ? wc_get_price_to_display( $product ) : $prijs ), 2 ),
+		'quantity'  => max( 1, (int) $aantal ),
+	);
+	$sim_n = 1;
+	foreach ( wc_get_product_terms( $sim_id, 'product_cat', array( 'number' => 5 ) ) as $sim_cat ) {
+		$item[ 1 === $sim_n ? 'item_category' : 'item_category' . $sim_n ] = $sim_cat->name;
+		$sim_n++;
+	}
+	return $item;
+}
+
+/** Print een GA4-event met dezelfde gtag-shim als de Ads-conversie. */
+function sim_ga_event( $naam, $data ) {
+	printf(
+		"<script>window.gtag = window.gtag || function () { ( window.dataLayer = window.dataLayer || [] ).push( arguments ); };\ngtag( 'event', %s, %s );</script>\n",
+		wp_json_encode( (string) $naam ),
+		wp_json_encode( $data, JSON_HEX_TAG | JSON_HEX_AMP )
+	);
+}
+
+/**
+ * Items, waarde en kortingscode van de huidige winkelwagen. Prijzen zoals de
+ * winkelwagen ze toont (incl. btw), na korting; de gratis 2+1-fles telt mee
+ * met prijs 0. Verzendkosten zitten niet in de waarde.
+ */
+function sim_ga_winkelwagen_data() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+		return null;
+	}
+	$incl   = WC()->cart->display_prices_including_tax();
+	$items  = array();
+	$waarde = 0.0;
+	foreach ( WC()->cart->get_cart() as $regel ) {
+		$product = isset( $regel['data'] ) ? $regel['data'] : null;
+		$aantal  = isset( $regel['quantity'] ) ? (int) $regel['quantity'] : 0;
+		if ( ! $product instanceof WC_Product || $aantal < 1 ) {
+			continue;
+		}
+		$korting = 0.0;
+		if ( ! empty( $regel['sim_gratis'] ) ) {
+			$prijs = 0.0;
+		} elseif ( isset( $regel['line_total'], $regel['line_subtotal'] ) ) {
+			$totaal  = (float) $regel['line_total'] + ( $incl ? (float) ( $regel['line_tax'] ?? 0 ) : 0.0 );
+			$sub     = (float) $regel['line_subtotal'] + ( $incl ? (float) ( $regel['line_subtotal_tax'] ?? 0 ) : 0.0 );
+			$prijs   = $totaal / $aantal;
+			$korting = max( 0.0, ( $sub - $totaal ) / $aantal );
+		} else {
+			$prijs = (float) wc_get_price_to_display( $product );
+		}
+		$item = sim_ga_item( $product, $aantal, $prijs );
+		if ( $korting >= 0.005 ) {
+			$item['discount'] = round( $korting, 2 );
+		}
+		$items[] = $item;
+		$waarde += $item['price'] * $aantal;
+	}
+	if ( ! $items ) {
+		return null;
+	}
+	$data = array(
+		'currency' => get_woocommerce_currency(),
+		'value'    => round( $waarde, 2 ),
+		'items'    => $items,
+	);
+	$codes = WC()->cart->get_applied_coupons();
+	if ( $codes ) {
+		$data['coupon'] = implode( ',', $codes );
+	}
+	return $data;
+}
+
+/** Status van deze request: betaalde toevoegingen en of wp_footer al draaide. */
+function sim_ga_request_staat() {
+	static $staat = null;
+	if ( null === $staat ) {
+		$staat = (object) array(
+			'toegevoegd' => array(),
+			'footer'     => false,
+		);
+	}
+	return $staat;
+}
+
+/**
+ * add_to_cart voor toevoegingen die met een redirect eindigen, zoals de
+ * Duo-knop (/?sim_duo=1) of een toevoeging waarna WooCommerce doorstuurt naar
+ * de winkelwagen. Site Kit schrijft zijn add_to_cart pas in wp_footer van
+ * dezelfde request uit en mist die dus. We onthouden de betaalde toevoegingen
+ * van deze request (de gratis 2+1-regel niet); draait wp_footer niet, dan gaan
+ * ze via de sessie mee en vuren ze op de volgende winkelwagen- of afrekenpagina.
+ * Die worden nooit gecachet, dus een event komt nooit bij een andere bezoeker
+ * terecht. AJAX- en Store API-toevoegingen meet Site Kit zelf in de browser.
+ */
+add_action( 'woocommerce_add_to_cart', function ( $cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data ) {
+	if ( ! empty( $cart_item_data['sim_gratis'] ) || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+		return;
+	}
+	$product = wc_get_product( $variation_id ? $variation_id : $product_id );
+	if ( $product ) {
+		sim_ga_request_staat()->toegevoegd[] = sim_ga_item( $product, $quantity );
+	}
+}, 30, 6 );
+
+add_action( 'shutdown', function () {
+	$staat = sim_ga_request_staat();
+	if ( $staat->footer || ! $staat->toegevoegd || ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+	$wachtend = (array) WC()->session->get( 'sim_ga_add_to_cart', array() );
+	// De sessie slaat zichzelf later op (shutdown, prioriteit 20).
+	WC()->session->set( 'sim_ga_add_to_cart', array_slice( array_merge( $wachtend, $staat->toegevoegd ), -20 ) );
+}, 5 );
+
+/**
+ * Site Kit vult zijn productlijst (nodig voor add_to_cart bij de AJAX-knoppen)
+ * alleen via de filter woocommerce_loop_add_to_cart_link. De eigen knoppen op de
+ * homepage en in de productkaarten gaan buiten die filter om, waardoor Site Kit
+ * een leeg product met waarde NaN stuurt. We melden de leverbare losse producten
+ * daarom hier bij die filter aan, voordat Site Kit zijn data in wp_footer
+ * (prioriteit 10) uitschrijft. Zo werkt het ook voor knoppen die later in de
+ * templates bijkomen. De lijst is voor elke bezoeker gelijk, dus cache-veilig.
+ */
+add_action( 'wp_footer', function () {
+	if ( ! function_exists( 'wc_get_products' ) || is_checkout() ) {
+		return;
+	}
+	$producten = wc_get_products(
+		array(
+			'status'       => 'publish',
+			'type'         => 'simple',
+			'stock_status' => 'instock',
+			'limit'        => 20,
+		)
+	);
+	foreach ( $producten as $product ) {
+		if ( $product->is_purchasable() ) {
+			apply_filters( 'woocommerce_loop_add_to_cart_link', '', $product, array() ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		}
+	}
+}, 5 );
+
+/**
+ * De trechterstappen die Site Kit niet meet: view_item op de productpagina,
+ * view_cart op de winkelwagen en begin_checkout op de afrekenpagina (niet op de
+ * bedankpagina en niet op order-pay). Plus de uitgestelde add_to_cart van een
+ * toevoeging met redirect. De productpagina wordt gecachet; daar staat alleen
+ * productdata in, niets van de bezoeker.
+ */
+add_action( 'wp_footer', function () {
+	$staat         = sim_ga_request_staat();
+	$staat->footer = true; // toevoegingen van deze request schrijft Site Kit zelf uit
+	if ( ! function_exists( 'WC' ) || ! function_exists( 'is_product' ) ) {
+		return;
+	}
+	$valuta = get_woocommerce_currency();
+
+	if ( is_product() ) {
+		$product = wc_get_product( get_queried_object_id() );
+		if ( $product ) {
+			$som   = sim_duo_setprijs( $product );
+			$prijs = $som > 0 ? $som : (float) wc_get_price_to_display( $product );
+			sim_ga_event(
+				'view_item',
+				array(
+					'currency' => $valuta,
+					'value'    => round( $prijs, 2 ),
+					'items'    => array( sim_ga_item( $product, 1, $prijs ) ),
+				)
+			);
+		}
+		return;
+	}
+
+	$is_cart     = is_cart();
+	$is_checkout = is_checkout() && ! is_order_received_page() && ! is_wc_endpoint_url( 'order-pay' );
+	if ( ! $is_cart && ! $is_checkout ) {
+		return;
+	}
+
+	$wachtend = WC()->session ? WC()->session->get( 'sim_ga_add_to_cart' ) : null;
+	if ( $wachtend && is_array( $wachtend ) ) {
+		WC()->session->set( 'sim_ga_add_to_cart', null );
+		$waarde = 0.0;
+		foreach ( $wachtend as $item ) {
+			$waarde += (float) $item['price'] * (int) $item['quantity'];
+		}
+		sim_ga_event(
+			'add_to_cart',
+			array(
+				'currency' => $valuta,
+				'value'    => round( $waarde, 2 ),
+				'items'    => array_values( $wachtend ),
+			)
+		);
+	}
+
+	$data = sim_ga_winkelwagen_data();
+	if ( $data ) {
+		sim_ga_event( $is_cart ? 'view_cart' : 'begin_checkout', $data );
+	}
+}, 1 );
