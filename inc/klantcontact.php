@@ -159,17 +159,23 @@ function sim_handle_form( $type ) {
 			update_option( 'sim_nieuwsbrief_lijst', $lijst, false );
 		}
 		// Hoogstens een welkomstmail per adres, zodat niemand een vreemde inbox kan volspammen.
-		$welkom = 'sim_welkom_' . md5( $sleutel );
+		$welkom      = 'sim_welkom_' . md5( $sleutel );
+		$welkom_mail = '';
 		if ( ! $bekend && ! get_transient( $welkom ) ) {
 			set_transient( $welkom, time(), 30 * DAY_IN_SECONDS );
-			sim_welkomstmail( $email );
+			// Mislukt het versturen, dan staat dat in de adminmail: een nieuwe poging stuurt de code niet opnieuw.
+			$welkom_mail = sim_welkomstmail( $email )
+				? 'De welkomstcode is verstuurd.'
+				: 'Let op: de welkomstmail kon niet worden verstuurd. Stuur de code WELKOM10 zelf.';
+		} elseif ( ! $bekend ) {
+			$welkom_mail = 'De welkomstcode ging de afgelopen 30 dagen al naar dit adres en is niet opnieuw verstuurd.';
 		}
 		if ( ! $bekend ) {
 			wp_mail(
 				get_option( 'admin_email' ),
 				'[Tropical Fresh] Nieuwsbrief-aanmelding via de site',
-				"E-mail: {$email}\nType: nieuwsbrief\nPagina: {$pagina}"
-					. ( $afgemeld ? "\nLet op: dit adres staat op de afmeldlijst en is daarom niet op de nieuwsbrieflijst gezet. De welkomstcode is wel verstuurd." : '' )
+				"E-mail: {$email}\nType: nieuwsbrief\nPagina: {$pagina}\n{$welkom_mail}"
+					. ( $afgemeld ? "\nLet op: dit adres staat op de afmeldlijst en is daarom niet op de nieuwsbrieflijst gezet." : '' )
 			);
 		}
 	} else {
@@ -264,6 +270,13 @@ add_action( 'wp_footer', function () {
  * Bewust geen pop-up.
  */
 function sim_nieuwsbrief_blok( $variant = 'footer' ) {
+	// Staat het blok al onder het artikel, dan niet nog eens hetzelfde aanbod vlak erna in de footerstrook.
+	if ( 'artikel' !== $variant && ! empty( $GLOBALS['sim_nl_artikel_getoond'] ) ) {
+		return '';
+	}
+	if ( 'artikel' === $variant ) {
+		$GLOBALS['sim_nl_artikel_getoond'] = true;
+	}
 	$sub = 'Laat je e-mailadres achter en je ontvangt de code per mail. Daarna af en toe nieuws over onze geuren en aanbiedingen.';
 	ob_start();
 	if ( 'artikel' === $variant ) :
@@ -598,8 +611,8 @@ add_action( 'sim_review_request', function ( $order_id ) {
 		if ( isset( $regels[ $pid ] ) ) {
 			continue;
 		}
-		// #review_form: de productpagina klapt de reviews open en scrolt naar het formulier.
-		$regels[ $pid ] = '- ' . $p->get_name() . ': ' . get_permalink( $pid ) . '#review_form';
+		// Persoonlijke link: opent het formulier ook voor wie als gast bestelde (zie sim_review_order).
+		$regels[ $pid ] = '- ' . $p->get_name() . ': ' . sim_review_link( $order, $pid );
 	}
 	if ( ! $regels ) {
 		return;
@@ -622,6 +635,123 @@ add_action( 'sim_review_request', function ( $order_id ) {
 		$order->update_meta_data( '_sim_review_verstuurd', time() );
 		$order->save();
 	}
+} );
+
+/*
+ * Reviewtoegang voor gastkopers. De winkel staat op "alleen geverifieerde eigenaren"
+ * en WooCommerce herkent een koper alleen als hij is ingelogd. Wie als gast bestelde,
+ * zag na de reviewmail dus alleen "Enkel ingelogde klanten die dit product gekocht
+ * hebben" en geen formulier. De link in de reviewmail draagt daarom een hmac op order
+ * en e-mailadres. Is die geldig, is de order voltooid en zit het product in die order,
+ * dan mag deze bezoeker voor dit ene product een review schrijven. De instelling zelf
+ * blijft staan: zonder geldige sleutel verandert er niets.
+ */
+
+/** Sleutel voor de persoonlijke reviewlink. */
+function sim_review_sleutel( $order_id, $email ) {
+	return substr( hash_hmac( 'sha256', 'review|' . (int) $order_id . '|' . strtolower( (string) $email ), wp_salt( 'auth' ) ), 0, 20 );
+}
+
+/** Persoonlijke reviewlink uit de mail; #review_form klapt de reviews open en scrolt naar het formulier. */
+function sim_review_link( $order, $product_id ) {
+	return add_query_arg(
+		array(
+			'sim_rv' => (int) $order->get_id(),
+			'sim_rk' => sim_review_sleutel( $order->get_id(), $order->get_billing_email() ),
+		),
+		get_permalink( $product_id )
+	) . '#review_form';
+}
+
+/** Parameter van de reviewlink: uit het verzonden formulier, anders uit de url. */
+function sim_review_param( $naam ) {
+	$waarde = isset( $_POST[ $naam ] ) ? $_POST[ $naam ] : ( isset( $_GET[ $naam ] ) ? $_GET[ $naam ] : '' ); // phpcs:ignore WordPress.Security -- gecontroleerd met de hmac in sim_review_order
+	return is_scalar( $waarde ) ? sanitize_key( wp_unslash( (string) $waarde ) ) : '';
+}
+
+/** Over welk product gaat dit verzoek: het verzonden reviewformulier of de productpagina. */
+function sim_review_product_id() {
+	if ( isset( $_POST['comment_post_ID'] ) && is_scalar( $_POST['comment_post_ID'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return absint( $_POST['comment_post_ID'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	}
+	return ( did_action( 'wp' ) && function_exists( 'is_product' ) && is_product() ) ? (int) get_queried_object_id() : 0;
+}
+
+/** De order achter een geldige reviewlink voor dit product, anders null. */
+function sim_review_order( $product_id ) {
+	static $sim_gezien = array();
+	$product_id = (int) $product_id;
+	if ( array_key_exists( $product_id, $sim_gezien ) ) {
+		return $sim_gezien[ $product_id ];
+	}
+	$sim_gezien[ $product_id ] = null;
+	$order_id = absint( sim_review_param( 'sim_rv' ) );
+	$sleutel  = sim_review_param( 'sim_rk' );
+	if ( ! $product_id || ! $order_id || '' === $sleutel || ! function_exists( 'wc_get_order' ) ) {
+		return null;
+	}
+	$order = wc_get_order( $order_id );
+	if ( ! $order || ! $order->has_status( 'completed' ) || ! $order->get_billing_email() ) {
+		return null;
+	}
+	if ( ! hash_equals( sim_review_sleutel( $order_id, $order->get_billing_email() ), $sleutel ) ) {
+		return null;
+	}
+	foreach ( $order->get_items() as $item ) {
+		if ( (int) $item->get_product_id() === $product_id ) {
+			$sim_gezien[ $product_id ] = $order;
+			break;
+		}
+	}
+	return $sim_gezien[ $product_id ];
+}
+
+/** Persoonlijke reviewpagina nooit in de paginacache (naam en e-mailadres staan al ingevuld). */
+add_action( 'template_redirect', function () {
+	if ( '' === sim_review_param( 'sim_rv' ) ) {
+		return;
+	}
+	nocache_headers();
+	do_action( 'litespeed_control_set_nocache', 'persoonlijke reviewlink' );
+}, 1 );
+
+/** Geldige reviewlink: voor dit verzoek en dit product geldt de koper als geverifieerd. */
+add_filter( 'option_woocommerce_review_rating_verification_required', function ( $waarde ) {
+	if ( 'yes' !== $waarde || '' === sim_review_param( 'sim_rv' ) ) {
+		return $waarde;
+	}
+	return sim_review_order( sim_review_product_id() ) ? 'no' : $waarde;
+} );
+
+/** Geef de sleutel mee met het reviewformulier, zodat ook het verzenden wordt toegestaan. */
+add_action( 'comment_form', function ( $post_id ) {
+	$order = sim_review_order( $post_id );
+	if ( ! $order ) {
+		return;
+	}
+	printf(
+		'<input type="hidden" name="sim_rv" value="%d"><input type="hidden" name="sim_rk" value="%s">',
+		(int) $order->get_id(),
+		esc_attr( sim_review_sleutel( $order->get_id(), $order->get_billing_email() ) )
+	);
+} );
+
+/** Naam en e-mailadres van de bestelling alvast invullen; met dat adres krijgt de review het label geverifieerde koper. */
+add_filter( 'wp_get_current_commenter', function ( $commenter ) {
+	if ( '' === sim_review_param( 'sim_rv' ) ) {
+		return $commenter;
+	}
+	$order = sim_review_order( sim_review_product_id() );
+	if ( ! $order ) {
+		return $commenter;
+	}
+	if ( empty( $commenter['comment_author'] ) ) {
+		$commenter['comment_author'] = trim( (string) $order->get_billing_first_name() );
+	}
+	if ( empty( $commenter['comment_author_email'] ) ) {
+		$commenter['comment_author_email'] = $order->get_billing_email();
+	}
+	return $commenter;
 } );
 
 /**
