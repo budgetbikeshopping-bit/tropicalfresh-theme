@@ -38,7 +38,6 @@ foreach ( $sim_slugs as $sim_slug ) {
 				<li>Laat de geur zich verdelen terwijl je rijdt; de auto hoeft er niet voor dicht of open.</li>
 				<li>Geniet tot twee dagen per spraybeurt. Wil je meer intensiteit, spray dan vaker; te sterk is met &eacute;&eacute;n spray minder zo opgelost.</li>
 			</ol>
-			<p>Met normaal gebruik gaat een flesje van 60 ml ongeveer twee maanden mee.</p>
 
 			<h2>Eerst fris, dan geur</h2>
 			<?php
@@ -77,7 +76,7 @@ foreach ( $sim_slugs as $sim_slug ) {
 			<h3>Is autoparfum veilig voor mijn interieur?</h3>
 			<p>Onze sprays zijn getest op leer, stof en kunststof en zijn vlekvrij. Spray niet direct op schermen of glas; dat is niet nodig voor de werking.</p>
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
-			<p>Een luchtverfrisser maskeert vooral. Autoparfum is een geconcentreerde geurcompositie die je doseert als parfum, met een topnoot die je direct ruikt en een basis die blijft hangen.</p>
+			<p>Veel luchtverfrissers voor de auto, zoals hangers en clips, geven passief en doorlopend geur af. Autoparfum is een spray die je zelf doseert: twee tot drie sprays op de matten of onder de stoel, en je hebt tot twee dagen geur per spraybeurt.</p>
 			<h3>Waar spray je autoparfum het beste?</h3>
 			<p>Op de matten, onder de stoelen of op stoffen bekleding. Daar verdeelt de geur zich rustig door de auto terwijl je rijdt. Schermen en glas sla je over.</p>
 			<h3>Helpt autoparfum tegen een muffe lucht?</h3>

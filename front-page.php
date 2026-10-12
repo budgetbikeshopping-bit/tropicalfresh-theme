@@ -243,8 +243,8 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<div class="why reveal">
 				<span class="mono-label">Waarom spray</span>
 				<h2 style="margin: 16px 0 20px;">Geen hangertje aan je spiegel.</h2>
-				<p class="lead">Een spray werkt direct en laat niets aan je interieur bungelen. Jij bepaalt zelf de intensiteit: meer sprays voor een vollere geur, minder voor subtiel.</p>
-				<p class="lead">Elke geur is getest op leer, stof en kunststof en laat geen vlekken of resten achter.</p>
+				<p class="lead">Een spray laat niets aan je interieur bungelen. Jij bepaalt zelf de intensiteit: meer sprays voor een vollere geur, minder voor subtiel.</p>
+				<p class="lead">Elke geur is vlekvrij getest op leer, stof en kunststof.</p>
 			</div>
 			<div class="steps reveal">
 				<div class="step"><span class="n">STAP 01</span><div><h3>Spray</h3><p>Twee tot drie keer in het interieur, bijvoorbeeld op de matten of onder de stoel.</p></div></div>
@@ -262,7 +262,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<span class="mono-label">Ons verhaal</span>
 			<h2 style="margin: 16px 0 20px;">Klein merk. E&eacute;n obsessie.</h2>
 			<p class="lead">Tropical Fresh is een Nederlands merk uit Leiden met &eacute;&eacute;n overtuiging: je auto is een ruimte waar je echt tijd doorbrengt, dus de geur verdient dezelfde aandacht als het interieur.</p>
-			<p class="lead">Daarom houden we de collectie klein en testen we elke geur uitvoerig in echte auto's voordat hij in de shop komt.</p>
+			<p class="lead">Daarom houden we de collectie klein en is elke geur vlekvrij getest op leer, stof en kunststof.</p>
 		</div>
 		<div class="facts reveal">
 			<div><span>Merk</span><b>Tropical Fresh B.V.</b></div>
@@ -281,12 +281,12 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<h2>Voordat je bestelt.</h2>
 		</div>
 		<div class="list reveal">
-			<details class="acc"><summary>Hoe gebruik ik autoparfum?</summary><div class="body">Spray twee tot drie keer in het interieur van je auto. De geur verspreidt zich direct en blijft tot twee dagen hangen. Meer uitleg vind je op onze <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a>.</div></details>
+			<details class="acc"><summary>Hoe gebruik ik autoparfum?</summary><div class="body">Spray twee tot drie keer in het interieur van je auto, bijvoorbeeld op de matten of onder de stoel. Je hebt tot twee dagen geur per spraybeurt. Meer uitleg vind je op onze <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a>.</div></details>
 			<?php if ( $sim_set_ok ) : ?>
 			<details class="acc"><summary>Hoe werkt de 2+1 set?</summary><div class="body">Leg Creamy Vanilla en Juicy Green Apple samen in je winkelwagen; wij voegen automatisch een extra Juicy Green Apple van &euro; 0,00 toe. Zo krijg je 3 flesjes voor <?php echo wp_kses_post( wc_price( $sim_set_som ) ); ?><?php echo $sim_set_gratis ? ' met gratis verzending' : ''; ?>. Geen code nodig, en de 2+1 geldt per combinatie. Met de <a href="<?php echo esc_url( sim_duo_url() ); ?>">2+1 set</a> leg je beide geuren in &eacute;&eacute;n keer in je winkelwagen.</div></details>
 			<?php endif; ?>
-			<details class="acc"><summary>Waar spray ik het?</summary><div class="body">Op leer, stof of kunststof, bijvoorbeeld op de matten of onder de stoel. De sprays zijn vlekvrij en laten geen resten achter.</div></details>
-			<details class="acc"><summary>Hoe lang blijft de geur hangen?</summary><div class="body">Tot twee dagen per spraybeurt. Met normaal gebruik doe je ongeveer twee maanden met &eacute;&eacute;n flesje van 60 ml.</div></details>
+			<details class="acc"><summary>Waar spray ik het?</summary><div class="body">Bijvoorbeeld op de matten of onder de stoel. Elke geur is vlekvrij getest op leer, stof en kunststof.</div></details>
+			<details class="acc"><summary>Hoe lang blijft de geur hangen?</summary><div class="body">Tot twee dagen geur per spraybeurt. Daarna spray je gewoon opnieuw.</div></details>
 			<details class="acc"><summary>Hoe snel wordt mijn bestelling verzonden?</summary><div class="body">We verzenden snel door heel Nederland. Vanaf &euro; 17,90 is de verzending gratis; daaronder betaal je &euro; 4,95 verzendkosten.</div></details>
 			<details class="acc"><summary>Wat als een geur niet bij mij past?</summary><div class="body">Je hebt 14 dagen retourrecht. Ongebruikte producten in originele, verzegelde verpakking kun je aanmelden via onze retourpagina.</div></details>
 		</div>
