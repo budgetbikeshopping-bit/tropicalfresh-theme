@@ -310,8 +310,9 @@
 
 /* nieuwsbrief-opt-in boven de bestelknop (niet vooraf aangevinkt) */
 .sim-optin { margin: 14px 0 6px; }
-.sim-optin label { display: flex; gap: 10px; align-items: flex-start; margin: 0; font-size: 13.5px; font-weight: 400; line-height: 1.5; }
-.sim-optin input[type="checkbox"] { flex: none; width: 18px; height: 18px; margin-top: 2px; accent-color: var(--chloro-deep); }
+/* zwaarder dan woocommerce.css (.woocommerce form .form-row label: line-height 2; .input-checkbox: margin -2px 8px 0 0) */
+.woocommerce form .form-row.sim-optin label { display: flex; gap: 10px; align-items: flex-start; margin: 0; font-size: 13.5px; font-weight: 400; line-height: 1.5; }
+.woocommerce form .form-row.sim-optin input[type="checkbox"] { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--chloro-deep); }
 .sim-optin a { color: var(--chloro-deep); text-decoration: underline; }
 
 /* bedankpagina: wat gebeurt er nu, en volg ons */
