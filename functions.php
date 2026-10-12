@@ -102,8 +102,18 @@ add_action( 'wp_enqueue_scripts', function () {
 
 /* ---------- helpers ---------- */
 
-/** Vrijgestelde productfoto per slug; valt terug op de featured image. */
+/**
+ * Vrijgestelde productfoto per slug; valt terug op de featured image.
+ * Alle cutouts zijn 900x900: de vaste afmetingen reserveren de ruimte (geen layout
+ * shift), de weergavebreedte komt uit de CSS (img.bottle krijgt height: auto).
+ * Zet een template $GLOBALS['sim_eerste_kaart_eager'] op true, dan laadt het
+ * eerstvolgende beeld direct (LCP) in plaats van lazy.
+ */
 function sim_product_visual( $product, $size = 'woocommerce_single', $eager = false ) {
+	if ( ! $eager && ! empty( $GLOBALS['sim_eerste_kaart_eager'] ) ) {
+		$eager                             = true;
+		$GLOBALS['sim_eerste_kaart_eager'] = false;
+	}
 	$map = array(
 		'creamy-vanilla-autoparfum'    => 'cutout_vanilla.webp',
 		'juicy-green-apple-autoparfum' => 'cutout_apple.webp',
@@ -114,14 +124,19 @@ function sim_product_visual( $product, $size = 'woocommerce_single', $eager = fa
 	$slug = $product ? $product->get_slug() : '';
 	if ( isset( $map[ $slug ] ) ) {
 		return sprintf(
-			'<img class="bottle" src="%s" alt="%s" %s>',
+			'<img class="bottle" src="%s" alt="%s" width="900" height="900" %s>',
 			esc_url( get_template_directory_uri() . '/assets/img/' . $map[ $slug ] ),
 			esc_attr( $product->get_name() ),
-			$eager ? 'fetchpriority="high"' : 'loading="lazy"'
+			$eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'
 		);
 	}
 	if ( $product && $product->get_image_id() ) {
-		return wp_get_attachment_image( $product->get_image_id(), $size, false, array( 'class' => 'bottle' ) );
+		$sim_attr = array( 'class' => 'bottle' );
+		if ( $eager ) {
+			$sim_attr['loading']       = false;
+			$sim_attr['fetchpriority'] = 'high';
+		}
+		return wp_get_attachment_image( $product->get_image_id(), $size, false, $sim_attr );
 	}
 	return '';
 }
