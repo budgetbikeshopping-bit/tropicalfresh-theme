@@ -293,4 +293,19 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 	</div>
 </section>
 
+<!-- 08 VOLG ONS: na de FAQ, zodat bezoekers eerst producten en antwoorden zien -->
+<?php $sim_kanalen = sim_sociale_kanalen(); ?>
+<section class="light volg">
+	<div class="wrap volg-inner">
+		<div class="reveal">
+			<span class="mono-label">Volg ons</span>
+			<h2>Tropical Fresh op TikTok en Instagram.</h2>
+		</div>
+		<div class="reveal">
+			<?php echo sim_sociale_links( 'sociaal', array( 'tiktok', 'instagram' ), true ); // phpcs:ignore ?>
+			<p class="volg-yt">Ook op YouTube: <a href="<?php echo esc_url( $sim_kanalen['youtube']['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $sim_kanalen['youtube']['handle'] ); ?></a></p>
+		</div>
+	</div>
+</section>
+
 <?php get_footer(); ?>
