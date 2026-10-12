@@ -166,7 +166,8 @@ while ( have_posts() ) :
 								<span class="vrij">03 &middot; Juicy Green Apple &middot; 60 ml &middot; gratis</span>
 							<?php endif; ?>
 						</div>
-						<a class="btn btn-primary duo-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span><?php echo $sim_set_ok ? '3 flesjes toevoegen' : 'Set toevoegen'; ?> &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
+						<?php // Aantal en prijs alleen in de knop als de 2+1 echt geleverd kan worden. ?>
+						<a class="btn btn-primary duo-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span><?php echo $sim_set_ok ? '3 flesjes toevoegen &middot; ' . wp_kses_post( wc_price( $sim_set_prijs ) ) : 'Voeg de complete set toe'; // phpcs:ignore ?></span></a>
 						<?php if ( $sim_set_ok ) : ?>
 							<p class="duo-set-note">Vaste combi-set. Het gratis flesje verschijnt automatisch in je winkelwagen.</p>
 						<?php endif; ?>
