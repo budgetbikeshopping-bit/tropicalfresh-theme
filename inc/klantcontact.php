@@ -563,3 +563,93 @@ function sim_bedankt_blok( $order_id ) {
 	<?php
 }
 add_action( 'woocommerce_thankyou', 'sim_bedankt_blok', 5 );
+
+/* ---------- reviewverzoek na levering ---------- */
+
+/**
+ * Plan 7 dagen na Voltooid een reviewverzoek in. Bewust niet op 'In behandeling':
+ * dat betekent betaald, niet geleverd. Zet een order dus bij verzending op Voltooid.
+ */
+add_action( 'woocommerce_order_status_completed', function ( $order_id ) {
+	if ( ! wp_next_scheduled( 'sim_review_request', array( $order_id ) ) ) {
+		wp_schedule_single_event( time() + 7 * DAY_IN_SECONDS, 'sim_review_request', array( $order_id ) );
+	}
+} );
+
+add_action( 'sim_review_request', function ( $order_id ) {
+	$order = wc_get_order( $order_id );
+	if ( ! $order || ! $order->get_billing_email() || $order->get_meta( '_sim_review_verstuurd' ) ) {
+		return;
+	}
+	$email = $order->get_billing_email();
+	if ( sim_klant_afgemeld( $email ) ) {
+		return;
+	}
+	$regels = array();
+	foreach ( $order->get_items() as $item ) {
+		if ( $item->get_meta( '_sim_gratis' ) ) {
+			continue; // het gratis 2+1-flesje staat al als betaalde regel in de mail
+		}
+		$p = $item->get_product();
+		if ( ! $p ) {
+			continue;
+		}
+		$pid = $p->get_parent_id() ? $p->get_parent_id() : $p->get_id();
+		if ( isset( $regels[ $pid ] ) ) {
+			continue;
+		}
+		// #review_form: de productpagina klapt de reviews open en scrolt naar het formulier.
+		$regels[ $pid ] = '- ' . $p->get_name() . ': ' . get_permalink( $pid ) . '#review_form';
+	}
+	if ( ! $regels ) {
+		return;
+	}
+	$voornaam  = trim( (string) $order->get_billing_first_name() );
+	$verstuurd = wp_mail(
+		$email,
+		'Hoe bevalt je Tropical Fresh?',
+		'Hoi' . ( $voornaam ? ' ' . $voornaam : '' ) . ",\n\n"
+			. "Je bestelling is nu ruim een week binnen. Hoe ruikt je auto?\n\n"
+			. "Een korte review helpt ons enorm en duurt een minuutje:\n"
+			. implode( "\n", $regels ) . "\n\n"
+			. "Dank je wel en tot de volgende rit,\nTropical Fresh\ntropicalfresh.nl\n\n"
+			. "Wil je geen mails meer van ons ontvangen? Afmelden kan via deze link:\n"
+			. sim_klant_afmeldlink( $email ) . "\n\n"
+			. sim_klant_bedrijfsregel(),
+		array( 'From: Tropical Fresh <info@tropicalfresh.nl>' )
+	);
+	if ( $verstuurd ) {
+		$order->update_meta_data( '_sim_review_verstuurd', time() );
+		$order->save();
+	}
+} );
+
+/**
+ * Reviewlink uit de mail (#review_form, of het oude #reviews): klap de reviews-accordeon
+ * open en scrol naar het formulier. Het openklappen vuurt ook 'toggle', waarop
+ * functions.php Turnstile laadt; daarom draait dit na dat script (prioriteit 100).
+ */
+add_action( 'wp_footer', function () {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
+	?>
+	<script>
+	(function () {
+		var doelen = ['reviews', 'sim-reviews', 'review_form', 'review_form_wrapper', 'respond', 'commentform', 'comments'];
+		function openReviews(scrol) {
+			var h = (location.hash || '').slice(1);
+			if (doelen.indexOf(h) === -1) return;
+			var form = document.getElementById('review_form') || document.getElementById('respond');
+			var acc = document.querySelector('details#reviews, details#sim-reviews') || (form && form.closest('details'));
+			if (!acc) return;
+			if (!acc.open) acc.open = true;
+			if (scrol) (form || acc).scrollIntoView({ block: 'start' });
+		}
+		openReviews(false);
+		window.addEventListener('load', function () { openReviews(true); });
+		window.addEventListener('hashchange', function () { openReviews(true); });
+	})();
+	</script>
+	<?php
+}, 100 );

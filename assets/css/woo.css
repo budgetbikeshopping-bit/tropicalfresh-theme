@@ -468,6 +468,8 @@
   cursor: pointer;
 }
 .sim-reviews p.stars a { color: var(--chloro); }
+/* reviewlink uit de mail landt op het formulier, niet onder de vaste kop */
+#review_form, .pdp details.acc { scroll-margin-top: 90px; }
 
 /* shop-paginatie */
 .woocommerce-pagination { margin-top: 40px; text-align: center; }

@@ -589,35 +589,4 @@ add_action( 'woocommerce_before_cart', function () {
 	}
 } );
 
-/* ---------- reviewverzoek na levering ---------- */
-
-/** Plan 7 dagen na afronding van een bestelling een reviewverzoek in. */
-add_action( 'woocommerce_order_status_completed', function ( $order_id ) {
-	if ( ! wp_next_scheduled( 'sim_review_request', array( $order_id ) ) ) {
-		wp_schedule_single_event( time() + 7 * DAY_IN_SECONDS, 'sim_review_request', array( $order_id ) );
-	}
-} );
-
-add_action( 'sim_review_request', function ( $order_id ) {
-	$order = wc_get_order( $order_id );
-	if ( ! $order || ! $order->get_billing_email() ) {
-		return;
-	}
-	$regels = array();
-	foreach ( $order->get_items() as $item ) {
-		$p = $item->get_product();
-		if ( $p ) {
-			$regels[] = '- ' . $p->get_name() . ': ' . $p->get_permalink() . '#reviews';
-		}
-	}
-	if ( ! $regels ) {
-		return;
-	}
-	wp_mail(
-		$order->get_billing_email(),
-		'Hoe bevalt je Tropical Fresh?',
-		"Hoi " . $order->get_billing_first_name() . ",\n\nJe bestelling is nu ruim een week binnen. Hoe ruikt je auto?\n\nEen korte review helpt ons enorm en duurt een minuutje:\n" . implode( "\n", $regels ) . "\n\nDank je wel en tot de volgende rit,\nTropical Fresh\ntropicalfresh.nl",
-		array( 'From: Tropical Fresh <info@tropicalfresh.nl>' )
-	);
-} );
-
+/* Het reviewverzoek na levering staat in inc/klantcontact.php. */
