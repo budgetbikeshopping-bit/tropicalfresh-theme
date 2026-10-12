@@ -324,3 +324,94 @@ add_action( 'wp_footer', function () {
 		sim_ga_event( $is_cart ? 'view_cart' : 'begin_checkout', $data );
 	}
 }, 1 );
+
+/* ---------- productschema ---------- */
+
+/**
+ * Productnaam in het schema: de WooCommerce-productnaam in plaats van de
+ * SEO-titel met "| Tropical Fresh" (bij de Duo stond de merknaam er twee keer
+ * in). get_name() en niet get_the_title(): die laatste haalt de titel door
+ * wptexturize, waardoor er HTML-entiteiten in het schema kunnen komen. De naam
+ * is dan ook gelijk aan wat Google Listings & Ads naar de feed stuurt.
+ */
+add_filter( 'rank_math/snippet/rich_snippet_product_entity', function ( $entity ) {
+	$product = function_exists( 'wc_get_product' ) ? wc_get_product( get_the_ID() ) : null;
+	if ( $product && is_array( $entity ) ) {
+		$entity['name'] = $product->get_name();
+	}
+	return $entity;
+}, 16 );
+
+/**
+ * Retourbeleid voor het schema, volgens /retourbeleid/: 14 dagen bedenktijd na
+ * ontvangst, terugsturen per post, de retourkosten zijn voor de klant.
+ */
+function sim_schema_retourbeleid() {
+	return array(
+		'@type'                => 'MerchantReturnPolicy',
+		'applicableCountry'    => 'NL',
+		'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
+		'merchantReturnDays'   => 14,
+		'returnMethod'         => 'https://schema.org/ReturnByMail',
+		'returnFees'           => 'https://schema.org/ReturnFeesCustomerResponsibility',
+		'merchantReturnLink'   => home_url( '/retourbeleid/' ),
+	);
+}
+
+/**
+ * Verzend- en retourinfo bij een Offer. Verzending naar Nederland: gratis
+ * vanaf de drempel, daaronder de vaste verzendkosten (de Duo komt dus op 0).
+ * Geen levertijd: de verdeling over verwerking en transport is niet bevestigd.
+ */
+function sim_schema_offer_aanvullen( $offer ) {
+	if ( ! is_array( $offer ) || ! isset( $offer['@type'] ) || 'Offer' !== $offer['@type'] || ! isset( $offer['price'] ) ) {
+		return $offer;
+	}
+	$valuta     = ! empty( $offer['priceCurrency'] ) ? $offer['priceCurrency'] : get_woocommerce_currency();
+	$gratis     = round( (float) $offer['price'] * 100 ) >= round( (float) SIM_GRATIS_VERZENDING_VANAF * 100 );
+	$verzending = $gratis ? 0.0 : (float) SIM_VERZENDKOSTEN;
+
+	$offer['shippingDetails']         = array(
+		'@type'               => 'OfferShippingDetails',
+		'shippingRate'        => array(
+			'@type'    => 'MonetaryAmount',
+			'value'    => number_format( $verzending, 2, '.', '' ),
+			'currency' => $valuta,
+		),
+		'shippingDestination' => array(
+			'@type'          => 'DefinedRegion',
+			'addressCountry' => 'NL',
+		),
+	);
+	$offer['hasMerchantReturnPolicy'] = sim_schema_retourbeleid();
+	return $offer;
+}
+
+/** Na de Duo-prijsfix (prioriteit 20), zodat de Duo met 17,90 op gratis verzending uitkomt. */
+add_filter( 'rank_math/snippet/rich_snippet_product_entity', function ( $entity ) {
+	if ( ! is_array( $entity ) || empty( $entity['offers'] ) || ! is_array( $entity['offers'] ) ) {
+		return $entity;
+	}
+	if ( isset( $entity['offers']['@type'] ) ) {
+		$entity['offers'] = sim_schema_offer_aanvullen( $entity['offers'] );
+	} else {
+		foreach ( $entity['offers'] as $sim_i => $sim_offer ) {
+			$entity['offers'][ $sim_i ] = sim_schema_offer_aanvullen( $sim_offer );
+		}
+	}
+	return $entity;
+}, 25 );
+
+/** Hetzelfde retourbeleid ook op organisatieniveau (na de organisatiefilter op prioriteit 20). */
+add_filter( 'rank_math/json_ld', function ( $data ) {
+	if ( ! is_array( $data ) ) {
+		return $data;
+	}
+	foreach ( $data as $sim_key => $sim_entity ) {
+		$sim_type = isset( $sim_entity['@type'] ) ? (array) $sim_entity['@type'] : array();
+		if ( array_intersect( array( 'Store', 'Organization' ), $sim_type ) ) {
+			$data[ $sim_key ]['hasMerchantReturnPolicy'] = sim_schema_retourbeleid();
+		}
+	}
+	return $data;
+}, 21 );
