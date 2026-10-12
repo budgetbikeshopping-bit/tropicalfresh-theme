@@ -314,6 +314,43 @@
 .sim-optin input[type="checkbox"] { flex: none; width: 18px; height: 18px; margin-top: 2px; accent-color: var(--chloro-deep); }
 .sim-optin a { color: var(--chloro-deep); text-decoration: underline; }
 
+/* bedankpagina: wat gebeurt er nu, en volg ons */
+.sim-bedankt {
+  margin: 28px 0 36px;
+  padding: clamp(22px, 3vw, 32px);
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-left: 3px solid var(--chloro-deep);
+  border-radius: 2px;
+}
+.sim-bedankt h2 { font-size: clamp(22px, 2.4vw, 28px); margin: 0 0 14px; }
+.sim-stappen { display: grid; gap: 10px; padding-left: 20px; font-size: 15px; color: var(--ink-soft); }
+.sim-stappen b { color: var(--ink); }
+.sim-stappen a, .sim-volg-yt a { color: var(--chloro-deep); text-decoration: underline; }
+.sim-volg { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line-light); }
+.sim-volg p { font-size: 15px; color: var(--ink-soft); }
+.sim-volg p b { color: var(--ink); }
+.sim-volg-knoppen { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 10px; }
+.sim-volg-knoppen a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.sim-volg-knoppen a:hover { border-color: var(--chloro-deep); color: var(--chloro-deep); }
+.sim-volg .sim-volg-yt { font-size: 13.5px; }
+
 /* account */
 .woocommerce-MyAccount-navigation ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
 .woocommerce-MyAccount-navigation a {

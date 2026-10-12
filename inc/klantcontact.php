@@ -518,3 +518,48 @@ add_action( 'woocommerce_checkout_order_processed', function ( $order_id, $data 
 		update_option( 'sim_nieuwsbrief_lijst', $lijst, false );
 	}
 }, 10, 3 );
+
+/* ---------- bedankpagina ---------- */
+
+/** Volgende stap na de bestelling: wat er nu gebeurt, en waar je Tropical Fresh kunt volgen. */
+function sim_bedankt_blok( $order_id ) {
+	$order = $order_id ? wc_get_order( $order_id ) : false;
+	if ( ! $order || $order->has_status( array( 'failed', 'cancelled', 'refunded' ) ) ) {
+		return;
+	}
+	$betaald = $order->is_paid() || $order->has_status( 'on-hold' );
+	?>
+	<section class="sim-bedankt" aria-labelledby="sim-bedankt-kop">
+		<h2 id="sim-bedankt-kop">Wat gebeurt er nu?</h2>
+		<ol class="sim-stappen">
+			<li>
+				<b><?php echo $betaald ? 'Bevestiging per mail.' : 'Bevestiging zodra je betaling binnen is.'; ?></b>
+				We mailen je orderbevestiging naar <?php echo esc_html( $order->get_billing_email() ); ?>. Niets ontvangen? Kijk ook even in je spam.
+			</li>
+			<li>
+				<b>Inpakken en versturen.</b>
+				We pakken je bestelling in en versturen hem naar het adres dat je opgaf. De levertijd is doorgaans 2 tot 4 werkdagen.
+			</li>
+			<li>
+				<b>Vragen?</b>
+				Mail ons op <a href="mailto:info@tropicalfresh.nl">info@tropicalfresh.nl</a> en noem je bestelnummer <?php echo esc_html( $order->get_order_number() ); ?>.
+			</li>
+		</ol>
+		<div class="sim-volg">
+			<p><b>Volg ons.</b> Tropical Fresh zit op TikTok en Instagram.</p>
+			<div class="sim-volg-knoppen">
+				<a href="https://www.tiktok.com/@tropicalfresh_nl" target="_blank" rel="noopener">
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.69 5.69 0 1 0 5.69 5.68V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48z"/></svg>
+					TikTok
+				</a>
+				<a href="https://www.instagram.com/tropicalfresh.nl/" target="_blank" rel="noopener">
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/></svg>
+					Instagram
+				</a>
+			</div>
+			<p class="sim-volg-yt">En op YouTube: <a href="https://www.youtube.com/channel/UCqnlCEmGxS0Z-6bOJiOKSmA" target="_blank" rel="noopener">kanaal Tropical Fresh</a>.</p>
+		</div>
+	</section>
+	<?php
+}
+add_action( 'woocommerce_thankyou', 'sim_bedankt_blok', 5 );
