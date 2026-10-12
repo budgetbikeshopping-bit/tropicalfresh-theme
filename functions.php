@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.4.5' );
+define( 'SIM_VERSION', '1.5.0' );
 
 /* ---------- setup ---------- */
 
@@ -195,7 +195,7 @@ function sim_pack_img( $key, $sizes = '(max-width: 767px) 92vw, 46vw', $eager = 
 		'05' => array( '05-creamy-vanilla-sfeer-60ml', 936, 1360, 1162, 'Vanillebloem en vanillestokjes, het karakter van Creamy Vanilla' ),
 		'06' => array( '06-juicy-green-apple-luxe-auto-60ml', 1920, 691, 288, 'Tropical Fresh Juicy Green Apple 60 ml autoparfum in een luxe auto' ),
 		'07' => array( '07-juicy-green-apple-fris-60ml', 1328, 1376, 829, 'Juicy Green Apple frisse autogeur 60 ml met groene appels' ),
-		'08' => array( '08-actie-vanilla-apple-extra-apple-gratis', 1920, 1030, 429, 'Tropical Fresh 2+1 actie: koop Creamy Vanilla en Juicy Green Apple en krijg een extra Juicy Green Apple gratis' ),
+		'08' => array( '08-actie-vanilla-apple-extra-apple-gratis', 1920, 1030, 429, 'Tropical Fresh 2+1: koop Creamy Vanilla en Juicy Green Apple en krijg een extra Juicy Green Apple gratis' ),
 		'09' => array( '09-creamy-vanilla-juicy-green-apple-duo', 1080, 1360, 1007, 'Creamy Vanilla en Juicy Green Apple van Tropical Fresh, beide 60 ml' ),
 	);
 	if ( ! isset( $map[ $key ] ) ) {
@@ -347,7 +347,7 @@ require_once get_template_directory() . '/inc/meting.php';
 
 /** Vertrouwensregel direct onder de bestelknop, op het beslismoment zelf. */
 add_action( 'woocommerce_review_order_after_submit', function () {
-	echo '<p class="order-trust">Veilig betalen via iDEAL of kaart. 14 dagen retourrecht en snelle levering.</p>';
+	echo '<p class="order-trust">Veilig betalen met iDEAL, Wero of kaart. 14 dagen retourrecht. Doorgaans binnen 2 tot 4 werkdagen geleverd.</p>';
 } );
 
 /** Merk in het productschema als echt Brand-veld. */
