@@ -705,6 +705,50 @@
   border-radius: 2px;
 }
 
+/* stickybalk met keuze: twee even brede knoppen */
+.stickybuy.is-keuze { gap: 10px; }
+.stickybuy.is-keuze .btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+/* mobiel: koopknop in het eerste scherm (390x664). Compacter podium, kleinere
+   tussenruimtes en aantal + knop op een rij. */
+@media (max-width: 767px) {
+  .single-product .crumbs { padding-top: 12px; }
+  .pdp { gap: 12px; padding-top: 12px; }
+  .pdp .stage { min-height: 0; height: 210px; }
+  .pdp .stage .tilt { pointer-events: none; }
+  .pdp .stage img.bottle { width: 240px; }
+  .pdp .stage .set-flesjes { --b: 31px; }
+  .pdp .stage .set-flesjes .vrij-tag { bottom: -8px; font-size: 9px; padding: 3px 7px; }
+  .pdp-info .mono-label { margin-bottom: 8px; }
+  .pdp-info h1 { margin-bottom: 6px; }
+  .pdp-info .price-row { margin-bottom: 10px; }
+  .pdp-info .price { line-height: 1.25; }
+  .duo-uitleg { margin: 0 0 10px; }
+  .keuze { padding: 12px 14px; }
+  .keuze-kop { margin-bottom: 10px; }
+  .buy-block form.cart { flex-wrap: nowrap; gap: 10px; }
+  .buy-block form.cart .quantity input.qty { width: 60px; }
+  .buy-block form.cart .single_add_to_cart_button { min-width: 0; padding: 0 10px; letter-spacing: 0.1em; }
+  .keuze .set-add, .duo-set .duo-add { padding: 0 10px; letter-spacing: 0.1em; }
+  .duo-set { padding: 14px; gap: 12px; }
+  .duo-set .duo-add { order: -1; }
+  .koop-info { grid-template-columns: 1fr; margin-bottom: 24px; }
+  .pdp-social .ps-links i { display: none; }
+  .pdp-info .lead { margin: 0 0 20px; }
+  .spec-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .spec-strip .cell { padding: 12px 10px; }
+  .spec-strip .cell + .cell { border-top: 0; border-left: 1px solid var(--line-dark); }
+  .spec-strip b { font-size: 12.5px; }
+  /* ruimte voor de stickybalk, zodat hij de footer niet afdekt */
+  .single-product footer { padding-bottom: calc(36px + 76px + env(safe-area-inset-bottom)); }
+}
+
 /* galerij met campagne-/sfeerbeelden op de PDP */
 .pdp-galerij { border-top: 1px solid var(--line-dark); }
 .pdp-galerij .section-head { margin-bottom: 30px; }

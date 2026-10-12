@@ -282,11 +282,23 @@ while ( have_posts() ) :
 	</section>
 
 	<?php if ( $product->is_in_stock() && ( $sim_is_duo || $product->is_purchasable() ) ) : ?>
-	<!-- mobiele sticky-koopbalk: verschijnt zodra het koopblok uit beeld scrolt -->
-	<div class="stickybuy">
-		<div><span class="t"><?php echo esc_html( $sim_short ); ?></span><span class="p price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span></div>
-		<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_is_duo ? home_url( '/?sim_duo=1' ) : $product->add_to_cart_url() ); ?>">Toevoegen</a>
+	<!-- mobiele sticky-koopbalk: verschijnt zodra geen koopknop van de pagina meer in beeld is -->
+	<?php if ( $sim_keuze ) : ?>
+	<div class="stickybuy is-keuze">
+		<?php // Zonder JavaScript werkt de link zoals voorheen; lux.js stuurt hem door het echte koopformulier. ?>
+		<a class="btn btn-outline" rel="nofollow" data-sim-koop="1" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"><span>1 flesje &middot; <?php echo wp_kses_post( wc_price( $sim_los_prijs ) ); ?></span></a>
+		<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span>3 flesjes &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
 	</div>
+	<?php else : ?>
+	<div class="stickybuy">
+		<div><span class="t"><?php echo esc_html( ( $sim_is_duo && $sim_set_ok ) ? '2+1 set, 3 flesjes' : $sim_short ); ?></span><span class="p price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span></div>
+		<?php if ( $sim_is_duo ) : ?>
+			<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>">Toevoegen</a>
+		<?php else : ?>
+			<a class="btn btn-primary" rel="nofollow" data-sim-koop="" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>">Toevoegen</a>
+		<?php endif; ?>
+	</div>
+	<?php endif; ?>
 	<?php endif; ?>
 
 	<?php

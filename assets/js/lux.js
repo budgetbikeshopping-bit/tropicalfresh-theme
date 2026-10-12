@@ -125,14 +125,39 @@
     });
   }
 
-  /* sticky koopbalk op mobiel: tonen zodra de primaire koopknop uit beeld is */
-  var buyBtn = document.querySelector(".pdp .buy-row, .pdp .buy-block");
+  /* sticky koopbalk op mobiel: we kijken naar de koopknoppen zelf, niet naar het
+     hele koopblok. Is geen enkele knop voor minstens de helft in beeld (onder de
+     vaste kop), dan verschijnt de balk. Zo staat er altijd een koopknop in beeld,
+     en dekt de balk de kop niet af zolang de echte knop al zichtbaar is. */
   var sticky = document.querySelector(".stickybuy");
-  if (buyBtn && sticky) {
-    var bio = new IntersectionObserver(function (entries) {
-      sticky.classList.toggle("show", !entries[0].isIntersecting);
-    }, { threshold: 0 });
-    bio.observe(buyBtn);
+  var koopKnoppen = document.querySelectorAll(".pdp .single_add_to_cart_button, .pdp .set-add, .pdp .duo-add");
+  if (sticky && koopKnoppen.length) {
+    if ("IntersectionObserver" in window) {
+      var zicht = [];
+      var bio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var i = Array.prototype.indexOf.call(koopKnoppen, e.target);
+          zicht[i] = e.isIntersecting && e.intersectionRatio >= 0.5;
+        });
+        sticky.classList.toggle("show", zicht.indexOf(true) === -1);
+      }, { threshold: [0, 0.5, 1], rootMargin: "-64px 0px 0px 0px" });
+      koopKnoppen.forEach(function (k) { bio.observe(k); });
+    } else {
+      sticky.classList.add("show");
+    }
+  }
+
+  /* losse knop in de stickybalk: via het echte koopformulier (POST) toevoegen, zodat
+     herladen niet ongemerkt nog een flesje toevoegt. Zonder JS blijft de link werken. */
+  var stickyLos = document.querySelector(".stickybuy [data-sim-koop]");
+  var hoofdKnop = document.querySelector(".pdp form.cart .single_add_to_cart_button");
+  if (stickyLos && hoofdKnop) {
+    stickyLos.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      var aantal = hoofdKnop.form && hoofdKnop.form.querySelector("input.qty");
+      if (aantal && stickyLos.getAttribute("data-sim-koop")) aantal.value = stickyLos.getAttribute("data-sim-koop");
+      hoofdKnop.click();
+    });
   }
 
   /* reviews: bij 0 reviews staat het blok verborgen (geen lege 'Reviews (0)'). Komt
