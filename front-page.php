@@ -115,10 +115,10 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
 		</div>
 		<div class="camp-media"
-			data-sim-video="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3.mp4' ); ?>"
-			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3.jpg' ); ?>"
-			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promovideo-v3-720.mp4' ); ?>"
-			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promovideo-poster-v3-800.jpg' ); ?>">
+			data-sim-video="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promo-pov-1080.mp4?v=' . SIM_VERSION ); ?>"
+			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promo-pov-poster-720.jpg?v=' . SIM_VERSION ); ?>"
+			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promo-pov-720.mp4?v=' . SIM_VERSION ); ?>"
+			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promo-pov-poster-540.jpg?v=' . SIM_VERSION ); ?>">
 			<div class="bottles">
 				<div class="b"><?php echo sim_product_visual( $sim_vanilla, 'woocommerce_thumbnail' ); // phpcs:ignore ?></div>
 				<span class="plus">+</span>
@@ -133,16 +133,21 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 	</div>
 </section>
 <script>
-/* Campagnevideo op alle schermformaten; alleen databesparing en reduced-motion
-   houden de flesjes-visual (dan wordt niets extra's gedownload). De video wordt
-   pas ingevoegd als de sectie in de buurt komt (wie niet scrolt, laadt niets) en
-   tot 1023px breed krijgt de bezoeker een lichtere versie (720 px breed) en poster. */
+/* Campagnevideo (staande promo 9:16, "POV: je auto na een week regen", met muziek)
+   op alle schermformaten; alleen databesparing en reduced-motion houden de
+   flesjes-visual (dan wordt niets extra's gedownload). De video wordt pas
+   ingevoegd als de sectie in de buurt komt (wie niet scrolt, laadt niets) en tot
+   1023px breed krijgt de bezoeker een lichtere versie (720 px breed) en poster.
+   Browsers spelen video alleen stil automatisch af: de knop zet het geluid aan
+   en start de eerste keer vanaf het begin, zodat de grap met geluid klopt. */
 (function () {
 	var m = document.querySelector('.camp-media');
 	if (!m || !window.matchMedia) return;
 	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 	if (navigator.connection && navigator.connection.saveData) return;
 	var klein = window.matchMedia('(max-width: 1023px)').matches;
+	/* direct de staande 9:16-ruimte reserveren: geen layoutverschuiving bij het inwisselen */
+	m.classList.add('is-staand');
 	function bron(naam) {
 		return (klein && m.getAttribute(naam + '-mobiel')) || m.getAttribute(naam);
 	}
@@ -157,7 +162,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		v.poster = bron('data-sim-poster');
 		v.src = bron('data-sim-video');
 		v.className = 'camp-video';
-		v.setAttribute('aria-label', 'Promovideo van Tropical Fresh autoparfum');
+		v.setAttribute('aria-label', 'Promovideo Tropical Fresh: POV, je auto na een week regen');
 		m.classList.add('has-video');
 		m.appendChild(v);
 		/* geluid staat standaard uit; de bezoeker kan hem zelf aanzetten */
@@ -166,11 +171,15 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		k.className = 'camp-sound';
 		k.textContent = 'Geluid aan';
 		k.setAttribute('aria-pressed', 'false');
+		var gehoord = false;
 		k.addEventListener('click', function () {
 			v.muted = !v.muted;
 			k.textContent = v.muted ? 'Geluid aan' : 'Geluid uit';
 			k.setAttribute('aria-pressed', v.muted ? 'false' : 'true');
-			if (!v.muted) { v.play().catch(function () {}); }
+			if (!v.muted) {
+				if (!gehoord) { gehoord = true; try { v.currentTime = 0; } catch (e) {} }
+				v.play().catch(function () {});
+			}
 		});
 		m.appendChild(k);
 		if ('IntersectionObserver' in window) {

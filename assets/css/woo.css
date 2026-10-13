@@ -586,6 +586,13 @@
   background: var(--graphite-900);
 }
 .camp-media.has-video .bottles { display: none; }
+/* staande promovideo (9:16): de ruimte wordt gereserveerd zodra het script besluit de
+   video te tonen; hoogte begrensd zodat hij op desktop niet hoger dan het scherm wordt */
+.campaign .camp-media.is-staand {
+  aspect-ratio: 9 / 16;
+  width: min(100%, calc(min(78vh, 720px) * 9 / 16));
+  justify-self: center;
+}
 
 /* geluid-aan/uit-knop op de video: klein frosted materiaal, rechtsonder */
 .camp-media .camp-sound {
