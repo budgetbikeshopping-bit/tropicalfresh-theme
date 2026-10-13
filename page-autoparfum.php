@@ -174,6 +174,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/condens-vocht-auto/' ) ); ?>">Vocht en condens in de auto</a>. Waar het vocht zit, hoe je de auto droogt en de muffe lucht voorkomt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">Hoe lang blijft autoparfum hangen?</a> Wat warmte, ventilatie en geurgewenning met je autogeur doen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">Rooklucht uit de auto halen</a>. Reinigen, interieurfilter vervangen en de restgeur laten absorberen.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/interieur-schoonmaken-checklist/' ) ); ?>">Interieur van je auto schoonmaken: de checklist</a>. Zone voor zone van boven naar beneden, en pas daarna een geur.</li>
 			</ul>
 		</div>
 	</div>
