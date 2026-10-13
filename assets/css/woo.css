@@ -593,6 +593,16 @@
   width: min(100%, calc(min(78vh, 720px) * 9 / 16));
   justify-self: center;
 }
+/* de staande video is smal (max 405 px): de tekstkolom krijgt meer ruimte, zodat de kop op
+   brede schermen "2 kiezen. / 3 ontvangen." blijft en de 3 niet los op een regel valt */
+@media (min-width: 901px) {
+  .campaign .frame { grid-template-columns: 1.15fr 0.85fr; }
+}
+.campaign .copy { min-width: 0; }
+/* heel smalle telefoons (320 px): "ontvangen." past anders niet in de kolom */
+@media (max-width: 359px) {
+  .campaign .camp-title { font-size: 38px; }
+}
 
 /* geluid-aan/uit-knop op de video: klein frosted materiaal, rechtsonder */
 .camp-media .camp-sound {

@@ -158,7 +158,8 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		var v = document.createElement('video');
 		v.muted = true; v.loop = true; v.playsInline = true;
 		v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
-		v.preload = 'metadata';
+		/* niets downloaden tot de video echt in beeld komt (play() start het laden); de poster staat er al */
+		v.preload = 'none';
 		v.poster = bron('data-sim-poster');
 		v.src = bron('data-sim-video');
 		v.className = 'camp-video';
