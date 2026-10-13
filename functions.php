@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.8' );
+define( 'SIM_VERSION', '1.5.9' );
 
 /* ---------- setup ---------- */
 
@@ -518,6 +518,9 @@ add_filter( 'woocommerce_get_price_html', function ( $html, $product ) {
  * winkelwagen en het reviewverzoek staan samen in inc/klantcontact.php.
  */
 require_once get_template_directory() . '/inc/klantcontact.php';
+
+/* Google Shopping-feed: de 2+1 set (Duo) als bundel in Merchant Center, zie inc/feed-duo.php. */
+require_once get_template_directory() . '/inc/feed-duo.php';
 
 /**
  * Afmelden voor mailings: /?sim_afmelden=<base64 e-mail>&k=<hmac>. De hmac voorkomt
