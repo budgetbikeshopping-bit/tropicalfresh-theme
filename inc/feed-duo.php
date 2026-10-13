@@ -64,7 +64,10 @@ add_filter(
 		}
 		$overrides = (array) $overrides;
 
-		$overrides['title']            = 'Autoparfum spray 2+1 set, 3 x 60 ml: Creamy Vanilla en 2x Juicy Green Apple | Tropical Fresh';
+		// Titel en beschrijving zonder actietaal ("2+1", "gratis"): Google wil die niet in titel of
+		// beschrijving. Alleen toegestane claims; de aanbieding staat op de landingspagina.
+		$overrides['title']            = 'Autoparfum spray set 3 x 60 ml: Creamy Vanilla en 2x Juicy Green Apple | Tropical Fresh';
+		$overrides['description']      = 'Set van drie autoparfum sprays van 60 ml van Tropical Fresh: 1x Creamy Vanilla, warm en zoet, en 2x Juicy Green Apple, fris en fruitig. Tot 2 dagen geur per spraybeurt. Vlekvrij getest op leer, stof en kunststof. 14 dagen retourrecht.';
 		$overrides['price']            = array(
 			'amountMicros' => (string) (int) round( $set['prijs'] * 1000000 ),
 			'currencyCode' => get_woocommerce_currency(),

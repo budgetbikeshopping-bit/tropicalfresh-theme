@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.9' );
+define( 'SIM_VERSION', '1.5.10' );
 
 /* ---------- setup ---------- */
 
@@ -121,6 +121,25 @@ function sim_purge_prijspaginas() {
 }
 add_action( 'woocommerce_update_product', 'sim_purge_prijspaginas' );
 add_action( 'woocommerce_product_set_stock_status', 'sim_purge_prijspaginas' );
+
+/**
+ * De WooCommerce Store API (/wp-json/wc/store/..., o.a. cart en checkout) nooit in de LiteSpeed-cache.
+ * LiteSpeed cachete GET /wp-json/wc/store/v1/cart, waardoor iedere bezoeker die die URL opvroeg de
+ * winkelwagen met Cart-Token en Nonce van een andere sessie kreeg. De site gebruikt de klassieke
+ * winkelwagen, maar scripts en bots roepen de Store API wel aan. (Ook uitgesloten in de LiteSpeed-
+ * instelling Do Not Cache URIs; dit is de vangrail in code.)
+ */
+add_filter(
+	'rest_pre_dispatch',
+	function ( $result, $server, $request ) {
+		if ( $request instanceof WP_REST_Request && 0 === strpos( (string) $request->get_route(), '/wc/store' ) ) {
+			do_action( 'litespeed_control_set_nocache', 'WooCommerce Store API is per sessie' );
+		}
+		return $result;
+	},
+	10,
+	3
+);
 
 /* ---------- helpers ---------- */
 
