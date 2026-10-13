@@ -599,9 +599,10 @@
   .campaign .frame { grid-template-columns: 1.15fr 0.85fr; }
 }
 .campaign .copy { min-width: 0; }
-/* heel smalle telefoons (320 px): "ontvangen." past anders niet in de kolom */
-@media (max-width: 359px) {
-  .campaign .camp-title { font-size: 38px; }
+/* telefoons: "3 ontvangen." is 6,7x de lettergrootte breed; de kolom is 92vw min 2x 32 px
+   padding en 2 px rand. Deler 7 houdt de regel heel (geen losse 3) tot 320 px */
+@media (max-width: 900px) {
+  .campaign .camp-title { font-size: min(clamp(44px, 5.5vw, 84px), calc((92vw - 66px) / 7)); }
 }
 
 /* geluid-aan/uit-knop op de video: klein frosted materiaal, rechtsonder */
