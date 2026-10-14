@@ -323,7 +323,9 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 	</div>
 </section>
 
-<!-- 08 VOLG ONS: na de FAQ, zodat bezoekers eerst producten en antwoorden zien -->
+<!-- 08 VOLG ONS: tijdelijk uit (14 okt): profielen met 0-1 volgers ondermijnen vertrouwen. Terug aanzetten met
+     add_filter( 'sim_toon_volgblokken', '__return_true' ) zodra er publiek is. De icoontjes in de footer blijven. -->
+<?php if ( apply_filters( 'sim_toon_volgblokken', false ) ) : ?>
 <?php $sim_kanalen = sim_sociale_kanalen(); ?>
 <section class="light volg">
 	<div class="wrap volg-inner">
@@ -337,5 +339,6 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		</div>
 	</div>
 </section>
+<?php endif; ?>
 
 <?php get_footer(); ?>

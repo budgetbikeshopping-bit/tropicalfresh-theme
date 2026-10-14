@@ -905,6 +905,35 @@
   }
 }
 
+/* 1.5.12: echte foto's in 'Van dichtbij': staande 4:5-tegels (niet bijgesneden) en de doosfoto
+   over twee kolommen, verticaal gecentreerd; op mobiel de doosfoto over de volle breedte */
+.pdp-galerij .gal-grid figure { aspect-ratio: 4 / 5; }
+.pdp-galerij .gal-grid figure.gal-breed {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  align-self: center;
+  overflow: visible;
+  border: 0;
+}
+.pdp-galerij .gal-grid figure.gal-breed img {
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--line-dark);
+}
+.pdp-galerij .gal-breed figcaption {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--alu);
+}
+@media (max-width: 767px) {
+  .pdp-galerij .gal-grid figure.gal-breed { grid-column: 1 / -1; margin-top: 8px; }
+}
+
+.pdp .duo-anker { margin: -4px 0 14px; font-size: 14px; color: var(--alu); }
+.pdp .duo-anker .amount { color: var(--mineral); }
+
 /* ---------- 1.5.1: WooCommerce-knoppen in themastijl, 2+1 set als eerste keuze, gelijke vinkjes ---------- */
 .woocommerce .promo-note a.button,
 .woocommerce .return-to-shop a.button,

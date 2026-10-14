@@ -117,6 +117,14 @@ while ( have_posts() ) :
 			</div>
 			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
 				<p class="duo-uitleg"><b>2+1 set:</b> 3 flesjes van 60 ml, je betaalt er 2<?php echo $sim_set_gratis_verzending ? ', met gratis verzending' : ''; ?>.</p>
+				<?php
+				// Waarde-anker: wat dezelfde drie flesjes los kosten (Vanilla + 2x Apple, eigen losse prijzen),
+				// geen doorgestreepte van-prijs.
+				if ( $sim_set_ok && $sim_set_a ) :
+					$sim_los_drie = $sim_set_prijs + (float) wc_get_price_to_display( $sim_set_a );
+					?>
+				<p class="duo-anker">Los gekocht kosten deze drie flesjes <?php echo wp_kses_post( wc_price( $sim_los_drie ) ); ?>. In de set betaal je <?php echo wp_kses_post( wc_price( $sim_set_prijs / 3 ) ); ?> per flesje.</p>
+				<?php endif; ?>
 			<?php endif; ?>
 
 			<?php
@@ -266,7 +274,8 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 
-			<?php // Sociale kanalen: compact onder de beschrijving, bewust niet bij de koopknop. ?>
+			<?php // Sociale kanalen tijdelijk uit (14 okt): profielen met 0-1 volgers ondermijnen vertrouwen; aan met de filter sim_toon_volgblokken. ?>
+			<?php if ( apply_filters( 'sim_toon_volgblokken', false ) ) : ?>
 			<div class="pdp-social">
 				<span class="mono-label">Volg Tropical Fresh</span>
 				<div class="ps-links">
@@ -281,6 +290,7 @@ while ( have_posts() ) :
 				</div>
 				<p class="ps-yt">Ook op <a href="https://www.youtube.com/channel/UCqnlCEmGxS0Z-6bOJiOKSmA" target="_blank" rel="noopener">YouTube</a>.</p>
 			</div>
+			<?php endif; ?>
 		</div>
 	</section>
 
@@ -305,51 +315,32 @@ while ( have_posts() ) :
 	<?php endif; ?>
 
 	<?php
-	// Campagne-/sfeerbeelden per geur (pack 8 sep, allemaal 60 ml). Het primaire
-	// productshot blijft de originele cutout; dit is aanvullend beeld.
-	// De bronnen zijn 1000 tot 1400 px breed: op desktop blijven de tegels in een raster van
-	// vier (ca. 300 px), groter worden ze onscherp. De 2+1-banner (08) is zelf zacht en staat
-	// daarom nooit over de volle breedte: hij vult de helft van de rij (Duo vooraan, zonder knop
-	// naar zichzelf; Apple achteraan met knop naar de set).
+	// Echte productfoto's per geur (eigen opnames van de flesjes, vrijgesteld op een studio-
+	// achtergrond) plus de foto van de verzenddoosjes. De AI-sfeerbeelden (pack 8 sep) staan hier
+	// niet meer: die hadden verminkte etiketteksten en wekten wantrouwen.
 	$sim_gal = array(
-		'creamy-vanilla-autoparfum'    => array( 'hero' => '01', 'grid' => array( '02', '03', '04', '05' ) ),
-		'juicy-green-apple-autoparfum' => array( 'hero' => '06', 'grid' => array( '07', '09' ), 'actie' => '08' ),
-		'tropical-fresh-duo'           => array( 'grid' => array( '09', '07' ), 'actie' => '08', 'actie_eerst' => true ),
+		'creamy-vanilla-autoparfum'    => array( 'e01', 'e02' ),
+		'juicy-green-apple-autoparfum' => array( 'e03', 'e04' ),
+		'tropical-fresh-duo'           => array( 'e05', 'e06' ),
 	);
 	$sim_g = $sim_gal[ $product->get_slug() ] ?? null;
 	if ( $sim_g && function_exists( 'sim_pack_img' ) ) :
-		$sim_g_actie = ! empty( $sim_g['actie'] ) && function_exists( 'sim_promo_active' ) && sim_promo_active();
-		$sim_g_eerst = $sim_g_actie && ! empty( $sim_g['actie_eerst'] );
-		ob_start();
-		if ( $sim_g_actie ) : ?>
-				<div class="gal-actie<?php echo $sim_g_eerst ? ' is-eerst' : ''; ?>">
-					<?php echo sim_pack_img( $sim_g['actie'], '(max-width: 767px) 92vw, (max-width: 1347px) 46vw, 620px' ); // phpcs:ignore ?>
-					<?php if ( ! $sim_g_eerst ) : ?>
-					<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
-					<?php endif; ?>
-				</div>
-		<?php
-		endif;
-		$sim_g_actie_html = ob_get_clean();
 		?>
 	<section class="pdp-galerij">
 		<div class="wrap">
 			<div class="section-head">
-				<span class="mono-label">In beeld</span>
+				<span class="mono-label">Echte foto's</span>
 				<h2>Van dichtbij.</h2>
 			</div>
-			<?php if ( ! empty( $sim_g['hero'] ) ) : ?>
-			<div class="gal-hero"><?php echo sim_pack_img( $sim_g['hero'], '(max-width: 1347px) 92vw, 1240px' ); // phpcs:ignore ?></div>
-			<?php endif; ?>
-			<?php if ( ! empty( $sim_g['grid'] ) ) : ?>
-			<div class="gal-grid<?php echo ( count( $sim_g['grid'] ) < 3 && ! $sim_g_actie ) ? ' is-2' : ''; ?>">
-				<?php echo $sim_g_eerst ? $sim_g_actie_html : ''; // phpcs:ignore ?>
-				<?php foreach ( $sim_g['grid'] as $sim_g_key ) : ?>
+			<div class="gal-grid">
+				<?php foreach ( $sim_g as $sim_g_key ) : ?>
 					<figure><?php echo sim_pack_img( $sim_g_key, '(max-width: 767px) 46vw, (max-width: 1347px) 23vw, 300px' ); // phpcs:ignore ?></figure>
 				<?php endforeach; ?>
-				<?php echo $sim_g_eerst ? '' : $sim_g_actie_html; // phpcs:ignore ?>
+				<figure class="gal-breed">
+					<?php echo sim_pack_img( 'e07', '(max-width: 767px) 92vw, (max-width: 1347px) 46vw, 620px' ); // phpcs:ignore ?>
+					<figcaption>Zo zitten de flesjes in het doosje.</figcaption>
+				</figure>
 			</div>
-			<?php endif; ?>
 		</div>
 	</section>
 	<?php endif; ?>

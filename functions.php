@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.11' );
+define( 'SIM_VERSION', '1.5.12' );
 
 /* ---------- setup ---------- */
 
@@ -216,12 +216,20 @@ function sim_pack_img( $key, $sizes = '(max-width: 767px) 92vw, 46vw', $eager = 
 		'07' => array( '07-juicy-green-apple-fris-60ml', 1328, 1376, 829, 'Juicy Green Apple frisse autogeur 60 ml met groene appels' ),
 		'08' => array( '08-actie-vanilla-apple-extra-apple-gratis', 1920, 1030, 429, 'Tropical Fresh 2+1: koop Creamy Vanilla en Juicy Green Apple en krijg een extra Juicy Green Apple gratis' ),
 		'09' => array( '09-creamy-vanilla-juicy-green-apple-duo', 1080, 1360, 1007, 'Creamy Vanilla en Juicy Green Apple van Tropical Fresh, beide 60 ml' ),
+		// Echte productfoto's (eigen opnames, vrijgesteld op een studioachtergrond; geen AI-beelden).
+		'e01' => array( 'echt/e01-creamy-vanilla-autoparfum-60ml', 1080, 1350, 1000, 'Creamy Vanilla autoparfum spray van 60 ml, echte productfoto' ),
+		'e02' => array( 'echt/e02-2plus1-set-warm', 1080, 1350, 1000, 'De 2+1 set: Creamy Vanilla en twee Juicy Green Apple sprays van 60 ml, echte productfoto' ),
+		'e03' => array( 'echt/e03-juicy-green-apple-autoparfum-60ml', 1080, 1350, 1000, 'Juicy Green Apple autoparfum spray van 60 ml, echte productfoto' ),
+		'e04' => array( 'echt/e04-2plus1-set-groen', 1080, 1350, 1000, 'Creamy Vanilla en twee Juicy Green Apple sprays van 60 ml naast elkaar, echte productfoto' ),
+		'e05' => array( 'echt/e05-2plus1-set-studio', 1080, 1350, 1000, 'De 2+1 set van Tropical Fresh: drie sprays van 60 ml, echte productfoto' ),
+		'e06' => array( 'echt/e06-2plus1-set-podium', 1080, 1350, 1000, 'Drie Tropical Fresh autoparfum sprays van 60 ml op een podium, echte productfoto' ),
+		'e07' => array( 'echt/e07-zo-komt-het-binnen', 1300, 780, 480, 'Echte foto van de verzenddoosjes met Creamy Vanilla en Juicy Green Apple sprays' ),
 	);
 	if ( ! isset( $map[ $key ] ) ) {
 		return '';
 	}
 	list( $base, $w, $h, $h800, $alt ) = $map[ $key ];
-	$dir = get_template_directory_uri() . '/assets/img/pack/';
+	$dir = get_template_directory_uri() . ( 0 === strpos( $base, 'echt/' ) ? '/assets/img/' : '/assets/img/pack/' );
 	return sprintf(
 		'<img src="%1$s%2$s.webp" srcset="%1$s%2$s-800.webp 800w, %1$s%2$s.webp %3$dw" sizes="%4$s" width="%3$d" height="%5$d" alt="%6$s" %7$s decoding="async">',
 		esc_url( $dir ),
