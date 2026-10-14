@@ -129,7 +129,7 @@ foreach ( $sim_products as $p ) {
 			<?php endif; ?>
 			</p>
 			<h3>Wisselen per seizoen</h3>
-			<p>In de herfst en winter, als de ramen dicht blijven en de verwarming aan staat, voelt een warme geur als Creamy Vanilla vertrouwd. In het voorjaar en de zomer, of na een grondige schoonmaakbeurt, past een frisse groene geur als Juicy Green Apple vaak beter. Met twee flesjes in het handschoenenkastje wissel je per seizoen of per stemming.</p>
+			<p>In de herfst en winter, als de ramen dicht blijven en de verwarming aan staat, voelt een warme geur als Creamy Vanilla vertrouwd. In het voorjaar en de zomer, of na een grondige schoonmaakbeurt, past een frisse groene geur als Juicy Green Apple vaak beter. Met twee flesjes in het handschoenenkastje wissel je per seizoen of per stemming. Wat je per seizoen verder anders doet met vocht, hitte en doseren, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-per-seizoen/' ) ); ?>">autoparfum per seizoen</a>.</p>
 			<p>Wil je weten welke vorm bij jouw ritten past, lees dan hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/beste-autoparfum-kiezen/' ) ); ?>">de beste autoparfum kiest</a>. Zoek je een geur voor iemand anders, dan helpen onze tips voor <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-cadeau/' ) ); ?>">autoparfum als cadeau</a>.</p>
 
 			<h2>Veelgestelde vragen over autoparfum</h2>
@@ -175,6 +175,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">Hoe lang blijft autoparfum hangen?</a> Wat warmte, ventilatie en geurgewenning met je autogeur doen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">Rooklucht uit de auto halen</a>. Reinigen, interieurfilter vervangen en de restgeur laten absorberen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/interieur-schoonmaken-checklist/' ) ); ?>">Interieur van je auto schoonmaken: de checklist</a>. Zone voor zone van boven naar beneden, en pas daarna een geur.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-per-seizoen/' ) ); ?>">Autoparfum per seizoen</a>. Lente, zomer, herfst en winter: wat je per seizoen anders doet voor een frisse auto.</li>
 			</ul>
 		</div>
 	</div>
