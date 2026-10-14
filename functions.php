@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.10' );
+define( 'SIM_VERSION', '1.5.11' );
 
 /* ---------- setup ---------- */
 
@@ -692,12 +692,95 @@ add_action( 'template_redirect', function () {
 	do_action( 'litespeed_control_set_nocache', 'sim_duo voegt de 2+1 set toe aan de winkelwagen' );
 	$ids = sim_promo_ids();
 	if ( $ids['vanilla'] && $ids['apple'] ) {
-		WC()->cart->add_to_cart( $ids['vanilla'], 1 );
-		WC()->cart->add_to_cart( $ids['apple'], 1 );
+		// Alleen aanvullen wat voor de set ontbreekt. Nog eens tikken, terug en opnieuw tikken of
+		// verversen zet er dus geen tweede set bij (een tweede set kan via de aantallen in de winkelwagen).
+		$betaald = array( 'vanilla' => 0, 'apple' => 0 );
+		foreach ( WC()->cart->get_cart() as $item ) {
+			if ( ! empty( $item['sim_gratis'] ) ) {
+				continue;
+			}
+			foreach ( array( 'vanilla', 'apple' ) as $geur ) {
+				if ( (int) $item['product_id'] === (int) $ids[ $geur ] ) {
+					$betaald[ $geur ] += (int) $item['quantity'];
+				}
+			}
+		}
+		$toegevoegd = false;
+		foreach ( array( 'vanilla', 'apple' ) as $geur ) {
+			if ( $betaald[ $geur ] < 1 && WC()->cart->add_to_cart( $ids[ $geur ], 1 ) ) {
+				$toegevoegd = true;
+			}
+		}
+		if ( $toegevoegd ) {
+			$v    = wc_get_product( $ids['vanilla'] );
+			$a    = wc_get_product( $ids['apple'] );
+			$som  = ( $v && $a ) ? (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ) : 0.0;
+			$gratis_vanaf = defined( 'SIM_GRATIS_VERZENDING_VANAF' ) ? (float) SIM_GRATIS_VERZENDING_VANAF : 17.90;
+			wc_add_notice(
+				sprintf(
+					'Je 2+1 set staat klaar: 3 flesjes van 60 ml voor %s%s.',
+					wp_strip_all_tags( wc_price( $som ) ),
+					round( $som, 2 ) >= round( $gratis_vanaf, 2 ) ? ', met gratis verzending' : ''
+				),
+				'success'
+			);
+		} else {
+			wc_add_notice( 'Je 2+1 set zit al in je bestelling.', 'notice' );
+		}
 	}
-	wp_safe_redirect( wc_get_cart_url() );
+	// Rechtstreeks naar afrekenen: bij een vaste set valt er in de winkelwagen niets te kiezen, en op
+	// mobiel stond de afrekenknop daar bijna twee schermen lager.
+	wp_safe_redirect( wc_get_checkout_url() );
 	exit;
 } );
+
+/*
+ * Kortingscode niet als eerste in de kassa: bovenaan lokt die mensen weg om een code te zoeken.
+ * WooCommerce's eigen coupon-formulier mag niet binnen het afrekenformulier staan (geneste form),
+ * dus komt het als kleine link onder het formulier.
+ */
+add_action(
+	'wp_loaded',
+	function () {
+		if ( remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 ) ) {
+			add_action( 'woocommerce_after_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+		}
+	}
+);
+
+/*
+ * Tas-teller in de header klopt ook op gecachte pagina's. LiteSpeed serveert dezelfde HTML aan iedere
+ * gast, dus wie iets in de tas heeft zag 'Tas 0' en tikte de set nog eens aan. Alleen als WooCommerce
+ * het cookie woocommerce_items_in_cart zet, haalt de browser het echte aantal op via de Store API
+ * (die nooit gecachet wordt), ook na 'terug' uit de back/forward-cache.
+ */
+add_action(
+	'wp_footer',
+	function () {
+		if ( ! function_exists( 'is_cart' ) || is_cart() || is_checkout() ) {
+			return;
+		}
+		?>
+<script>
+(function () {
+	function ververs() {
+		if (document.cookie.indexOf('woocommerce_items_in_cart=') === -1 || !window.fetch) { return; }
+		fetch(<?php echo wp_json_encode( esc_url_raw( rest_url( 'wc/store/v1/cart' ) ) ); ?>, { credentials: 'same-origin' })
+			.then(function (r) { return r.ok ? r.json() : null; })
+			.then(function (c) {
+				if (!c || typeof c.items_count === 'undefined') { return; }
+				document.querySelectorAll('.sim-cart-count').forEach(function (el) { el.textContent = c.items_count; });
+			})
+			.catch(function () {});
+	}
+	ververs();
+	window.addEventListener('pageshow', function (e) { if (e.persisted) { ververs(); } });
+})();
+</script>
+		<?php
+	},
+	30
+);
 
 /* ---------- gratis-verzending voortgang in de winkelwagen ---------- */
 
