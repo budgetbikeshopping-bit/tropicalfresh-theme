@@ -140,7 +140,7 @@ foreach ( $sim_products as $p ) {
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
 			<p>Een klassieke luchtverfrisser of geurhanger geeft continu geur af, of je dat nu wilt of niet. Autoparfum doseer je zelf, net als een parfum: jij bepaalt hoeveel en waar je sprayt.</p>
 			<h3>Waar spray je autoparfum het beste?</h3>
-			<p>Op de matten, onder de stoelen of op stoffen bekleding. Daar verdeelt de geur zich rustig door de auto terwijl je rijdt. Schermen en glas sla je over.</p>
+			<p>Op de matten, onder de stoelen of op stoffen bekleding. Daar verdeelt de geur zich rustig door de auto terwijl je rijdt. Schermen en glas sla je over. Hoeveel sprays genoeg zijn en wanneer je het best spuit, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">autoparfum spuiten: waar, hoeveel en wanneer</a>.</p>
 			<h3>Helpt autoparfum tegen een muffe lucht?</h3>
 			<p>Alleen als afwerking. Een muffe lucht komt vrijwel altijd door vocht, dus droog de auto eerst. Anders komt de muffe lucht terug zodra de geur is uitgewerkt.</p>
 			<h3>Hoeveel kost autoparfum?</h3>
@@ -176,6 +176,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">Rooklucht uit de auto halen</a>. Reinigen, interieurfilter vervangen en de restgeur laten absorberen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/interieur-schoonmaken-checklist/' ) ); ?>">Interieur van je auto schoonmaken: de checklist</a>. Zone voor zone van boven naar beneden, en pas daarna een geur.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-per-seizoen/' ) ); ?>">Autoparfum per seizoen</a>. Lente, zomer, herfst en winter: wat je per seizoen anders doet voor een frisse auto.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">Autoparfum spuiten: waar, hoeveel en wanneer</a>. De beste plekken, het juiste aantal sprays en het goede moment.</li>
 			</ul>
 		</div>
 	</div>
