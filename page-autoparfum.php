@@ -119,6 +119,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Rooklucht:</strong> die zit in bekleding, hemel en interieurfilter. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">rooklucht uit de auto haalt</a>.</li>
 				<li><strong>Een andere hardnekkige vieze geur:</strong> volg het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan om vieze geur te verwijderen</a>.</li>
 				<li><strong>Hondengeur:</strong> grondig zuigen, reinigen en dekens goed laten drogen. Alles staat in <a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">hondengeur uit de auto halen</a>.</li>
+				<li><strong>Net een gebruikte auto gekocht:</strong> eerst het interieurfilter vervangen en per materiaal reinigen. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">de geur van een tweedehands auto verwijdert</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -177,6 +178,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/interieur-schoonmaken-checklist/' ) ); ?>">Interieur van je auto schoonmaken: de checklist</a>. Zone voor zone van boven naar beneden, en pas daarna een geur.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-per-seizoen/' ) ); ?>">Autoparfum per seizoen</a>. Lente, zomer, herfst en winter: wat je per seizoen anders doet voor een frisse auto.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">Autoparfum spuiten: waar, hoeveel en wanneer</a>. De beste plekken, het juiste aantal sprays en het goede moment.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">Tweedehands auto geur verwijderen</a>. Van de geur van de vorige eigenaar naar een neutrale, frisse auto in zes stappen.</li>
 			</ul>
 		</div>
 	</div>
