@@ -116,6 +116,7 @@ foreach ( $sim_products as $p ) {
 			<p>Autoparfum komt het best tot zijn recht in een auto die al schoon en droog is. Ruikt je auto muf, naar rook of naar je hond, dan maskeert een geur dat hooguit even. Pak daarom eerst de bron aan en voeg pas daarna een nieuwe geur toe.</p>
 			<ul>
 				<li><strong>Muffe lucht of beslagen ruiten:</strong> bijna altijd vocht. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/condens-vocht-auto/' ) ); ?>">vocht en condens uit de auto haalt</a>.</li>
+				<li><strong>Muffe lucht uit de roosters zodra de ventilator aangaat:</strong> dan zit het in het ventilatiesysteem. Lees waarom je <a href="<?php echo esc_url( home_url( '/autoparfum/airco-stinkt-muffe-geur-auto/' ) ); ?>">airco stinkt en hoe je dat oplost</a>.</li>
 				<li><strong>Rooklucht:</strong> die zit in bekleding, hemel en interieurfilter. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/rooklucht-uit-de-auto/' ) ); ?>">rooklucht uit de auto haalt</a>.</li>
 				<li><strong>Een andere hardnekkige vieze geur:</strong> volg het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan om vieze geur te verwijderen</a>.</li>
 				<li><strong>Hondengeur:</strong> grondig zuigen, reinigen en dekens goed laten drogen. Alles staat in <a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">hondengeur uit de auto halen</a>.</li>
@@ -179,6 +180,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-per-seizoen/' ) ); ?>">Autoparfum per seizoen</a>. Lente, zomer, herfst en winter: wat je per seizoen anders doet voor een frisse auto.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">Autoparfum spuiten: waar, hoeveel en wanneer</a>. De beste plekken, het juiste aantal sprays en het goede moment.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">Tweedehands auto geur verwijderen</a>. Van de geur van de vorige eigenaar naar een neutrale, frisse auto in zes stappen.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/airco-stinkt-muffe-geur-auto/' ) ); ?>">Airco stinkt: muffe geur uit de ventilatie halen</a>. Interieurfilter, verdamper en afvoer: zo komt er weer schone lucht uit de roosters.</li>
 			</ul>
 		</div>
 	</div>
