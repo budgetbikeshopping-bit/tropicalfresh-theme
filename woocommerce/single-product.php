@@ -213,6 +213,23 @@ while ( have_posts() ) :
 					<li><?php echo wp_kses_post( $sim_verzend_regel ); ?></li>
 					<li>14 dagen retourrecht</li>
 				</ul>
+				<?php
+				// Echte foto's direct bij de koopknop (audit 18 okt): de bezoeker ziet meteen het echte flesje.
+				$sim_koop_echt = array(
+					'creamy-vanilla-autoparfum'    => array( 'e01', 'e02' ),
+					'juicy-green-apple-autoparfum' => array( 'e03', 'e04' ),
+					'tropical-fresh-duo'           => array( 'e05', 'e06' ),
+				);
+				$sim_ke = $sim_koop_echt[ $product->get_slug() ] ?? null;
+				if ( $sim_ke && function_exists( 'sim_pack_img' ) ) :
+					?>
+				<div class="koop-echt">
+					<?php foreach ( $sim_ke as $sim_ke_key ) : ?>
+						<figure><?php echo sim_pack_img( $sim_ke_key, '120px' ); // phpcs:ignore ?></figure>
+					<?php endforeach; ?>
+					<a class="koop-echt-link" href="#van-dichtbij">Meer echte foto's</a>
+				</div>
+				<?php endif; ?>
 			<?php endif; ?>
 
 			<?php if ( $product->get_short_description() ) : ?>
@@ -326,7 +343,7 @@ while ( have_posts() ) :
 	$sim_g = $sim_gal[ $product->get_slug() ] ?? null;
 	if ( $sim_g && function_exists( 'sim_pack_img' ) ) :
 		?>
-	<section class="pdp-galerij">
+	<section class="pdp-galerij" id="van-dichtbij">
 		<div class="wrap">
 			<div class="section-head">
 				<span class="mono-label">Echte foto's</span>

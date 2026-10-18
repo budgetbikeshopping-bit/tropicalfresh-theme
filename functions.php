@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.14' );
+define( 'SIM_VERSION', '1.5.15' );
 
 /* ---------- setup ---------- */
 
@@ -823,7 +823,14 @@ add_action(
 
 /* ---------- gratis-verzending voortgang in de winkelwagen ---------- */
 
+/** Altijd in een eigen blok, zodat het script hieronder hem na een AJAX-wijziging kan verversen. */
 add_action( 'woocommerce_before_cart', function () {
+	echo '<div class="sim-verzend-blok">';
+	sim_verzend_voortgang();
+	echo '</div>';
+} );
+
+function sim_verzend_voortgang() {
 	$drempel = 17.90;
 	$sub = (float) WC()->cart->get_displayed_subtotal(); // drempel telt VOOR korting, net als de verzendinstelling
 	if ( $sub <= 0 ) {
@@ -844,7 +851,53 @@ add_action( 'woocommerce_before_cart', function () {
 			(int) $pct
 		);
 	}
-} );
+}
+
+/*
+ * Na verwijderen of aantal wijzigen vervangt WooCommerce via AJAX alleen het winkelwagenformulier en de
+ * totalen. De verzendbalk, de 2+1-melding en de tas-teller stonden daarna nog op de oude stand (audit
+ * 18 okt, B6). Na elke AJAX-update halen we de winkelwagenpagina stil opnieuw op en wisselen alleen die
+ * blokken. Inline meetscripts in die HTML worden door DOMParser niet uitgevoerd: geen dubbele events.
+ */
+add_action(
+	'wp_footer',
+	function () {
+		if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
+			return;
+		}
+		?>
+<script>
+(function () {
+	if (!window.jQuery || !window.fetch || !window.DOMParser) { return; }
+	var bezig = null;
+	function ververs() {
+		if (bezig) { clearTimeout(bezig); }
+		bezig = setTimeout(function () {
+			bezig = null;
+			fetch(window.location.href, { credentials: 'same-origin', cache: 'no-store' })
+				.then(function (r) { return r.ok ? r.text() : null; })
+				.then(function (html) {
+					if (!html) { return; }
+					var d = new DOMParser().parseFromString(html, 'text/html');
+					['.sim-verzend-blok', '.sim-promo-blok'].forEach(function (sel) {
+						var oud = document.querySelector(sel), nieuw = d.querySelector(sel);
+						if (oud && nieuw) { oud.replaceWith(document.importNode(nieuw, true)); }
+						else if (oud) { oud.remove(); }
+					});
+					var teller = d.querySelector('.sim-cart-count');
+					var aantal = teller ? teller.textContent : '0';
+					document.querySelectorAll('.sim-cart-count').forEach(function (el) { el.textContent = aantal; });
+				})
+				.catch(function () {});
+		}, 150);
+	}
+	jQuery(document.body).on('updated_wc_div updated_cart_totals wc_cart_emptied', ververs);
+})();
+</script>
+		<?php
+	},
+	30
+);
 
 /* Het reviewverzoek na levering staat in inc/klantcontact.php. */
 

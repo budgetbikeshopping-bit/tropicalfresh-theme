@@ -1088,3 +1088,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   .spec-strip { grid-template-columns: 1fr; }
   .spec-strip .cell + .cell { border-left: 0; border-top: 1px solid var(--line-dark); }
 }
+
+/* hero: echte 2+1 set (breder beeld dan een los flesje) */
+.hero .tilt img.bottle.is-set { width: min(480px, 38vw); }
+@media (max-width: 767px) { .hero .tilt img.bottle.is-set { width: min(380px, 86vw); } }
+/* echte foto's direct bij de koopknop */
+.koop-echt { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.koop-echt figure { margin: 0; width: 88px; aspect-ratio: 4 / 5; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-dark, rgba(255,255,255,.12)); }
+.koop-echt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.koop-echt-link { font-size: 0.9rem; text-decoration: underline; text-underline-offset: 3px; }

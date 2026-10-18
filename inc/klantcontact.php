@@ -421,7 +421,12 @@ function sim_winkelwagen_2plus1() {
 		esc_html( 'Voeg ' . $naam . ' toe' )
 	);
 }
-add_action( 'woocommerce_before_cart', 'sim_winkelwagen_2plus1', 15 );
+add_action( 'woocommerce_before_cart', function () {
+	// eigen blok: het verversscript in functions.php wisselt het na een AJAX-wijziging van de winkelwagen
+	echo '<div class="sim-promo-blok">';
+	sim_winkelwagen_2plus1();
+	echo '</div>';
+}, 15 );
 
 /* ---------- afrekenen ---------- */
 
