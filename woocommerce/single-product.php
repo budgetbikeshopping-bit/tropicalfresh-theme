@@ -67,7 +67,7 @@ while ( have_posts() ) :
 	$sim_inhoud = $sim_inhoud_map[ $product->get_slug() ] ?? '60 ml';
 
 	$sim_verzend_regel = sprintf(
-		'Gratis verzending vanaf %s, daaronder %s',
+		'Gratis verzending in Nederland vanaf %s, daaronder %s. België: € 7,95',
 		wc_price( $sim_gratis_vanaf ),
 		wc_price( $sim_verzendkosten )
 	);

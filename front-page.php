@@ -91,7 +91,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 <!-- TRUST -->
 <div class="trust">
 	<div class="wrap">
-		<div class="item"><b>Gratis verzending</b><span>bij bestellingen vanaf &euro; 17,90</span></div>
+		<div class="item"><b>Gratis verzending</b><span>in Nederland, vanaf &euro; 17,90</span></div>
 		<div class="item"><b>Bezorging</b><span>doorgaans in 2 tot 4 werkdagen</span></div>
 		<div class="item"><b>14 dagen retourrecht</b><span>bedenktijd na ontvangst</span></div>
 		<div class="item"><b>Vlekvrij getest</b><span>op leer, stof en kunststof</span></div>

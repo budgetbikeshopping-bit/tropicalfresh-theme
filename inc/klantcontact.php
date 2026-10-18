@@ -107,7 +107,7 @@ function sim_welkomstmail( $email ) {
 	$tekst = "Hoi,\n\n"
 		. "Welkom bij Tropical Fresh. Dit is je welkomstcode voor 10% korting op je eerste bestelling:\n\n"
 		. "WELKOM10\n\n"
-		. "Vul de code in bij het afrekenen op https://tropicalfresh.nl: klik daar op 'Heb je een kortingscode?'. De code werkt op het hele assortiment en is eenmalig per klant geldig.\n\n"
+		. "Vul de code in bij het afrekenen op https://tropicalfresh.nl: klik daar op 'Heb je een kortingscode?'. De code werkt op losse flesjes (niet in combinatie met de 2+1 set) en is eenmalig per klant geldig.\n\n"
 		. "Tot snel onderweg,\nTropical Fresh\n\n"
 		. "Wil je geen mails meer van ons ontvangen? Afmelden kan via deze link:\n"
 		. sim_klant_afmeldlink( $email ) . "\n\n"
@@ -277,7 +277,7 @@ function sim_nieuwsbrief_blok( $variant = 'footer' ) {
 	if ( 'artikel' === $variant ) {
 		$GLOBALS['sim_nl_artikel_getoond'] = true;
 	}
-	$sub = 'Laat je e-mailadres achter en je ontvangt de code per mail. Daarna af en toe nieuws over onze geuren en aanbiedingen.';
+	$sub = 'Laat je e-mailadres achter en je ontvangt de code per mail. Geldt voor losse flesjes, niet op de 2+1 set. Daarna af en toe nieuws over onze geuren en aanbiedingen.';
 	ob_start();
 	if ( 'artikel' === $variant ) :
 		?>
@@ -404,7 +404,7 @@ function sim_winkelwagen_2plus1() {
 	$drempel = sim_verzend_drempel();
 	$tekst   = sprintf( 'Maak er de 2+1 set van: voeg %s toe en je krijgt er een extra Juicy Green Apple gratis bij.', esc_html( $naam ) );
 	// Het voordeel alleen voorrekenen als het klopt: onder de drempel nu, erboven na toevoegen, zonder kortingscode.
-	if ( $sub < $drempel && $sub + $prijs >= $drempel && ! $cart->get_applied_coupons() ) {
+	if ( $sub < $drempel && $sub + $prijs >= $drempel && ! $cart->get_applied_coupons() && 'NL' === sim_klant_land() ) {
 		$verzending = (float) $cart->get_shipping_total() + (float) $cart->get_shipping_tax();
 		$tekst      = ( $verzending > 0 ? sprintf( 'Nu %s inclusief verzending. ', wc_price( $cart->get_total( 'edit' ) ) ) : '' )
 			. sprintf(

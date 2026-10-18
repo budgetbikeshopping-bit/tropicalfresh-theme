@@ -10,7 +10,7 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<div class="announce"><span>Gratis verzending vanaf <b>&euro;&nbsp;17,90</b></span><span class="a-extra"> &nbsp;&middot;&nbsp; Doorgaans in 2 tot 4 werkdagen bezorgd</span><span class="a-extra"> &nbsp;&middot;&nbsp; 14 dagen retourrecht</span></div>
+<div class="announce"><span>Gratis verzending in NL vanaf <b>&euro;&nbsp;17,90</b></span><span class="a-extra"> &nbsp;&middot;&nbsp; Doorgaans in 2 tot 4 werkdagen bezorgd</span><span class="a-extra"> &nbsp;&middot;&nbsp; 14 dagen retourrecht</span></div>
 
 <header class="site-head">
 	<div class="wrap bar">

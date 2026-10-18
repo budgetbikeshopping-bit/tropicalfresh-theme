@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.13' );
+define( 'SIM_VERSION', '1.5.14' );
 
 /* ---------- setup ---------- */
 
@@ -688,6 +688,37 @@ add_action( 'woocommerce_checkout_create_order_line_item', function ( $line_item
 	}
 }, 10, 3 );
 
+/**
+ * Kortingscodes gelden niet in combinatie met de 2+1 set (besluit eigenaar 18 okt 2026): de set is al de
+ * aanbieding. Zodra er een gratis 2+1-regel in de winkelwagen staat, weigert WooCommerce elke code met deze
+ * melding (een al toegepaste code valt bij de volgende controle weg).
+ */
+add_filter( 'woocommerce_coupon_is_valid', function ( $valid, $coupon, $discounts = null ) {
+	if ( ! $valid || ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return $valid;
+	}
+	if ( $discounts instanceof WC_Discounts && ! ( $discounts->get_object() instanceof WC_Cart ) ) {
+		return $valid; // alleen de winkelwagen, niet handmatige orders in de beheeromgeving
+	}
+	foreach ( WC()->cart->get_cart() as $item ) {
+		if ( ! empty( $item['sim_gratis'] ) ) {
+			throw new Exception( 'Kortingscodes zijn niet te combineren met de 2+1 set: de set is al de aanbieding. De code werkt wel op losse flesjes.', 100 );
+		}
+	}
+	return $valid;
+}, 20, 3 );
+
+/** Verzendland van de klant (standaard Nederland); gratis verzending geldt alleen in Nederland. */
+function sim_klant_land() {
+	if ( function_exists( 'WC' ) && WC()->customer ) {
+		$land = WC()->customer->get_shipping_country();
+		if ( $land ) {
+			return strtoupper( $land );
+		}
+	}
+	return 'NL';
+}
+
 /* De 2+1-melding in de winkelwagen (met directe toevoegknop) staat in inc/klantcontact.php. */
 
 /** Snelkoppeling: beide geuren in een klik in de winkelwagen (2+1 wordt dan automatisch toegepast). */
@@ -796,6 +827,10 @@ add_action( 'woocommerce_before_cart', function () {
 	$drempel = 17.90;
 	$sub = (float) WC()->cart->get_displayed_subtotal(); // drempel telt VOOR korting, net als de verzendinstelling
 	if ( $sub <= 0 ) {
+		return;
+	}
+	if ( 'NL' !== sim_klant_land() ) {
+		echo '<div class="ship-progress"><span class="sp-label">Verzending naar België: &euro;&nbsp;7,95. Gratis verzending geldt in Nederland.</span></div>';
 		return;
 	}
 	if ( $sub >= $drempel ) {

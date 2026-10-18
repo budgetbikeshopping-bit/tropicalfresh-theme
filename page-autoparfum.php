@@ -80,7 +80,7 @@ foreach ( $sim_products as $p ) {
 				<span class="ks-pijl" aria-hidden="true">&rarr;</span>
 			</a>
 			<?php endif; ?>
-			<p class="ks-noot">Gratis verzending vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> &middot; 14 dagen retourrecht</p>
+			<p class="ks-noot">Gratis verzending in Nederland vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> &middot; 14 dagen retourrecht</p>
 		</div>
 		<?php endif; ?>
 
@@ -163,7 +163,7 @@ foreach ( $sim_products as $p ) {
 			<?php if ( $sim_set_prijs > 0 ) : ?>
 				De <a href="<?php echo esc_url( $sim_duo->get_permalink() ); ?>">2+1 set</a> met drie flesjes kost <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?>.
 			<?php endif; ?>
-				Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> is de verzending gratis.
+				Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> is de verzending in Nederland gratis.
 			</p>
 
 			<h2>Verder lezen</h2>
