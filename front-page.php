@@ -115,10 +115,10 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<a class="btn btn-primary" href="<?php echo esc_url( sim_duo_url() ); ?>">Bekijk de 2+1 set</a>
 		</div>
 		<div class="camp-media"
-			data-sim-video="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promo-pov-1080.mp4?v=' . SIM_VERSION ); ?>"
-			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promo-pov-poster-720.jpg?v=' . SIM_VERSION ); ?>"
-			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-promo-pov-720.mp4?v=' . SIM_VERSION ); ?>"
-			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/promo-pov-poster-540.jpg?v=' . SIM_VERSION ); ?>">
+			data-sim-video="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-beatdrop-1080.mp4?v=' . SIM_VERSION ); ?>"
+			data-sim-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/video/beatdrop-poster-720.jpg?v=' . SIM_VERSION ); ?>"
+			data-sim-video-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/tropicalfresh-beatdrop-720.mp4?v=' . SIM_VERSION ); ?>"
+			data-sim-poster-mobiel="<?php echo esc_url( get_template_directory_uri() . '/assets/video/beatdrop-poster-540.jpg?v=' . SIM_VERSION ); ?>">
 			<div class="bottles">
 				<div class="b"><?php echo sim_product_visual( $sim_vanilla, 'woocommerce_thumbnail' ); // phpcs:ignore ?></div>
 				<span class="plus">+</span>
@@ -133,13 +133,13 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 	</div>
 </section>
 <script>
-/* Campagnevideo (staande promo 9:16, "POV: je auto na een week regen", met muziek)
+/* Campagnevideo (staande promo 9:16, "Eén flesje. Eén spray.", beatdrop met muziek, 18 okt)
    op alle schermformaten; alleen databesparing en reduced-motion houden de
    flesjes-visual (dan wordt niets extra's gedownload). De video wordt pas
    ingevoegd als de sectie in de buurt komt (wie niet scrolt, laadt niets) en tot
    1023px breed krijgt de bezoeker een lichtere versie (720 px breed) en poster.
    Browsers spelen video alleen stil automatisch af: de knop zet het geluid aan
-   en start de eerste keer vanaf het begin, zodat de grap met geluid klopt. */
+   en start de eerste keer vanaf het begin, zodat de drop met geluid klopt. */
 (function () {
 	var m = document.querySelector('.camp-media');
 	if (!m || !window.matchMedia) return;
@@ -163,7 +163,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 		v.poster = bron('data-sim-poster');
 		v.src = bron('data-sim-video');
 		v.className = 'camp-video';
-		v.setAttribute('aria-label', 'Promovideo Tropical Fresh: POV, je auto na een week regen');
+		v.setAttribute('aria-label', 'Promovideo Tropical Fresh: één flesje, één spray, tot 2 dagen geur per spraybeurt');
 		m.classList.add('has-video');
 		m.appendChild(v);
 		/* geluid staat standaard uit; de bezoeker kan hem zelf aanzetten */
