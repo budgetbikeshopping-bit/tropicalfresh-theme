@@ -86,6 +86,7 @@ foreach ( $sim_products as $p ) {
 
 		<div class="page-content">
 			<p>Autoparfum is een geurspray voor het interieur van je auto: je spuit hem op de matten, de stoelen of kunststof. Anders dan bij een geurhanger bepaal jij zelf hoe sterk het ruikt; begin met twee tot drie sprays.</p>
+			<p>Mensen noemen het ook een auto luchtje, autogeur of auto geurtje, en in webshops kom je het Engelse car parfum tegen. Het gaat steeds om hetzelfde: een geur voor in de auto die jij zelf aanbrengt, in plaats van een boompje dat aan de spiegel hangt.</p>
 
 			<h2>Spray of geurhanger?</h2>
 			<p>Een geurhanger werkt passief: hij hangt aan je spiegel en geeft continu geur af tot hij op is. Een autoparfum-spray werkt actief: je doseert zelf wanneer en hoeveel, en er bungelt niets in je zicht. Onze sprays zijn vlekvrij getest op leer, stof en kunststof.</p>
@@ -121,6 +122,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Een andere hardnekkige vieze geur:</strong> volg het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan om vieze geur te verwijderen</a>.</li>
 				<li><strong>Hondengeur:</strong> grondig zuigen, reinigen en dekens goed laten drogen. Alles staat in <a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">hondengeur uit de auto halen</a>.</li>
 				<li><strong>Net een gebruikte auto gekocht:</strong> eerst het interieurfilter vervangen en per materiaal reinigen. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">de geur van een tweedehands auto verwijdert</a>.</li>
+				<li><strong>Etenslucht na een snelle hap onderweg:</strong> vet en kruimels zitten in de stof en de naden. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/eetgeur-fastfood-uit-auto-halen/' ) ); ?>">eetgeur en fastfoodlucht uit de auto haalt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -141,6 +143,8 @@ foreach ( $sim_products as $p ) {
 			<p>Onze sprays zijn vlekvrij getest op leer, stof en kunststof. Spray niet direct op schermen of glas; dat is niet nodig voor de werking.</p>
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
 			<p>Een klassieke luchtverfrisser of geurhanger geeft continu geur af, of je dat nu wilt of niet. Autoparfum doseer je zelf, net als een parfum: jij bepaalt hoeveel en waar je sprayt.</p>
+			<h3>Is een auto luchtje hetzelfde als autoparfum?</h3>
+			<p>In de praktijk gebruiken mensen auto luchtje, autogeur en auto geurtje voor elke geur in de auto, van een boompje aan de spiegel tot een spray. Autoparfum is de sprayvorm: je spuit hem zelf op de matten of onder de stoel, doseert hoeveel je wilt en er hangt niets in je zicht.</p>
 			<h3>Waar spray je autoparfum het beste?</h3>
 			<p>Op de matten, onder de stoelen of op stoffen bekleding. Daar verdeelt de geur zich rustig door de auto terwijl je rijdt. Schermen en glas sla je over. Hoeveel sprays genoeg zijn en wanneer je het best spuit, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">autoparfum spuiten: waar, hoeveel en wanneer</a>.</p>
 			<h3>Helpt autoparfum tegen een muffe lucht?</h3>
@@ -181,6 +185,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">Autoparfum spuiten: waar, hoeveel en wanneer</a>. De beste plekken, het juiste aantal sprays en het goede moment.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">Tweedehands auto geur verwijderen</a>. Van de geur van de vorige eigenaar naar een neutrale, frisse auto in zes stappen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/airco-stinkt-muffe-geur-auto/' ) ); ?>">Airco stinkt: muffe geur uit de ventilatie halen</a>. Interieurfilter, verdamper en afvoer: zo komt er weer schone lucht uit de roosters.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/eetgeur-fastfood-uit-auto-halen/' ) ); ?>">Eetgeur en fastfoodlucht uit de auto halen</a>. De bron vinden, per materiaal reinigen, de restgeur neutraliseren en pas daarna een geur.</li>
 			</ul>
 		</div>
 	</div>
