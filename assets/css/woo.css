@@ -448,6 +448,9 @@
 .cat-tekst h2 { font-size: 22px; margin-bottom: 12px; }
 .cat-tekst p { color: var(--ink-soft); font-size: 14.5px; margin-bottom: 12px; }
 .cat-tekst a { color: var(--chloro-deep); text-decoration: underline; }
+.cat-tekst h3 { font-size: 16px; margin: 20px 0 6px; }
+.cat-tekst ul { color: var(--ink-soft); font-size: 14.5px; margin: 0 0 12px 20px; }
+.cat-tekst li { margin-bottom: 6px; }
 
 /* reviews op de donkere productpagina */
 .sim-reviews .commentlist { list-style: none; padding: 0; }

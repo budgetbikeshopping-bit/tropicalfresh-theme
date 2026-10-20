@@ -123,6 +123,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Hondengeur:</strong> grondig zuigen, reinigen en dekens goed laten drogen. Alles staat in <a href="<?php echo esc_url( home_url( '/autoparfum/hondengeur-uit-de-auto/' ) ); ?>">hondengeur uit de auto halen</a>.</li>
 				<li><strong>Net een gebruikte auto gekocht:</strong> eerst het interieurfilter vervangen en per materiaal reinigen. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">de geur van een tweedehands auto verwijdert</a>.</li>
 				<li><strong>Etenslucht na een snelle hap onderweg:</strong> vet en kruimels zitten in de stof en de naden. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/eetgeur-fastfood-uit-auto-halen/' ) ); ?>">eetgeur en fastfoodlucht uit de auto haalt</a>.</li>
+				<li><strong>Zweetlucht na het sporten:</strong> natte sportkleding, schoenen en een dichte tas trekken in matten en kofferbak. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/zweetlucht-sportgeur-auto/' ) ); ?>">zweetlucht en sportgeur uit de auto haalt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -186,6 +187,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/tweedehands-auto-geur-verwijderen/' ) ); ?>">Tweedehands auto geur verwijderen</a>. Van de geur van de vorige eigenaar naar een neutrale, frisse auto in zes stappen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/airco-stinkt-muffe-geur-auto/' ) ); ?>">Airco stinkt: muffe geur uit de ventilatie halen</a>. Interieurfilter, verdamper en afvoer: zo komt er weer schone lucht uit de roosters.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/eetgeur-fastfood-uit-auto-halen/' ) ); ?>">Eetgeur en fastfoodlucht uit de auto halen</a>. De bron vinden, per materiaal reinigen, de restgeur neutraliseren en pas daarna een geur.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zweetlucht-sportgeur-auto/' ) ); ?>">Zweetlucht en sportgeur uit de auto halen</a>. Vochtige sportspullen eruit, per materiaal reinigen, de restgeur absorberen en pas daarna een frisse spray.</li>
 			</ul>
 		</div>
 	</div>
