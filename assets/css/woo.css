@@ -522,6 +522,15 @@
 .page-content .art-beeld { margin: 24px 0; }
 .page-content .art-beeld img { border-radius: 4px; width: min(360px, 100%); height: auto; }
 
+/* vergelijkingstabel in artikelen */
+.page-content .art-tabel { width: 100%; border-collapse: collapse; border: 1px solid var(--line-light); margin: 20px 0 26px; font-size: 14.5px; }
+.page-content .art-tabel th, .page-content .art-tabel td { padding: 10px 12px; border-bottom: 1px solid var(--line-light); text-align: left; vertical-align: top; }
+.page-content .art-tabel thead th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); }
+.page-content .art-tabel td:first-child { font-weight: 500; color: var(--ink); }
+@media (max-width: 640px) {
+  .page-content .art-tabel th, .page-content .art-tabel td { padding: 8px; font-size: 13px; }
+}
+
 /* koopstrook pijlerpagina: geuren en prijzen direct onder de H1, zonder beelden (snel) */
 .koopstrook { display: grid; gap: 8px; margin: 0 0 30px; }
 .koopstrook .ks-item {
