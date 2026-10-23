@@ -126,6 +126,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Zweetlucht na het sporten:</strong> natte sportkleding, schoenen en een dichte tas trekken in matten en kofferbak. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/zweetlucht-sportgeur-auto/' ) ); ?>">zweetlucht en sportgeur uit de auto haalt</a>.</li>
 				<li><strong>Zure lucht na gemorste melk of drank:</strong> eiwit en suiker zakken in de vulling van stoel of mat en gaan daar gisten. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/zure-geur-gemorste-melk-auto/' ) ); ?>">een zure melklucht uit de auto haalt</a>.</li>
 				<li><strong>Muffe lucht uit de kofferbak:</strong> natte spullen en vocht onder de vloerplaat blijven in een dichte laadruimte hangen. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kofferbak-stinkt-geur-verwijderen/' ) ); ?>">een stinkende kofferbak weer fris krijgt</a>.</li>
+				<li><strong>Stoelen die zelf stinken:</strong> zweet, gemorste drank en vocht trekken in de zitting en komen bij warm weer terug. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autostoelen-geur-verwijderen/' ) ); ?>">geur uit autostoelen van stof en leer haalt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -192,6 +193,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zweetlucht-sportgeur-auto/' ) ); ?>">Zweetlucht en sportgeur uit de auto halen</a>. Vochtige sportspullen eruit, per materiaal reinigen, de restgeur absorberen en pas daarna een frisse spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zure-geur-gemorste-melk-auto/' ) ); ?>">Zure melklucht en gemorste drank uit de auto halen</a>. Direct deppen met koud water, per materiaal reinigen, zuiveringszout of enzymreiniger en pas na het drogen een spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kofferbak-stinkt-geur-verwijderen/' ) ); ?>">Kofferbak stinkt: muffe geur uit de kofferbak halen</a>. Leegmaken, de bron onder de vloerplaat vinden, drogen, neutraliseren en pas daarna een spray.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autostoelen-geur-verwijderen/' ) ); ?>">Geur uit autostoelen verwijderen: stof en leer</a>. Bron zoeken, stofzuigen, per materiaal deppen, volledig drogen en pas daarna een frisse afwerking.</li>
 			</ul>
 		</div>
 	</div>
