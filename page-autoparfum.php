@@ -144,7 +144,7 @@ foreach ( $sim_products as $p ) {
 			<h3>Hoe lang blijft autoparfum ruiken?</h3>
 			<p>Tot twee dagen per spraybeurt, afhankelijk van je auto, ventilatie en hoeveel je sprayt. Wat de duur precies bepaalt, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">hoe lang blijft autoparfum hangen</a>.</p>
 			<h3>Is autoparfum veilig voor mijn interieur?</h3>
-			<p>Onze sprays zijn vlekvrij getest op leer, stof en kunststof. Spray niet direct op schermen of glas; dat is niet nodig voor de werking.</p>
+			<p>Onze sprays zijn vlekvrij getest op leer, stof en kunststof. Spray niet direct op schermen of glas; dat is niet nodig voor de werking. Wat je per materiaal wel en niet doet, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-veilig-leer-stof-kunststof/' ) ); ?>">autoparfum veilig gebruiken op leer, stof en kunststof</a>.</p>
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
 			<p>Een klassieke luchtverfrisser of geurhanger geeft continu geur af, of je dat nu wilt of niet. Autoparfum doseer je zelf, net als een parfum: jij bepaalt hoeveel en waar je sprayt.</p>
 			<h3>Is een auto luchtje hetzelfde als autoparfum?</h3>
@@ -194,6 +194,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zure-geur-gemorste-melk-auto/' ) ); ?>">Zure melklucht en gemorste drank uit de auto halen</a>. Direct deppen met koud water, per materiaal reinigen, zuiveringszout of enzymreiniger en pas na het drogen een spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kofferbak-stinkt-geur-verwijderen/' ) ); ?>">Kofferbak stinkt: muffe geur uit de kofferbak halen</a>. Leegmaken, de bron onder de vloerplaat vinden, drogen, neutraliseren en pas daarna een spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autostoelen-geur-verwijderen/' ) ); ?>">Geur uit autostoelen verwijderen: stof en leer</a>. Bron zoeken, stofzuigen, per materiaal deppen, volledig drogen en pas daarna een frisse afwerking.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-veilig-leer-stof-kunststof/' ) ); ?>">Autoparfum veilig gebruiken op leer, stof en kunststof</a>. Afstand houden, klein beginnen, een testplek kiezen en per materiaal weten wat je wel en niet doet.</li>
 			</ul>
 		</div>
 	</div>
