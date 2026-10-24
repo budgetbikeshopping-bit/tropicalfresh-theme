@@ -79,6 +79,24 @@ function sim_form_te_vaak() {
 	return false;
 }
 
+/**
+ * Adressen die bijna altijd van bots komen die andermans adres invullen ("subscription bombing"):
+ * Gmail met 3 of meer puntjes in het eerste deel (Gmail negeert puntjes, bots gebruiken dat om
+ * hetzelfde adres steeds opnieuw in te schrijven) en sms-gateways van Amerikaanse providers.
+ */
+function sim_verdacht_adres( $email ) {
+	$delen = explode( '@', strtolower( $email ) );
+	if ( 2 !== count( $delen ) ) {
+		return true;
+	}
+	list( $lok, $dom ) = $delen;
+	if ( in_array( $dom, array( 'gmail.com', 'googlemail.com' ), true ) && substr_count( $lok, '.' ) >= 3 ) {
+		return true;
+	}
+	$gateways = array( 'tmomail.net', 'vtext.com', 'vzwpix.com', 'txt.att.net', 'mms.att.net', 'messaging.sprintpcs.com', 'pm.sprint.com', 'mymetropcs.com', 'sms.myboostmobile.com', 'msg.fi.google.com', 'text.republicwireless.com', 'email.uscc.net', 'mms.cricketwireless.net' );
+	return in_array( $dom, $gateways, true );
+}
+
 /** Melding bij een status: array( tekst, is_fout ), of null. */
 function sim_form_melding( $status, $bron ) {
 	$nieuwsbrief = 0 === strpos( $bron, 'nieuwsbrief' );
@@ -134,8 +152,13 @@ function sim_handle_form( $type ) {
 		sim_form_terug( 'ok', $bron );
 	}
 	// Tijdsval: het script onderaan vult sim_t met de seconden sinds het laden van de pagina.
+	// Zonder sim_t is het formulier niet via een browser verstuurd (een bot die direct post):
+	// nepbevestiging, niets opslaan en niets mailen (gat gedicht 25 okt 2026, botaanmeldingen).
 	$sim_t = isset( $_POST['sim_t'] ) ? sanitize_text_field( wp_unslash( $_POST['sim_t'] ) ) : '';
-	if ( '' !== $sim_t && (int) $sim_t < 2 ) {
+	if ( '' === $sim_t || ! ctype_digit( $sim_t ) ) {
+		sim_form_terug( 'ok', $bron );
+	}
+	if ( (int) $sim_t < 2 ) {
 		sim_form_terug( 'opnieuw', $bron );
 	}
 	$email = isset( $_POST['sim_email'] ) ? sanitize_email( wp_unslash( $_POST['sim_email'] ) ) : '';
@@ -146,6 +169,13 @@ function sim_handle_form( $type ) {
 		sim_form_terug( 'te-vaak', $bron );
 	}
 	$sleutel = strtolower( $email );
+	// Bekende botpatronen: nepbevestiging, niet op de lijst en geen mail naar een onbekende inbox.
+	if ( 'nieuwsbrief' === $type && sim_verdacht_adres( $sleutel ) ) {
+		$verdacht              = (array) get_option( 'sim_nieuwsbrief_verdacht', array() );
+		$verdacht[ $sleutel ] = time();
+		update_option( 'sim_nieuwsbrief_verdacht', array_slice( $verdacht, -500, null, true ), false );
+		sim_form_terug( 'ok', $bron );
+	}
 	$extra   = isset( $_POST['sim_product'] ) ? substr( sanitize_text_field( wp_unslash( $_POST['sim_product'] ) ), 0, 120 ) : '';
 	$pagina  = wp_get_referer() ?: '-';
 
@@ -161,7 +191,14 @@ function sim_handle_form( $type ) {
 		// Hoogstens een welkomstmail per adres, zodat niemand een vreemde inbox kan volspammen.
 		$welkom      = 'sim_welkom_' . md5( $sleutel );
 		$welkom_mail = '';
-		if ( ! $bekend && ! get_transient( $welkom ) ) {
+		// Hoogstens 15 welkomstmails per dag voor de hele site: een golf botaanmeldingen kan zo
+		// de mailreputatie van tropicalfresh.nl niet beschadigen.
+		$dagsleutel = 'sim_welkom_dag_' . gmdate( 'Ymd' );
+		$vandaag    = (int) get_transient( $dagsleutel );
+		if ( ! $bekend && ! get_transient( $welkom ) && $vandaag >= 15 ) {
+			$welkom_mail = 'Daglimiet van 15 welkomstmails bereikt: de code is NIET verstuurd. Is dit een echte klant, stuur dan zelf WELKOM10.';
+		} elseif ( ! $bekend && ! get_transient( $welkom ) ) {
+			set_transient( $dagsleutel, $vandaag + 1, DAY_IN_SECONDS );
 			set_transient( $welkom, time(), 30 * DAY_IN_SECONDS );
 			// Mislukt het versturen, dan staat dat in de adminmail: een nieuwe poging stuurt de code niet opnieuw.
 			$welkom_mail = sim_welkomstmail( $email )
