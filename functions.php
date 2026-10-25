@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.17' );
+define( 'SIM_VERSION', '1.5.18' );
 
 /* ---------- setup ---------- */
 
@@ -548,6 +548,9 @@ require_once get_template_directory() . '/inc/klantcontact.php';
 
 /* Google Shopping-feed: de 2+1 set (Duo) als bundel in Merchant Center, zie inc/feed-duo.php. */
 require_once get_template_directory() . '/inc/feed-duo.php';
+
+/* AI-zoekmachines: eigen llms.txt, FAQPage-schema uit de zichtbare vragen, auteur en homepage-schema. Zie inc/ai-zoek.php. */
+require_once get_template_directory() . '/inc/ai-zoek.php';
 
 /**
  * Afmelden voor mailings: /?sim_afmelden=<base64 e-mail>&k=<hmac>. De hmac voorkomt
