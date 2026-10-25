@@ -142,7 +142,7 @@ foreach ( $sim_products as $p ) {
 
 			<h2>Veelgestelde vragen over autoparfum</h2>
 			<h3>Hoe lang blijft autoparfum ruiken?</h3>
-			<p>Tot twee dagen per spraybeurt, afhankelijk van je auto, ventilatie en hoeveel je sprayt. Wat de duur precies bepaalt, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">hoe lang blijft autoparfum hangen</a>.</p>
+			<p>Tot twee dagen per spraybeurt, afhankelijk van je auto, ventilatie en hoeveel je sprayt. Wat de duur precies bepaalt, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/hoe-lang-blijft-autoparfum-hangen/' ) ); ?>">hoe lang blijft autoparfum hangen</a>. Ga je uren achter elkaar rijden, lees dan hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/lange-autorit-auto-fris-houden/' ) ); ?>">de auto op een lange autorit fris houdt</a>.</p>
 			<h3>Is autoparfum veilig voor mijn interieur?</h3>
 			<p>Onze sprays zijn vlekvrij getest op leer, stof en kunststof. Spray niet direct op schermen of glas; dat is niet nodig voor de werking. Wat je per materiaal wel en niet doet, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-veilig-leer-stof-kunststof/' ) ); ?>">autoparfum veilig gebruiken op leer, stof en kunststof</a>.</p>
 			<h3>Wat is het verschil met een luchtverfrisser?</h3>
@@ -195,6 +195,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kofferbak-stinkt-geur-verwijderen/' ) ); ?>">Kofferbak stinkt: muffe geur uit de kofferbak halen</a>. Leegmaken, de bron onder de vloerplaat vinden, drogen, neutraliseren en pas daarna een spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autostoelen-geur-verwijderen/' ) ); ?>">Geur uit autostoelen verwijderen: stof en leer</a>. Bron zoeken, stofzuigen, per materiaal deppen, volledig drogen en pas daarna een frisse afwerking.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-veilig-leer-stof-kunststof/' ) ); ?>">Autoparfum veilig gebruiken op leer, stof en kunststof</a>. Afstand houden, klein beginnen, een testplek kiezen en per materiaal weten wat je wel en niet doet.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/lange-autorit-auto-fris-houden/' ) ); ?>">Lange autorit: zo houd je de auto onderweg fris</a>. Opruimen en op tijd spuiten voor vertrek, luchten bij elke stop en de auto resetten na aankomst.</li>
 			</ul>
 		</div>
 	</div>
