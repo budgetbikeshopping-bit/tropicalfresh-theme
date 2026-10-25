@@ -8,8 +8,8 @@
  * - FAQPage-schema uit de zichtbare veelgestelde vragen van elke pagina: de accordeons
  *   op de homepage en de h3-vragen onder een h2 "Veelgestelde vragen" in de pijler,
  *   de geurwijzer en alle artikelen. Alleen wat de bezoeker ook echt ziet.
- * - Artikelauteur: Rank Math noemde een naamloze persoon met /author/ (404) als auteur;
- *   dat wordt de organisatie Tropical Fresh.
+ * - Artikelauteur: Rank Math noemde een naamloze persoon met /author/ (404), "admin" of de
+ *   routine-account als auteur; dat wordt overal de organisatie Tropical Fresh.
  * - Homepage-schema: dateModified volgt de laatste wijziging van homepage of producten
  *   (stond op 27-10-2025) en de hoofdafbeelding is de echte 2+1 set in plaats van de
  *   uitverkochte Shiny New Car.
@@ -219,20 +219,33 @@ add_action( 'template_redirect', function () {
 
 /* ---------- Rank Math-graaf: auteur en homepage ---------- */
 
+/** Auteursarchieven (noindex, alleen "routinebot" en admin) wijzen naar Over ons. */
+add_action( 'template_redirect', function () {
+	if ( is_author() ) {
+		wp_safe_redirect( home_url( '/over-ons/' ), 301 );
+		exit;
+	}
+}, 3 );
+
+/**
+ * Auteur = de organisatie. WordPress-gebruikers (admin, de routine-account "routinebot",
+ * of een lege auteur met /author/ als 404) zijn geen echte schrijvers met een profiel;
+ * het merk is dat wel.
+ */
 add_filter( 'rank_math/json_ld', function ( $data ) {
 	$organisatie = array( '@id' => home_url( '/#organization' ) );
-	$naamloos    = '~/author/?$~';
+	$auteurpad   = '~/author/~';
 
 	foreach ( $data as $sleutel => $entiteit ) {
 		if ( ! is_array( $entiteit ) ) {
 			continue;
 		}
 		$types = isset( $entiteit['@type'] ) ? (array) $entiteit['@type'] : array();
-		if ( in_array( 'Person', $types, true ) && isset( $entiteit['@id'] ) && preg_match( $naamloos, $entiteit['@id'] ) ) {
+		if ( in_array( 'Person', $types, true ) && isset( $entiteit['@id'] ) && preg_match( $auteurpad, $entiteit['@id'] ) ) {
 			unset( $data[ $sleutel ] );
 			continue;
 		}
-		if ( isset( $entiteit['author']['@id'] ) && preg_match( $naamloos, $entiteit['author']['@id'] ) ) {
+		if ( isset( $entiteit['author']['@id'] ) && preg_match( $auteurpad, $entiteit['author']['@id'] ) ) {
 			$data[ $sleutel ]['author'] = $organisatie;
 		}
 	}
