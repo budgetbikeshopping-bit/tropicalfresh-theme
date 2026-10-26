@@ -248,6 +248,18 @@ while ( have_posts() ) :
 					<div class="body"><?php the_content(); ?></div>
 				</details>
 				<details class="acc">
+					<summary>Zo gebruik je de spray</summary>
+					<div class="body">
+						<p>Deze autoparfum spray werkt het best op materiaal dat de geur vasthoudt en langzaam loslaat. Spuit daarom op de vloermatten of de stof onder de stoelen, niet op schermen, glas of het dashboard in de zon.</p>
+						<ol>
+							<li>Houd het flesje zo'n 20 centimeter boven de mat en spuit gelijkmatig, niet op een punt.</li>
+							<li>Twee tot drie sprays in totaal zijn genoeg voor een gewone personenauto: een op elke voormat, eventueel een lichte op de achterbank.</li>
+							<li>Reken op tot 2 dagen geur per spraybeurt. Wordt de geur zachter, spuit dan opnieuw in plaats van meer tegelijk.</li>
+						</ol>
+						<p>Vlekvrij getest op leer, stof en kunststof. Bij oudere of gevoelige bekleding test je eerst een onopvallend plekje onder de stoel. Meer uitleg lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">autoparfum spuiten: waar, hoeveel en wanneer</a> en in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-veilig-leer-stof-kunststof/' ) ); ?>">autoparfum veilig gebruiken op leer, stof en kunststof</a>.</p>
+					</div>
+				</details>
+				<details class="acc">
 					<summary>Details</summary>
 					<div class="body">
 						<?php if ( $product->get_sku() ) : ?><p>Artikelnummer: <?php echo esc_html( $product->get_sku() ); ?></p><?php endif; ?>
