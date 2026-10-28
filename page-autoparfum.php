@@ -129,6 +129,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Zure lucht na gemorste melk of drank:</strong> eiwit en suiker zakken in de vulling van stoel of mat en gaan daar gisten. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/zure-geur-gemorste-melk-auto/' ) ); ?>">een zure melklucht uit de auto haalt</a>.</li>
 				<li><strong>Muffe lucht uit de kofferbak:</strong> natte spullen en vocht onder de vloerplaat blijven in een dichte laadruimte hangen. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kofferbak-stinkt-geur-verwijderen/' ) ); ?>">een stinkende kofferbak weer fris krijgt</a>.</li>
 				<li><strong>Stoelen die zelf stinken:</strong> zweet, gemorste drank en vocht trekken in de zitting en komen bij warm weer terug. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autostoelen-geur-verwijderen/' ) ); ?>">geur uit autostoelen van stof en leer haalt</a>.</li>
+				<li><strong>Braaklucht na wagenziekte:</strong> maagzuur en voedselresten trekken in stof en vulling en worden na een dag juist sterker. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/braaksel-uit-auto-halen/' ) ); ?>">braaklucht uit de auto haalt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -200,6 +201,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/lange-autorit-auto-fris-houden/' ) ); ?>">Lange autorit: zo houd je de auto onderweg fris</a>. Opruimen en op tijd spuiten voor vertrek, luchten bij elke stop en de auto resetten na aankomst.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/auto-verkopen-geur-interieur/' ) ); ?>">Auto verkopen: zo ruikt je interieur fris tijdens de bezichtiging</a>. Eerst de bron weg, interieurfilter vervangen, goed luchten en pas als laatste een lichte spraybeurt op de matten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/auto-lang-stilstaan-muffe-geur-voorkomen/' ) ); ?>">Auto lang stilstaan: zo voorkom je een muffe geur</a>. Droog en leeg stallen met een vochtvreter erin, af en toe luchten, en na de stilstand eerst ventileren en drogen voordat je een geur toevoegt.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/braaksel-uit-auto-halen/' ) ); ?>">Braaksel in de auto: zo haal je de geur eruit</a>. Direct scheppen en deppen, per materiaal reinigen, zuiveringszout of enzymreiniger, volledig drogen en pas daarna een lichte spraybeurt.</li>
 			</ul>
 		</div>
 	</div>
