@@ -75,7 +75,7 @@ foreach ( $sim_products as $p ) {
 			<?php if ( $sim_set_prijs > 0 ) : ?>
 			<a class="ks-item is-set" href="<?php echo esc_url( $sim_duo->get_permalink() ); ?>">
 				<span class="ks-stip" aria-hidden="true"></span>
-				<span class="ks-naam"><b>2+1 set</b><span>3 flesjes: beide geuren plus een extra Juicy Green Apple gratis<?php echo round( $sim_set_prijs, 2 ) >= $sim_drempel ? ', met gratis verzending' : ''; ?></span></span>
+				<span class="ks-naam"><b>2+1 set</b><span>3 flesjes: beide geuren plus een extra Juicy Green Apple gratis<?php echo round( $sim_set_prijs, 2 ) >= $sim_drempel ? ', met gratis verzending in Nederland' : ''; ?></span></span>
 				<span class="ks-prijs"><?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span>
 				<span class="ks-pijl" aria-hidden="true">&rarr;</span>
 			</a>

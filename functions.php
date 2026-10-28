@@ -758,11 +758,20 @@ add_action( 'template_redirect', function () {
 			$a    = wc_get_product( $ids['apple'] );
 			$som  = ( $v && $a ) ? (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ) : 0.0;
 			$gratis_vanaf = defined( 'SIM_GRATIS_VERZENDING_VANAF' ) ? (float) SIM_GRATIS_VERZENDING_VANAF : 17.90;
+			// Deze melding blijft bovenaan de kassa staan, ook als de klant daar naar België wisselt
+			// (audit 28 okt). Daarom altijd het land erbij, en naar België het tarief in plaats van 'gratis'.
+			if ( 'NL' !== sim_klant_land() ) {
+				$verzending = '. Verzending naar België: € 7,95';
+			} elseif ( round( $som, 2 ) >= round( $gratis_vanaf, 2 ) ) {
+				$verzending = ', met gratis verzending in Nederland';
+			} else {
+				$verzending = '';
+			}
 			wc_add_notice(
 				sprintf(
 					'Je 2+1 set staat klaar: 3 flesjes van 60 ml voor %s%s.',
 					wp_strip_all_tags( wc_price( $som ) ),
-					round( $som, 2 ) >= round( $gratis_vanaf, 2 ) ? ', met gratis verzending' : ''
+					$verzending
 				),
 				'success'
 			);

@@ -116,7 +116,7 @@ while ( have_posts() ) :
 				<span class="price-note">incl. btw</span>
 			</div>
 			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
-				<p class="duo-uitleg"><b>2+1 set:</b> 3 flesjes van 60 ml, je betaalt er 2<?php echo $sim_set_gratis_verzending ? ', met gratis verzending' : ''; ?>.</p>
+				<p class="duo-uitleg"><b>2+1 set:</b> 3 flesjes van 60 ml, je betaalt er 2<?php echo $sim_set_gratis_verzending ? ', met gratis verzending in Nederland' : ''; ?>.</p>
 				<?php
 				// Waarde-anker: wat dezelfde drie flesjes los kosten (Vanilla + 2x Apple, eigen losse prijzen),
 				// geen doorgestreepte van-prijs.
@@ -148,7 +148,7 @@ while ( have_posts() ) :
 					// eigen knop. Geen voorselectie; de klant kiest zelf.
 					$sim_los_verzending = round( $sim_los_prijs, 2 ) < round( $sim_gratis_vanaf, 2 )
 						? sprintf( '%s + %s verzending', wc_price( $sim_los_prijs ), wc_price( $sim_verzendkosten ) )
-						: sprintf( '%s, gratis verzending', wc_price( $sim_los_prijs ) );
+						: sprintf( '%s, gratis verzending in NL', wc_price( $sim_los_prijs ) );
 					$sim_set_inhoud = 'juicy-green-apple-autoparfum' === $product->get_slug()
 						? 'Deze Juicy Green Apple en een Creamy Vanilla, plus een extra Juicy Green Apple gratis.'
 						: 'Deze Creamy Vanilla en een Juicy Green Apple, plus een extra Juicy Green Apple gratis.';
@@ -159,7 +159,7 @@ while ( have_posts() ) :
 							<?php echo $sim_summary; // phpcs:ignore -- WooCommerce-hookuitvoer (koopformulier) ?>
 						</div>
 						<div class="keuze is-set">
-							<p class="keuze-kop"><b><span class="set-tag">2+1 set</span> 3 flesjes</b><span><?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?><?php echo $sim_set_gratis_verzending ? ' &middot; gratis verzending' : ''; ?></span></p>
+							<p class="keuze-kop"><b><span class="set-tag">2+1 set</span> 3 flesjes</b><span><?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?><?php echo $sim_set_gratis_verzending ? ' &middot; gratis verzending in NL' : ''; ?></span></p>
 							<p class="set-inhoud"><?php echo esc_html( $sim_set_inhoud ); ?></p>
 							<a class="btn btn-primary set-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span>3 flesjes toevoegen &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
 						</div>
