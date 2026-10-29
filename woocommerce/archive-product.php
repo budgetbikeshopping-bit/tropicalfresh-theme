@@ -76,6 +76,10 @@ $sim_duo_ok   = $sim_promo && $sim_duo && 'publish' === $sim_duo->get_status() &
 			<p>Doe de <a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">geurwijzer</a>: in &eacute;&eacute;n vraag zie je of warm en zoet of fris en fruitig beter bij je rit past. Twijfel je dan nog, dan is een flesje van elk de makkelijkste manier om het zelf te ontdekken.</p>
 			<h3>Is de spray veilig voor leer en stof?</h3>
 			<p>Ja, elke geur is vlekvrij getest op leer, stof en kunststof. Spray niet op schermen of glas, dat is niet nodig voor de werking.</p>
+			<h3>Wat is een goed auto luchtje als je iets zoekt dat lang blijft?</h3>
+			<p>Een auto luchtje dat je zelf doseert. Met een spray bepaal je per rit hoeveel je spuit: tot twee dagen per spraybeurt is de basis, en een paar extra sprays op de matten rekken dat op. Een boompje of hanger geeft je die keuze niet.</p>
+			<h3>Hoe krijg ik een vieze autogeur weg voordat ik ga sprayen?</h3>
+			<p>Eerst de bron weg: natte matten, etensresten of een vol interieurfilter. Zolang die er zit, komt de autogeur steeds terug, hoe lekker het luchtje ook ruikt. Het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan voor vieze geur</a> en de <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-gids</a> helpen je stap voor stap.</p>
 			<h3>Wanneer is de verzending gratis?</h3>
 			<p>Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> binnen Nederland. Daaronder zie je de verzendkosten bij het afrekenen voordat je betaalt.</p>
 		</div>

@@ -130,6 +130,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Muffe lucht uit de kofferbak:</strong> natte spullen en vocht onder de vloerplaat blijven in een dichte laadruimte hangen. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kofferbak-stinkt-geur-verwijderen/' ) ); ?>">een stinkende kofferbak weer fris krijgt</a>.</li>
 				<li><strong>Stoelen die zelf stinken:</strong> zweet, gemorste drank en vocht trekken in de zitting en komen bij warm weer terug. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autostoelen-geur-verwijderen/' ) ); ?>">geur uit autostoelen van stof en leer haalt</a>.</li>
 				<li><strong>Braaklucht na wagenziekte:</strong> maagzuur en voedselresten trekken in stof en vulling en worden na een dag juist sterker. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/braaksel-uit-auto-halen/' ) ); ?>">braaklucht uit de auto haalt</a>.</li>
+				<li><strong>Water in de auto na regen of een lek:</strong> natte matten en vloerbedekking drogen in een gesloten cabine traag en gaan muf ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/natte-auto-lekkage-drogen-geur/' ) ); ?>">een lekkage opspoort en het interieur droogt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -202,6 +203,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/auto-verkopen-geur-interieur/' ) ); ?>">Auto verkopen: zo ruikt je interieur fris tijdens de bezichtiging</a>. Eerst de bron weg, interieurfilter vervangen, goed luchten en pas als laatste een lichte spraybeurt op de matten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/auto-lang-stilstaan-muffe-geur-voorkomen/' ) ); ?>">Auto lang stilstaan: zo voorkom je een muffe geur</a>. Droog en leeg stallen met een vochtvreter erin, af en toe luchten, en na de stilstand eerst ventileren en drogen voordat je een geur toevoegt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/braaksel-uit-auto-halen/' ) ); ?>">Braaksel in de auto: zo haal je de geur eruit</a>. Direct scheppen en deppen, per materiaal reinigen, zuiveringszout of enzymreiniger, volledig drogen en pas daarna een lichte spraybeurt.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/natte-auto-lekkage-drogen-geur/' ) ); ?>">Natte auto na regen of lekkage: zo droog je het interieur</a>. Lek opsporen bij rubbers en afvoergaten, matten eruit, stap voor stap drogen met luchtstroom en een vochtvreter, en pas daarna een lichte geur.</li>
 			</ul>
 		</div>
 	</div>
