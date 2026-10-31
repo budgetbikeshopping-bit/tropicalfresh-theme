@@ -158,6 +158,8 @@ foreach ( $sim_products as $p ) {
 			<p>Op de matten, onder de stoelen of op stoffen bekleding. Daar verdeelt de geur zich rustig door de auto terwijl je rijdt. Schermen en glas sla je over. Hoeveel sprays genoeg zijn en wanneer je het best spuit, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">autoparfum spuiten: waar, hoeveel en wanneer</a>.</p>
 			<h3>Helpt autoparfum tegen een muffe lucht?</h3>
 			<p>Alleen als afwerking. Een muffe lucht komt vrijwel altijd door vocht, dus droog de auto eerst. Anders komt de muffe lucht terug zodra de geur is uitgewerkt.</p>
+			<h3>Welke auto geurtjes passen bij een auto waar vaak anderen in zitten?</h3>
+			<p>Lichte, frisse auto geurtjes vallen bij de meeste mensen goed. Een warme geur zoals Creamy Vanilla kan ook, zolang je zuinig spuit: een of twee sprays op de matten, een kwartier voordat je iemand ophaalt. Rijd je met klanten, collega's of in een poolauto, lees dan hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/zakelijke-auto-geur-passagiers/' ) ); ?>">een zakelijke auto fris houdt voor passagiers</a>. Twijfel je over de geur zelf, dan helpt de <a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">geurwijzer</a>.</p>
 			<h3>Hoeveel kost autoparfum?</h3>
 			<p>
 			<?php if ( $sim_prijzen && 1 === count( array_unique( $sim_prijzen ) ) ) : ?>
@@ -206,6 +208,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/braaksel-uit-auto-halen/' ) ); ?>">Braaksel in de auto: zo haal je de geur eruit</a>. Direct scheppen en deppen, per materiaal reinigen, zuiveringszout of enzymreiniger, volledig drogen en pas daarna een lichte spraybeurt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/natte-auto-lekkage-drogen-geur/' ) ); ?>">Natte auto na regen of lekkage: zo droog je het interieur</a>. Lek opsporen bij rubbers en afvoergaten, matten eruit, stap voor stap drogen met luchtstroom en een vochtvreter, en pas daarna een lichte geur.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autovloermatten-schoonmaken-geur/' ) ); ?>">Autovloermatten schoonmaken: muffe geur uit je matten halen</a>. Rubber uitkloppen, afspoelen en schrobben, stof grondig stofzuigen en deppen, de vloer eronder controleren en pas op droge matten een paar sprays.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zakelijke-auto-geur-passagiers/' ) ); ?>">Zakelijke auto: zo ruikt je auto fris voor klanten en collega's</a>. Afval elke dag eruit, bewust eten onderweg, afspraken in een poolauto en een kwartier voor het ophalen een of twee sprays op de matten.</li>
 			</ul>
 		</div>
 	</div>
