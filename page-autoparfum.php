@@ -132,6 +132,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Braaklucht na wagenziekte:</strong> maagzuur en voedselresten trekken in stof en vulling en worden na een dag juist sterker. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/braaksel-uit-auto-halen/' ) ); ?>">braaklucht uit de auto haalt</a>.</li>
 				<li><strong>Water in de auto na regen of een lek:</strong> natte matten en vloerbedekking drogen in een gesloten cabine traag en gaan muf ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/natte-auto-lekkage-drogen-geur/' ) ); ?>">een lekkage opspoort en het interieur droogt</a>.</li>
 				<li><strong>Muffe vloermatten:</strong> zand, regenwater en kruimels blijven in de matten hangen en gaan muf ruiken, ook als de rest van het interieur schoon is. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autovloermatten-schoonmaken-geur/' ) ); ?>">rubberen en stoffen autovloermatten schoonmaakt</a>.</li>
+				<li><strong>Kinderzitje dat zuur ruikt:</strong> melk, kruimels en zweet zakken in de hoes en het schuim van het zitje en gaan daar na een paar warme dagen zuur ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kinderzitje-schoonmaken-geur/' ) ); ?>">een kinderzitje schoonmaakt en fris houdt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -209,6 +210,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/natte-auto-lekkage-drogen-geur/' ) ); ?>">Natte auto na regen of lekkage: zo droog je het interieur</a>. Lek opsporen bij rubbers en afvoergaten, matten eruit, stap voor stap drogen met luchtstroom en een vochtvreter, en pas daarna een lichte geur.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autovloermatten-schoonmaken-geur/' ) ); ?>">Autovloermatten schoonmaken: muffe geur uit je matten halen</a>. Rubber uitkloppen, afspoelen en schrobben, stof grondig stofzuigen en deppen, de vloer eronder controleren en pas op droge matten een paar sprays.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zakelijke-auto-geur-passagiers/' ) ); ?>">Zakelijke auto: zo ruikt je auto fris voor klanten en collega's</a>. Afval elke dag eruit, bewust eten onderweg, afspraken in een poolauto en een kwartier voor het ophalen een of twee sprays op de matten.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kinderzitje-schoonmaken-geur/' ) ); ?>">Kinderzitje schoonmaken: zure geur en gemorste drank verwijderen</a>. Eerst de handleiding van de fabrikant, hoes wassen, schuim deppen, alles echt laten drogen en nooit op het zitje of de gordels spuiten.</li>
 			</ul>
 		</div>
 	</div>
