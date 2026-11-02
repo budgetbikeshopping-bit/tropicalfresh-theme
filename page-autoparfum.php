@@ -211,6 +211,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autovloermatten-schoonmaken-geur/' ) ); ?>">Autovloermatten schoonmaken: muffe geur uit je matten halen</a>. Rubber uitkloppen, afspoelen en schrobben, stof grondig stofzuigen en deppen, de vloer eronder controleren en pas op droge matten een paar sprays.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zakelijke-auto-geur-passagiers/' ) ); ?>">Zakelijke auto: zo ruikt je auto fris voor klanten en collega's</a>. Afval elke dag eruit, bewust eten onderweg, afspraken in een poolauto en een kwartier voor het ophalen een of twee sprays op de matten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kinderzitje-schoonmaken-geur/' ) ); ?>">Kinderzitje schoonmaken: zure geur en gemorste drank verwijderen</a>. Eerst de handleiding van de fabrikant, hoes wassen, schuim deppen, alles echt laten drogen en nooit op het zitje of de gordels spuiten.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-te-sterk-geur-verzachten/' ) ); ?>">Autoparfum te sterk: zo verzacht je een overheersende autogeur</a>. Portieren open en doorluchten, natte plek deppen, matten buiten leggen, zuiveringszout op stof, en de volgende keer opbouwen met twee sprays op de voormatten.</li>
 			</ul>
 		</div>
 	</div>
