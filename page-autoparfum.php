@@ -133,6 +133,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Water in de auto na regen of een lek:</strong> natte matten en vloerbedekking drogen in een gesloten cabine traag en gaan muf ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/natte-auto-lekkage-drogen-geur/' ) ); ?>">een lekkage opspoort en het interieur droogt</a>.</li>
 				<li><strong>Muffe vloermatten:</strong> zand, regenwater en kruimels blijven in de matten hangen en gaan muf ruiken, ook als de rest van het interieur schoon is. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autovloermatten-schoonmaken-geur/' ) ); ?>">rubberen en stoffen autovloermatten schoonmaakt</a>.</li>
 				<li><strong>Kinderzitje dat zuur ruikt:</strong> melk, kruimels en zweet zakken in de hoes en het schuim van het zitje en gaan daar na een paar warme dagen zuur ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kinderzitje-schoonmaken-geur/' ) ); ?>">een kinderzitje schoonmaakt en fris houdt</a>.</li>
+				<li><strong>Benzinelucht na tanken of een jerrycan:</strong> gemorste brandstof trekt in het tapijt en de kofferbak, maar een sterke, aanhoudende lucht kan ook op een lek wijzen. Lees wanneer je <a href="<?php echo esc_url( home_url( '/autoparfum/benzinegeur-in-auto-oorzaken-verwijderen/' ) ); ?>">benzinegeur in de auto</a> zelf oplost en wanneer je naar de garage gaat.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -212,6 +213,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/zakelijke-auto-geur-passagiers/' ) ); ?>">Zakelijke auto: zo ruikt je auto fris voor klanten en collega's</a>. Afval elke dag eruit, bewust eten onderweg, afspraken in een poolauto en een kwartier voor het ophalen een of twee sprays op de matten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kinderzitje-schoonmaken-geur/' ) ); ?>">Kinderzitje schoonmaken: zure geur en gemorste drank verwijderen</a>. Eerst de handleiding van de fabrikant, hoes wassen, schuim deppen, alles echt laten drogen en nooit op het zitje of de gordels spuiten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-te-sterk-geur-verzachten/' ) ); ?>">Autoparfum te sterk: zo verzacht je een overheersende autogeur</a>. Portieren open en doorluchten, natte plek deppen, matten buiten leggen, zuiveringszout op stof, en de volgende keer opbouwen met twee sprays op de voormatten.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/benzinegeur-in-auto-oorzaken-verwijderen/' ) ); ?>">Benzinegeur in de auto: oorzaken, veiligheid en geur verwijderen</a>. Eerst de veiligheid: bij een sterke, aanhoudende lucht naar de garage; is de bron onschuldig of weg, dan ventileren, deppen, zuiveringszout en pas daarna een lichte spray.</li>
 			</ul>
 		</div>
 	</div>
