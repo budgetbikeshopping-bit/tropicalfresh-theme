@@ -216,6 +216,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-te-sterk-geur-verzachten/' ) ); ?>">Autoparfum te sterk: zo verzacht je een overheersende autogeur</a>. Portieren open en doorluchten, natte plek deppen, matten buiten leggen, zuiveringszout op stof, en de volgende keer opbouwen met twee sprays op de voormatten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/benzinegeur-in-auto-oorzaken-verwijderen/' ) ); ?>">Benzinegeur in de auto: oorzaken, veiligheid en geur verwijderen</a>. Eerst de veiligheid: bij een sterke, aanhoudende lucht naar de garage; is de bron onschuldig of weg, dan ventileren, deppen, zuiveringszout en pas daarna een lichte spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/verwarming-stinkt-herfst-auto-geur/' ) ); ?>">Verwarming stinkt in de herfst: stoflucht en muffe geur uit de auto halen</a>. Korte stoflucht is normaal, muf wijst op filter of vocht, brandlucht is voor de garage; interieurfilter vervangen, roosters zuigen en de verwarming laten doorlopen.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/geurgewenning-auto-neus-went/' ) ); ?>">Geurgewenning in de auto: waarom je je eigen autogeur niet meer ruikt</a>. Je neus dempt elke constante geur; met de portiertest of een tweede neus weet je wat passagiers ruiken en voorkom je dat je te veel spuit.</li>
 			</ul>
 		</div>
 	</div>
