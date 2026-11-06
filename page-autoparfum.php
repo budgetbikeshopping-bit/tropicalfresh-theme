@@ -135,6 +135,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Kinderzitje dat zuur ruikt:</strong> melk, kruimels en zweet zakken in de hoes en het schuim van het zitje en gaan daar na een paar warme dagen zuur ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kinderzitje-schoonmaken-geur/' ) ); ?>">een kinderzitje schoonmaakt en fris houdt</a>.</li>
 				<li><strong>Benzinelucht na tanken of een jerrycan:</strong> gemorste brandstof trekt in het tapijt en de kofferbak, maar een sterke, aanhoudende lucht kan ook op een lek wijzen. Lees wanneer je <a href="<?php echo esc_url( home_url( '/autoparfum/benzinegeur-in-auto-oorzaken-verwijderen/' ) ); ?>">benzinegeur in de auto</a> zelf oplost en wanneer je naar de garage gaat.</li>
 				<li><strong>Verwarming die naar stof of muf ruikt:</strong> de eerste koude ochtend brandt het zomerstof op de warmtewisselaar op en een vochtig filter geeft een bedompte lucht. Lees waarom je <a href="<?php echo esc_url( home_url( '/autoparfum/verwarming-stinkt-herfst-auto-geur/' ) ); ?>">verwarming stinkt in de herfst</a> en wanneer het onschuldig is.</li>
+				<li><strong>Schimmel op rubbers, bekleding of onder de matten:</strong> een aardse lucht die na het drogen terugkomt, wijst op vocht dat ergens blijft staan. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/schimmel-in-auto-verwijderen-voorkomen/' ) ); ?>">schimmel in de auto herkent en kleine plekken aanpakt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -217,6 +218,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/benzinegeur-in-auto-oorzaken-verwijderen/' ) ); ?>">Benzinegeur in de auto: oorzaken, veiligheid en geur verwijderen</a>. Eerst de veiligheid: bij een sterke, aanhoudende lucht naar de garage; is de bron onschuldig of weg, dan ventileren, deppen, zuiveringszout en pas daarna een lichte spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/verwarming-stinkt-herfst-auto-geur/' ) ); ?>">Verwarming stinkt in de herfst: stoflucht en muffe geur uit de auto halen</a>. Korte stoflucht is normaal, muf wijst op filter of vocht, brandlucht is voor de garage; interieurfilter vervangen, roosters zuigen en de verwarming laten doorlopen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/geurgewenning-auto-neus-went/' ) ); ?>">Geurgewenning in de auto: waarom je je eigen autogeur niet meer ruikt</a>. Je neus dempt elke constante geur; met de portiertest of een tweede neus weet je wat passagiers ruiken en voorkom je dat je te veel spuit.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/schimmel-in-auto-verwijderen-voorkomen/' ) ); ?>">Schimmel in de auto: herkennen, verwijderen en voorkomen</a>. Eerst de vochtbron zoeken, kleine plekken droog zuigen en mild reinigen, grondig nadrogen en bij grote of terugkerende plekken naar de garage.</li>
 			</ul>
 		</div>
 	</div>
