@@ -138,6 +138,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Schimmel op rubbers, bekleding of onder de matten:</strong> een aardse lucht die na het drogen terugkomt, wijst op vocht dat ergens blijft staan. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/schimmel-in-auto-verwijderen-voorkomen/' ) ); ?>">schimmel in de auto herkent en kleine plekken aanpakt</a>.</li>
 				<li><strong>Afval en rommel die blijven liggen:</strong> een lege fles in de deurzak, kruimels onder de stoel en een kleverige bekerhouder gaan bij warmte snel ruiken. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/afval-rommel-auto-opruimen-geur/' ) ); ?>">afval en rommel in de auto opruimt en de geur voorkomt</a>.</li>
 				<li><strong>Hemelbekleding die rook en vocht vasthoudt:</strong> warme lucht stijgt op en het schuim in het dak werkt als een spons. Lees hoe je de <a href="<?php echo esc_url( home_url( '/autoparfum/hemelbekleding-schoonmaken-geur/' ) ); ?>">hemelbekleding schoonmaakt zonder dat de lijm loslaat</a>.</li>
+				<li><strong>Natte jassen, sneeuw en strooizout in de winter:</strong> vocht dat via schoenen en kleding binnenkomt blijft bij gesloten ramen in matten en stof zitten, en zout houdt het vast. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/winter-auto-strooizout-natte-kleding-geur/' ) ); ?>">zoutvlekken weghaalt en de auto in de winter fris houdt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -224,6 +225,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/elektrische-auto-geur-interieur/' ) ); ?>">Elektrische auto: geur in een stille cabine fris houden</a>. Zonder motorgeluid en uitlaatlucht valt elke lucht op; vocht door korte ritten, een vol interieurfilter en snacks bij het laden zijn de vaakste bronnen, dus luchten, filter checken en spaarzaam spuiten.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/afval-rommel-auto-opruimen-geur/' ) ); ?>">Afval en rommel in de auto: opruimen en geur voorkomen</a>. Waar rommel zich verstopt, hoe je de auto in een kwartier leeg en schoon krijgt en welke gewoontes voorkomen dat het weer vol raakt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hemelbekleding-schoonmaken-geur/' ) ); ?>">Hemelbekleding schoonmaken: geur en vlekken uit het dak van je auto</a>. Droog stofzuigen, vlekken deppen met een uitgewrongen doek, nooit schrobben of stomen en het dak volledig laten drogen voordat je de auto sluit.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/winter-auto-strooizout-natte-kleding-geur/' ) ); ?>">Winter in de auto: strooizout, natte jassen en muffe geur voorkomen</a>. Waarom de auto in de winter sneller gaat ruiken, hoe je zoutvlekken uit matten dept, slim ventileert zonder kou en met een routine van tien minuten per week de cabine droog houdt.</li>
 			</ul>
 		</div>
 	</div>
