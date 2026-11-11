@@ -687,7 +687,8 @@ add_action( 'woocommerce_cart_calculate_fees', function ( $cart ) {
 	}
 	$incl  = $korting * $sets;
 	$btw   = array_sum( WC_Tax::calc_tax( $incl, WC_Tax::get_rates( '' ), true ) );
-	$label = 1 === $sets ? 'Setprijs 2+1 (3 flesjes voor ' . wp_strip_all_tags( wc_price( SIM_SETPRIJS ) ) . ')' : sprintf( 'Setprijs 2+1 (%d sets)', $sets );
+	// Platte tekst (geen HTML-entiteiten): het label komt ook in de order en de ordermails.
+	$label = 1 === $sets ? 'Setprijs 2+1 (3 flesjes voor € ' . number_format( (float) SIM_SETPRIJS, 2, ',', '.' ) . ')' : sprintf( 'Setprijs 2+1 (%d sets)', $sets );
 	$cart->add_fee( $label, -1 * ( $incl - $btw ), true, '' );
 } );
 
