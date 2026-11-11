@@ -226,6 +226,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/afval-rommel-auto-opruimen-geur/' ) ); ?>">Afval en rommel in de auto: opruimen en geur voorkomen</a>. Waar rommel zich verstopt, hoe je de auto in een kwartier leeg en schoon krijgt en welke gewoontes voorkomen dat het weer vol raakt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/hemelbekleding-schoonmaken-geur/' ) ); ?>">Hemelbekleding schoonmaken: geur en vlekken uit het dak van je auto</a>. Droog stofzuigen, vlekken deppen met een uitgewrongen doek, nooit schrobben of stomen en het dak volledig laten drogen voordat je de auto sluit.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/winter-auto-strooizout-natte-kleding-geur/' ) ); ?>">Winter in de auto: strooizout, natte jassen en muffe geur voorkomen</a>. Waarom de auto in de winter sneller gaat ruiken, hoe je zoutvlekken uit matten dept, slim ventileert zonder kou en met een routine van tien minuten per week de cabine droog houdt.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/ozonbehandeling-auto-geur/' ) ); ?>">Ozonbehandeling voor de auto: wat het doet, wanneer het zinvol is en wat je daarna doet</a>. Ozon breekt ingesleten rook- en schimmelgeur af, maar alleen in een auto die al schoon en droog is; daarna luchten, het interieurfilter vervangen en pas na een paar dagen een lichte geur.</li>
 			</ul>
 		</div>
 	</div>
