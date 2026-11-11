@@ -22,7 +22,7 @@ function sim_feed_is_duo( $product ) {
 }
 
 /**
- * Prijs en leverbaarheid van de 2+1 set, berekend uit de twee geuren.
+ * Prijs en leverbaarheid van de 2+1 set: de vaste setprijs (sim_duo_setprijs) en de voorraad van de twee geuren.
  *
  * @return array{prijs: float, leverbaar: bool}
  */
@@ -34,7 +34,7 @@ function sim_feed_duo_set() {
 		return array( 'prijs' => 0.0, 'leverbaar' => false );
 	}
 	return array(
-		'prijs'     => (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ),
+		'prijs'     => function_exists( 'sim_duo_setprijs' ) ? sim_duo_setprijs() : (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ),
 		'leverbaar' => function_exists( 'sim_promo_active' ) && sim_promo_active()
 			&& $v->is_purchasable() && $a->is_purchasable()
 			&& ( ! $a->managing_stock() || (int) $a->get_stock_quantity() >= 2 ),

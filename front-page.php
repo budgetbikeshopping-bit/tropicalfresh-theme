@@ -46,7 +46,7 @@ foreach ( array( $sim_vanilla, $sim_apple ) as $p ) {
 		$sim_losse[] = (float) wc_get_price_to_display( $p );
 	}
 }
-$sim_set_som    = $sim_set_ok ? array_sum( $sim_losse ) : 0.0;
+$sim_set_som    = $sim_set_ok ? sim_duo_setprijs() : 0.0;
 $sim_set_gratis = $sim_set_som > 0 && (int) round( $sim_set_som * 100 ) >= (int) round( $sim_drempel * 100 );
 $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round( $x * 100 ), $sim_losse ) ) );
 ?>

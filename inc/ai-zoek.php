@@ -63,7 +63,7 @@ function sim_ai_llms_txt() {
 		$kort  = sim_ai_tekst( $product->get_short_description() );
 		$regel = '- [' . sim_ai_tekst( $product->get_name() ) . '](' . get_permalink( $product->get_id() ) . '): ' . sim_ai_prijs( $prijs );
 		if ( $set > 0 ) {
-			$regel .= ' voor 3 flesjes van 60 ml (je betaalt 2, de derde Juicy Green Apple is gratis), met gratis verzending in Nederland.';
+			$regel .= ' voor 3 flesjes van 60 ml (1 Creamy Vanilla en 2 Juicy Green Apple in een set), met gratis verzending in Nederland.';
 		} else {
 			$regel .= ' per spray van 60 ml, met gratis verzending in Nederland.';
 		}

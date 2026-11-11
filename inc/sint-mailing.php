@@ -76,7 +76,7 @@ function sim_sint_log( $regel ) {
 function sim_sint_tekst( $afmeld ) {
 	return "Iets kleins voor in de schoen?\n\n"
 		. "Pakjesavond komt eraan. Met de 2+1 set van Tropical Fresh heb je drie flesjes autoparfum: eentje voor jezelf en twee om weg te geven.\n"
-		. "In de set: Creamy Vanilla en twee keer Juicy Green Apple, sprays van 60 ml. Samen 24,90 euro, gratis verzonden in Nederland.\n\n"
+		. "In de set: Creamy Vanilla en twee keer Juicy Green Apple, sprays van 60 ml. Samen 19,90 euro, gratis verzonden in Nederland.\n\n"
 		. "Bekijk de set: https://tropicalfresh.nl/product/tropical-fresh-duo/?utm_source=email&utm_medium=email&utm_campaign=sint-nov26&utm_content=tekst\n\n"
 		. "Je ontvangt deze mail omdat je je bij Tropical Fresh hebt aangemeld voor e-mail.\n"
 		. "Afmelden: {$afmeld}\n"

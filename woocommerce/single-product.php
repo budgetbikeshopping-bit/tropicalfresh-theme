@@ -42,7 +42,7 @@ while ( have_posts() ) :
 	$sim_set_prijs = 0.0;
 	$sim_set_ok    = false;
 	if ( $sim_set_v && $sim_set_a ) {
-		$sim_set_prijs = (float) wc_get_price_to_display( $sim_set_v ) + (float) wc_get_price_to_display( $sim_set_a );
+		$sim_set_prijs = sim_duo_setprijs(); // vaste setprijs, inc/meting.php
 		$sim_set_ok    = function_exists( 'sim_promo_active' ) && sim_promo_active()
 			&& $sim_set_v->is_purchasable() && $sim_set_a->is_purchasable()
 			&& ( ! $sim_set_a->managing_stock() || (int) $sim_set_a->get_stock_quantity() >= 2 );
@@ -112,7 +112,7 @@ while ( have_posts() ) :
 				<span class="price-note">incl. btw, gratis verzending in NL</span>
 			</div>
 			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
-				<p class="duo-uitleg"><b>Je betaalt 2, je krijgt 3:</b> 1&times; Creamy Vanilla en 2&times; Juicy Green Apple van 60 ml<?php echo $sim_set_gratis_verzending ? ', gratis verzonden in Nederland' : ''; ?>.</p>
+				<p class="duo-uitleg"><b>3 flesjes in &eacute;&eacute;n set:</b> 1&times; Creamy Vanilla en 2&times; Juicy Green Apple van 60 ml<?php echo $sim_set_gratis_verzending ? ', gratis verzonden in Nederland' : ''; ?>.</p>
 				<?php
 				// Waarde-anker: wat dezelfde drie flesjes los kosten (Vanilla + 2x Apple, eigen losse prijzen),
 				// geen doorgestreepte van-prijs.

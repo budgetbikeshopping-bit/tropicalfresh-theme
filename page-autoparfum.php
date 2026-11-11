@@ -33,19 +33,13 @@ $sim_kleur    = array(
 // Zelfde drempel als de verzendvoortgang in de winkelwagen; in NL sinds 11 nov altijd gratis (0).
 $sim_drempel = (float) SIM_GRATIS_VERZENDING_VANAF;
 
-// 2+1 set: alleen tonen zolang de actie loopt; prijs = som van de betaalde flesjes,
-// net als de prijsweergave van de Duo in functions.php.
+// 2+1 set: alleen tonen zolang de actie loopt; prijs = de vaste setprijs (sim_duo_setprijs).
 $sim_promo     = function_exists( 'sim_promo_active' ) && sim_promo_active();
 $sim_duo_post  = get_page_by_path( 'tropical-fresh-duo', OBJECT, 'product' );
 $sim_duo       = $sim_duo_post ? wc_get_product( $sim_duo_post->ID ) : null;
 $sim_set_prijs = 0.0;
 if ( $sim_promo && $sim_duo && 'publish' === $sim_duo->get_status() ) {
-	foreach ( $sim_duo->get_children() as $sim_child_id ) {
-		$sim_child = wc_get_product( $sim_child_id );
-		if ( $sim_child && $sim_child->is_purchasable() && $sim_child->is_in_stock() ) {
-			$sim_set_prijs += (float) wc_get_price_to_display( $sim_child );
-		}
-	}
+	$sim_set_prijs = sim_duo_setprijs( $sim_duo );
 }
 
 // Losse prijzen voor de koopstrook en de prijsvraag in de FAQ.

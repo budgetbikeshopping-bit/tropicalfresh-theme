@@ -27,6 +27,12 @@ if ( ! defined( 'SIM_VERZENDKOSTEN' ) ) {
 	// Verzendkosten in NL onder de drempel; met drempel 0 worden ze nooit gerekend.
 	define( 'SIM_VERZENDKOSTEN', 0.0 );
 }
+if ( ! defined( 'SIM_SETPRIJS' ) ) {
+	// Vaste prijs van de 2+1 set (3 flesjes, incl. btw). Besluit eigenaar 11 nov: het losse flesje gaat
+	// omhoog (12,45 incl. gratis verzending), de set blijft 19,90. In de winkelwagen zorgt de setkorting
+	// in functions.php dat Vanilla + Apple + gratis Apple samen precies deze prijs kosten.
+	define( 'SIM_SETPRIJS', 19.90 );
+}
 if ( ! defined( 'SIM_VERZENDKOSTEN_BE' ) ) {
 	// België: vast tarief, geen gratis verzending; gelijk houden met de verzendzone België.
 	define( 'SIM_VERZENDKOSTEN_BE', 7.95 );
@@ -35,9 +41,9 @@ if ( ! defined( 'SIM_VERZENDKOSTEN_BE' ) ) {
 /* ---------- helpers ---------- */
 
 /**
- * Setprijs van de Duo: de som van de leverbare kindproducten, dus wat de klant
- * echt betaalt (de derde fles komt gratis via de 2+1-cartlogica). Zelfde som als
- * de prijsweergave in functions.php. Geeft 0 terug voor elk ander product, zodat
+ * Setprijs van de Duo: de vaste setprijs SIM_SETPRIJS zolang beide geuren leverbaar
+ * zijn, anders de som van de leverbare kindproducten. Alle plekken (weergave, schema,
+ * feeds, meting, winkelwagenkorting) gebruiken deze functie. Geeft 0 terug voor elk ander product, zodat
  * aanroepers alleen op > 0 hoeven te testen. Zonder argument: de Duo zelf.
  */
 function sim_duo_setprijs( $product = null ) {
@@ -50,14 +56,28 @@ function sim_duo_setprijs( $product = null ) {
 	if ( ! $product instanceof WC_Product || ! $product->is_type( 'grouped' ) || 'tropical-fresh-duo' !== $product->get_slug() ) {
 		return 0.0;
 	}
-	$som = 0.0;
+	$som   = 0.0;
+	$kinds = 0;
 	foreach ( $product->get_children() as $sim_kind_id ) {
 		$kind = wc_get_product( $sim_kind_id );
 		if ( $kind && $kind->is_purchasable() && $kind->is_in_stock() ) {
 			$som += (float) wc_get_price_to_display( $kind );
+			++$kinds;
 		}
 	}
-	return $som;
+	// Beide geuren leverbaar: de vaste setprijs (nooit hoger dan de twee flesjes los).
+	return 2 === $kinds ? min( $som, (float) SIM_SETPRIJS ) : $som;
+}
+
+/** Korting per set in de winkelwagen: Vanilla + Apple los min de vaste setprijs (incl. btw). */
+function sim_set_korting() {
+	$ids = function_exists( 'sim_promo_ids' ) ? sim_promo_ids() : array( 'vanilla' => 0, 'apple' => 0 );
+	$v   = $ids['vanilla'] ? wc_get_product( $ids['vanilla'] ) : null;
+	$a   = $ids['apple'] ? wc_get_product( $ids['apple'] ) : null;
+	if ( ! $v || ! $a ) {
+		return 0.0;
+	}
+	return max( 0.0, round( (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ) - (float) SIM_SETPRIJS, 2 ) );
 }
 
 /** De order op de bedankpagina, alleen met een geldige orderkey; anders null. */

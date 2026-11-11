@@ -519,23 +519,8 @@ add_filter( 'woocommerce_get_price_html', function ( $html, $product ) {
 	if ( 'grouped' !== $product->get_type() || 'tropical-fresh-duo' !== $product->get_slug() ) {
 		return $html;
 	}
-	$som     = 0.0;
-	$som_reg = 0.0;
-	foreach ( $product->get_children() as $sim_child_id ) {
-		$c = wc_get_product( $sim_child_id );
-		if ( ! $c || ! $c->is_purchasable() || ! $c->is_in_stock() ) {
-			continue;
-		}
-		$som     += (float) wc_get_price_to_display( $c );
-		$som_reg += (float) wc_get_price_to_display( $c, array( 'price' => $c->get_regular_price() ) );
-	}
-	if ( $som <= 0 ) {
-		return $html;
-	}
-	if ( $som_reg > $som ) {
-		return '<del aria-hidden="true">' . wc_price( $som_reg ) . '</del> <ins>' . wc_price( $som ) . '</ins>';
-	}
-	return wc_price( $som );
+	$som = sim_duo_setprijs( $product ); // vaste setprijs (inc/meting.php), geen doorgestreepte van-prijs
+	return $som > 0 ? wc_price( $som ) : $html;
 }, 10, 2 );
 
 /* ---------- klantcontact ---------- */
@@ -684,6 +669,28 @@ add_action( 'woocommerce_cart_item_restored', 'sim_promo_reconcile', 20 );
 add_action( 'woocommerce_after_cart_item_quantity_update', 'sim_promo_reconcile', 20 );
 add_action( 'woocommerce_check_cart_items', 'sim_promo_reconcile', 5 );
 
+/**
+ * Setkorting: per complete set (Vanilla + Apple + gratis Apple) gaat het verschil tussen twee losse
+ * flesjes en de vaste setprijs eraf, zodat de set precies SIM_SETPRIJS kost. Het bedrag is incl. btw;
+ * WooCommerce rekent fees exclusief btw, dus we halen de btw er eerst uit met dezelfde tarieven.
+ */
+add_action( 'woocommerce_cart_calculate_fees', function ( $cart ) {
+	$sets = 0;
+	foreach ( $cart->get_cart() as $item ) {
+		if ( ! empty( $item['sim_gratis'] ) ) {
+			$sets += (int) $item['quantity'];
+		}
+	}
+	$korting = function_exists( 'sim_set_korting' ) ? sim_set_korting() : 0.0;
+	if ( $sets < 1 || $korting <= 0 ) {
+		return;
+	}
+	$incl  = $korting * $sets;
+	$btw   = array_sum( WC_Tax::calc_tax( $incl, WC_Tax::get_rates( '' ), true ) );
+	$label = 1 === $sets ? 'Setprijs 2+1 (3 flesjes voor ' . wp_strip_all_tags( wc_price( SIM_SETPRIJS ) ) . ')' : sprintf( 'Setprijs 2+1 (%d sets)', $sets );
+	$cart->add_fee( $label, -1 * ( $incl - $btw ), true, '' );
+} );
+
 /** Gratis regels kosten niets; geen andere korting eroverheen. */
 add_action( 'woocommerce_before_calculate_totals', function ( $cart ) {
 	foreach ( $cart->get_cart() as $item ) {
@@ -778,7 +785,7 @@ add_action( 'template_redirect', function () {
 		if ( $toegevoegd ) {
 			$v    = wc_get_product( $ids['vanilla'] );
 			$a    = wc_get_product( $ids['apple'] );
-			$som  = ( $v && $a ) ? (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ) : 0.0;
+			$som  = ( $v && $a ) ? sim_duo_setprijs() : 0.0;
 			$gratis_vanaf = (float) SIM_GRATIS_VERZENDING_VANAF;
 			// Deze melding blijft bovenaan de kassa staan, ook als de klant daar naar België wisselt
 			// (audit 28 okt). Daarom altijd het land erbij, en naar België het tarief in plaats van 'gratis'.
