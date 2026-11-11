@@ -552,6 +552,9 @@ require_once get_template_directory() . '/inc/feed-duo.php';
 /* AI-zoekmachines: eigen llms.txt, FAQPage-schema uit de zichtbare vragen, auteur en homepage-schema. Zie inc/ai-zoek.php. */
 require_once get_template_directory() . '/inc/ai-zoek.php';
 
+/* Sinterklaas-mailing nov 2026 (alleen actief zolang de wachtrij bestaat): inc/sint-mailing.php */
+require_once get_template_directory() . '/inc/sint-mailing.php';
+
 /**
  * Afmelden voor mailings: /?sim_afmelden=<base64 e-mail>&k=<hmac>. De hmac voorkomt
  * dat iemand anders je kan afmelden. Afmeldingen gaan op een suppressielijst die

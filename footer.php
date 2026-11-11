@@ -19,7 +19,7 @@
 				<h5>Shop</h5>
 				<ul>
 					<li><a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">Alle geuren</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/product/tropical-fresh-duo/' ) ); ?>">Tropical Fresh Duo</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/product/tropical-fresh-duo/' ) ); ?>">2+1 set</a></li>
 					<li><a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">Geurwijzer</a></li>
 				</ul>
 			</div>
