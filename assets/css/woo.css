@@ -967,3 +967,44 @@
 /* Voorwaardenvinkje even groot en even zwaar als het nieuwsbriefvinkje. */
 .woocommerce form .form-row.validate-required .woocommerce-form__label-for-checkbox { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; font-weight: 400; line-height: 1.5; }
 .woocommerce form .form-row .woocommerce-form__input-checkbox#terms { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--chloro-deep); }
+
+/* ============================================================
+   kassa 12 nov: sneller afrekenen (zie inc/kassa.php)
+   ============================================================ */
+/* iOS Safari zoomt in op elk invoerveld onder 16px; daarna moest de klant steeds terugzoomen. */
+.light input[type="text"], .light input[type="email"], .light input[type="tel"],
+.light input[type="password"], .light input[type="number"], .light input[type="search"],
+.light textarea, .light select { font-size: 16px; }
+/* Compacter formulier: voor- en achternaam naast elkaar, postcode naast plaats (twee rijen minder).
+   Op veld-id, niet via PHP-klassen: address-i18n.js zet die bij een landwissel terug. */
+@media (min-width: 340px) {
+  .woocommerce form .woocommerce-billing-fields__field-wrapper,
+  .woocommerce form .woocommerce-shipping-fields__field-wrapper {
+    display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); column-gap: 12px;
+  }
+  .woocommerce form .woocommerce-billing-fields__field-wrapper > .form-row,
+  .woocommerce form .woocommerce-shipping-fields__field-wrapper > .form-row {
+    grid-column: 1 / -1; width: auto; float: none; margin-right: 0;
+  }
+  #billing_first_name_field, #shipping_first_name_field { grid-column: 1 / 6; }
+  #billing_last_name_field, #shipping_last_name_field { grid-column: 6 / 11; }
+  #billing_postcode_field, #shipping_postcode_field { grid-column: 1 / 5; }
+  #billing_city_field, #shipping_city_field { grid-column: 5 / 11; }
+}
+/* 'Aantal wijzigen' naast het kopje 'Je bestelling' (de winkelwagen wordt overgeslagen). */
+.sim-wijzig { float: right; margin: 32px 0 0 12px; font-size: 13px; }
+.sim-wijzig a { color: var(--chloro-deep); text-decoration: underline; }
+/* 2+1-aanbod bovenaan afrekenen: compact, het formulier blijft in het eerste scherm. */
+.sim-promo-blok.is-afrekenen .promo-note { margin-bottom: 16px; }
+/* Na 'In winkelwagen' op home en shop: een echte knop 'Afrekenen' in plaats van een losse link. */
+a.added_to_cart.wc-forward {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  margin-top: 10px; padding: 0 18px; border-radius: 2px;
+  background: var(--chloro-deep); color: var(--mineral); text-decoration: none;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+}
+/* Afrekenknop bovenaan de winkelwagen. */
+.sim-snel-afrekenen { margin: 0 0 18px; }
+.sim-snel-afrekenen .button.checkout-button {
+  width: 100%; justify-content: center; background: var(--chloro-deep); border-color: var(--chloro-deep); color: var(--mineral); min-height: 50px;
+}

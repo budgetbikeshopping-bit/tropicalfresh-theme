@@ -334,7 +334,7 @@ while ( have_posts() ) :
 		<?php if ( $sim_is_duo ) : ?>
 			<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>">Bestellen</a>
 		<?php else : ?>
-			<a class="btn btn-primary" rel="nofollow" data-sim-koop="" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>">Toevoegen</a>
+			<a class="btn btn-primary" rel="nofollow" data-sim-koop="" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>">Bestellen</a>
 		<?php endif; ?>
 	</div>
 	<?php endif; ?>

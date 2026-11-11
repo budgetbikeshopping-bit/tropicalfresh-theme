@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.19' );
+define( 'SIM_VERSION', '1.5.20' );
 
 /* ---------- setup ---------- */
 
@@ -539,6 +539,9 @@ require_once get_template_directory() . '/inc/ai-zoek.php';
 
 /* Sinterklaas-mailing nov 2026 (alleen actief zolang de wachtrij bestaat): inc/sint-mailing.php */
 require_once get_template_directory() . '/inc/sint-mailing.php';
+
+/* Sneller afrekenen (12 nov): los flesje direct naar afrekenen, kortere kassa, minder scripts. Zie inc/kassa.php. */
+require_once get_template_directory() . '/inc/kassa.php';
 
 /**
  * Afmelden voor mailings: /?sim_afmelden=<base64 e-mail>&k=<hmac>. De hmac voorkomt

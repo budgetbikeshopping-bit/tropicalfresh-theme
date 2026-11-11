@@ -208,9 +208,12 @@ function sim_ga_winkelwagen_data() {
 	if ( ! $items ) {
 		return null;
 	}
+	// De setkorting van de 2+1 (19,90) is een negatieve fee, geen regelkorting: tel hem mee, anders
+	// meldt de trechter 24,90 voor een set van 19,90 (gemeten 12 nov). Kortingscodes zitten al in line_total.
+	$waarde += (float) WC()->cart->get_fee_total() + ( $incl ? (float) WC()->cart->get_fee_tax() : 0.0 );
 	$data = array(
 		'currency' => get_woocommerce_currency(),
-		'value'    => round( $waarde, 2 ),
+		'value'    => round( max( 0.0, $waarde ), 2 ),
 		'items'    => $items,
 	);
 	$codes = WC()->cart->get_applied_coupons();

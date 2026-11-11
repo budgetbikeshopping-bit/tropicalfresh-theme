@@ -363,6 +363,7 @@ add_action( 'sim_na_artikel', function () {
 /**
  * /?sim_add=apple of /?sim_add=vanilla voegt 1 flesje toe en stuurt door naar de
  * winkelwagen (post/redirect/get zoals sim_duo), zodat verversen niets dubbel toevoegt.
+ * Met &terug=afrekenen (de knop op de afrekenpagina) gaat het terug naar afrekenen.
  */
 add_action( 'template_redirect', function () {
 	if ( empty( $_GET['sim_add'] ) || ! function_exists( 'WC' ) || ! WC()->cart ) {
@@ -376,7 +377,8 @@ add_action( 'template_redirect', function () {
 	// Deze doorverwijzing hoort nooit in de paginacache.
 	nocache_headers();
 	do_action( 'litespeed_control_set_nocache', 'sim_add voegt toe aan de winkelwagen' );
-	wp_safe_redirect( wc_get_cart_url() );
+	$terug = isset( $_GET['terug'] ) && 'afrekenen' === sanitize_key( wp_unslash( $_GET['terug'] ) );
+	wp_safe_redirect( $terug ? wc_get_checkout_url() : wc_get_cart_url() );
 	exit;
 } );
 
@@ -385,7 +387,7 @@ add_action( 'template_redirect', function () {
  * toevoegt. Belooft alleen wat sim_promo_reconcile echt geeft: een gratis Juicy
  * Green Apple, en alleen als de voorraad dat toelaat.
  */
-function sim_winkelwagen_2plus1() {
+function sim_winkelwagen_2plus1( $op_afrekenen = false ) {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart || ! sim_promo_active() ) {
 		return;
 	}
@@ -406,6 +408,9 @@ function sim_winkelwagen_2plus1() {
 		}
 	}
 	if ( $gratis > 0 ) {
+		if ( $op_afrekenen ) {
+			return; // op afrekenen meldt de sim_duo-melding dit al, en de bestelling toont de gratis regel
+		}
 		$txt = 1 === $gratis
 			? 'Je 2+1 set is compleet: de gratis Juicy Green Apple zit erbij.'
 			: sprintf( 'Je 2+1 sets zijn compleet: de %d gratis Juicy Green Apples zitten erbij.', $gratis );
@@ -458,7 +463,7 @@ function sim_winkelwagen_2plus1() {
 	printf(
 		'<div class="promo-note"><p>%s</p><a class="button" rel="nofollow" href="%s">%s</a></div>',
 		wp_kses_post( $tekst ),
-		esc_url( home_url( '/?sim_add=' . $wie ) ),
+		esc_url( home_url( '/?sim_add=' . $wie . ( $op_afrekenen ? '&terug=afrekenen' : '' ) ) ),
 		esc_html( 'Voeg ' . $naam . ' toe' )
 	);
 }
@@ -497,8 +502,24 @@ add_filter( 'woocommerce_get_country_locale', function ( $locale ) {
 	return $locale;
 } );
 
-/** Knoptekst die zegt wat er gebeurt: bestellen met betaalverplichting. */
-add_filter( 'woocommerce_order_button_text', fn() => 'Bestellen en betalen' );
+/**
+ * Knoptekst die zegt wat er gebeurt: bestellen met betaalverplichting, met het bedrag erbij
+ * (12 nov). Het betaalblok wordt bij elke adreswijziging opnieuw opgebouwd, dus het bedrag volgt
+ * de winkelwagen (set 19,90, los 12,45, naar België plus verzending). Op order-pay geen bedrag.
+ */
+add_filter( 'woocommerce_order_button_text', function () {
+	$tekst = 'Bestellen en betalen';
+	if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-pay' ) ) {
+		return $tekst;
+	}
+	if ( function_exists( 'WC' ) && WC()->cart && ! WC()->cart->is_empty() ) {
+		$bedrag = trim( html_entity_decode( wp_strip_all_tags( WC()->cart->get_total() ), ENT_QUOTES, 'UTF-8' ) );
+		if ( '' !== $bedrag ) {
+			$tekst .= ' · ' . $bedrag;
+		}
+	}
+	return $tekst;
+} );
 
 /** Kortingscodeveld: zelfde woord als in de welkomstmail en het nieuwsbriefblok. */
 add_filter( 'gettext', function ( $vertaling, $tekst, $domein ) {
