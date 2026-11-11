@@ -573,6 +573,17 @@ add_action( 'template_redirect', function () {
 		wp_safe_redirect( home_url( '/' ) );
 		exit;
 	}
+	// Alleen een POST meldt af: het one-click-verzoek uit Gmail/Yahoo (RFC 8058) of de knop hieronder.
+	// Een gewone GET (ook linkscanners van mailbeveiliging) krijgt eerst een bevestigingsknop.
+	if ( 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
+		nocache_headers();
+		do_action( 'litespeed_control_set_nocache', 'afmeldbevestiging' );
+		wp_die(
+			'<h1 style="font-family:sans-serif">Afmelden voor mailings van Tropical Fresh?</h1><form method="post" action="' . esc_url( add_query_arg( array( 'sim_afmelden' => rawurlencode( wp_unslash( $_GET['sim_afmelden'] ) ), 'k' => $k ), home_url( '/' ) ) ) . '"><p style="font-family:sans-serif">Klik op de knop en je ontvangt geen mailings meer.</p><button type="submit" style="font:16px sans-serif;padding:10px 18px;cursor:pointer">Ja, meld mij af</button></form><p style="font-family:sans-serif"><a href="' . esc_url( home_url( '/' ) ) . '">Nee, terug naar tropicalfresh.nl</a></p>',
+			'Afmelden',
+			array( 'response' => 200 )
+		);
+	}
 	$af = get_option( 'sim_afmeldingen', array() );
 	if ( ! in_array( $email, $af, true ) ) {
 		$af[] = $email;

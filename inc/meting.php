@@ -526,11 +526,18 @@ add_action( 'woocommerce_after_single_product', function () {
 }, 99 );
 
 /**
+ * WooPayments hangt zijn shopper-tracking ook aan woocommerce_after_single_product; die staat uit
+ * (isShopperTrackingEnabled false) maar laadt dan toch ca. 40 kB scripts op de advertentiepagina.
+ */
+add_filter( 'wcpay_frontend_tracks', function ( $tracks ) {
+	return ( function_exists( 'is_product' ) && is_product() ) ? array() : $tracks;
+}, 99 );
+
+/**
  * Server-events (CAPI) alleen voor mensen. De plugin herkent zelf alleen Meta-crawlers;
  * scanners, scripts en onze eigen controles stuurden duizenden PageViews en tientallen
  * AddToCarts zonder browser (gemeten 11 nov). Toevoegen via een link (?sim_duo=1,
- * ?add-to-cart=, ?sim_add=) telt alleen als de klik van onze eigen site komt en de
- * browser de pixel al had geladen (_fbp-cookie).
+ * ?add-to-cart=, ?sim_add=) telt alleen als de klik van onze eigen site komt (referrer).
  */
 add_filter( 'wc_facebook_crawler_user_agent_patterns', function ( $patronen ) {
 	return array_merge( (array) $patronen, array( 'bot/', 'bot;', 'bot)', 'spider', 'crawl', '+http', 'facebookexternalhit', 'facebookcatalog', 'curl/', 'wget', 'python', 'go-http-client', 'headlesschrome', 'okhttp', 'java/', 'libwww', 'node-fetch', 'axios', 'scrapy', 'lighthouse', 'sim-check' ) );
@@ -544,7 +551,9 @@ add_filter( 'wc_facebook_is_crawler_request', function ( $is_crawler, $user_agen
 		$eigen = (string) wp_parse_url( home_url(), PHP_URL_HOST );
 		$van   = isset( $_SERVER['HTTP_REFERER'] ) ? (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), PHP_URL_HOST ) : '';
 		$eigen_site = '' !== $van && ( $van === $eigen || substr( $van, -strlen( '.' . $eigen ) ) === '.' . $eigen );
-		if ( empty( $_COOKIE['_fbp'] ) || ! $eigen_site ) {
+		// Alleen de eigen-site-referrer: de gemeten bots hadden er geen. Een _fbp-eis zou echte klanten
+		// wegfilteren die tikken voordat de pixel geladen is (pagina's komen uit de cache, zonder cookie).
+		if ( ! $eigen_site ) {
 			return true;
 		}
 	}
