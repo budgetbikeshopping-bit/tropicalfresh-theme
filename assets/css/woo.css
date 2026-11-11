@@ -838,7 +838,8 @@
 /* mobiel: koopknop in het eerste scherm (390x664). Compacter podium, kleinere
    tussenruimtes en aantal + knop op een rij. */
 @media (max-width: 767px) {
-  .single-product .crumbs { padding-top: 12px; }
+  /* kruimelpad op mobiel weg: twee regels boven de foto drukten de koopknop uit beeld */
+  .single-product .crumbs { display: none; }
   .pdp { gap: 12px; padding-top: 12px; }
   .pdp .stage { min-height: 0; height: 210px; }
   .pdp .stage .tilt { pointer-events: none; }

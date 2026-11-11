@@ -30,8 +30,8 @@ $sim_kleur    = array(
 	'juicy-green-apple-autoparfum' => 'is-apple',
 );
 
-// Zelfde drempel als de verzendvoortgang in de winkelwagen (functions.php).
-$sim_drempel = 17.90;
+// Zelfde drempel als de verzendvoortgang in de winkelwagen; in NL sinds 11 nov altijd gratis (0).
+$sim_drempel = (float) SIM_GRATIS_VERZENDING_VANAF;
 
 // 2+1 set: alleen tonen zolang de actie loopt; prijs = som van de betaalde flesjes,
 // net als de prijsweergave van de Duo in functions.php.
@@ -80,7 +80,7 @@ foreach ( $sim_products as $p ) {
 				<span class="ks-pijl" aria-hidden="true">&rarr;</span>
 			</a>
 			<?php endif; ?>
-			<p class="ks-noot">Gratis verzending in Nederland vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> &middot; 14 dagen retourrecht</p>
+			<p class="ks-noot">Gratis verzending in heel Nederland &middot; 14 dagen retourrecht</p>
 		</div>
 		<?php endif; ?>
 
@@ -185,7 +185,7 @@ foreach ( $sim_products as $p ) {
 			<?php if ( $sim_set_prijs > 0 ) : ?>
 				De <a href="<?php echo esc_url( $sim_duo->get_permalink() ); ?>">2+1 set</a> met drie flesjes kost <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?>.
 			<?php endif; ?>
-				Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> is de verzending in Nederland gratis.
+				De verzending is in Nederland altijd gratis.
 			</p>
 
 			<h2>Verder lezen</h2>

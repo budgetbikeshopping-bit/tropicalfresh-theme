@@ -33,7 +33,6 @@ function sim_ai_tekst( $html ) {
 
 /** De volledige llms.txt, opgebouwd uit de live winkeldata. */
 function sim_ai_llms_txt() {
-	$drempel = 17.90; // gratis verzending in NL vanaf; gelijk aan front-page.php en de verzendinstelling
 	$regels  = array();
 
 	$regels[] = '# Tropical Fresh';
@@ -66,7 +65,7 @@ function sim_ai_llms_txt() {
 		if ( $set > 0 ) {
 			$regel .= ' voor 3 flesjes van 60 ml (je betaalt 2, de derde Juicy Green Apple is gratis), met gratis verzending in Nederland.';
 		} else {
-			$regel .= ' per spray van 60 ml.';
+			$regel .= ' per spray van 60 ml, met gratis verzending in Nederland.';
 		}
 		$regels[] = $regel . ( $kort ? ' ' . $kort : '' );
 	}
@@ -83,7 +82,7 @@ function sim_ai_llms_txt() {
 
 	$regels[] = '## Bestellen, verzending en retour';
 	$regels[] = '';
-	$regels[] = '- Verzending in Nederland is gratis vanaf ' . sim_ai_prijs( $drempel ) . ', daaronder ' . sim_ai_prijs( 4.95 ) . '. Naar België ' . sim_ai_prijs( 7.95 ) . '.';
+	$regels[] = '- Verzending in Nederland is altijd gratis. Naar België ' . sim_ai_prijs( SIM_VERZENDKOSTEN_BE ) . '.';
 	$regels[] = '- Doorgaans binnen 2 tot 4 werkdagen geleverd.';
 	$regels[] = '- Betalen met iDEAL | Wero of creditcard.';
 	$regels[] = '- 14 dagen retourrecht na ontvangst: ' . home_url( '/retourneren/' );

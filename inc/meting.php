@@ -19,12 +19,17 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'SIM_GRATIS_VERZENDING_VANAF' ) ) {
-	// Drempel voor gratis verzending; gelijk houden met de WooCommerce-verzendzone en Merchant Center.
-	define( 'SIM_GRATIS_VERZENDING_VANAF', 17.90 );
+	// Drempel voor gratis verzending in NL; gelijk houden met de WooCommerce-verzendzone en Merchant Center.
+	// Sinds 11 nov 2026 verzenden we in Nederland altijd gratis (besluit eigenaar), dus 0.
+	define( 'SIM_GRATIS_VERZENDING_VANAF', 0.0 );
 }
 if ( ! defined( 'SIM_VERZENDKOSTEN' ) ) {
-	// Verzendkosten onder de drempel; gelijk houden met de WooCommerce-verzendzone en Merchant Center.
-	define( 'SIM_VERZENDKOSTEN', 4.95 );
+	// Verzendkosten in NL onder de drempel; met drempel 0 worden ze nooit gerekend.
+	define( 'SIM_VERZENDKOSTEN', 0.0 );
+}
+if ( ! defined( 'SIM_VERZENDKOSTEN_BE' ) ) {
+	// België: vast tarief, geen gratis verzending; gelijk houden met de verzendzone België.
+	define( 'SIM_VERZENDKOSTEN_BE', 7.95 );
 }
 
 /* ---------- helpers ---------- */
@@ -361,7 +366,7 @@ function sim_schema_retourbeleid() {
 
 /**
  * Verzend- en retourinfo bij een Offer. Verzending naar Nederland: gratis
- * vanaf de drempel, daaronder de vaste verzendkosten (de Duo komt dus op 0).
+ * vanaf de drempel, daaronder de vaste verzendkosten (drempel 0: altijd gratis).
  * Geen levertijd: de verdeling over verwerking en transport is niet bevestigd.
  */
 function sim_schema_offer_aanvullen( $offer ) {
@@ -388,7 +393,7 @@ function sim_schema_offer_aanvullen( $offer ) {
 	return $offer;
 }
 
-/** Na de Duo-prijsfix (prioriteit 20), zodat de Duo met 17,90 op gratis verzending uitkomt. */
+/** Na de Duo-prijsfix (prioriteit 20), zodat de Duo met de setprijs in het schema staat. */
 add_filter( 'rank_math/snippet/rich_snippet_product_entity', function ( $entity ) {
 	if ( ! is_array( $entity ) || empty( $entity['offers'] ) || ! is_array( $entity['offers'] ) ) {
 		return $entity;
@@ -421,7 +426,7 @@ add_filter( 'rank_math/json_ld', function ( $data ) {
 
 /**
  * Rank Math zet in Open Graph de laagste kindprijs (8,95) van de Duo; de pagina
- * en het schema vragen 17,90. product:price:amount krijgt de setprijs.
+ * en het schema vragen de setprijs. product:price:amount krijgt de setprijs.
  */
 add_filter( 'rank_math/opengraph/facebook/product_price_amount', function ( $prijs ) {
 	if ( ! function_exists( 'wc_get_product' ) || ! is_singular( 'product' ) ) {
@@ -500,3 +505,66 @@ add_filter( 'rank_math/frontend/breadcrumb/items', function ( $crumbs ) {
 } );
 
 /* GLA-gtag staat uit via de mu-plugin tf-gla-geen-gtag.php (het filter moet vóór plugins_loaded bestaan). */
+
+/* ---------- Meta-pixel (Facebook for WooCommerce): ViewContent en botfilter ---------- */
+
+/**
+ * De plugin stuurt ViewContent vanuit woocommerce_after_single_product (die hook staat
+ * sinds 11 nov in woocommerce/single-product.php). Voor de Duo (gegroepeerd product)
+ * zou de plugin de laagste kindprijs als waarde sturen; rond de plugin-callback
+ * (prioriteit 10) geven we daarom de setprijs door. Weergave en feeds blijven ongemoeid.
+ */
+function sim_fb_duo_prijs( $prijs, $product ) {
+	$som = sim_duo_setprijs( $product );
+	return $som > 0 ? (string) $som : $prijs;
+}
+add_action( 'woocommerce_after_single_product', function () {
+	add_filter( 'woocommerce_product_get_price', 'sim_fb_duo_prijs', 99, 2 );
+}, 1 );
+add_action( 'woocommerce_after_single_product', function () {
+	remove_filter( 'woocommerce_product_get_price', 'sim_fb_duo_prijs', 99 );
+}, 99 );
+
+/**
+ * Server-events (CAPI) alleen voor mensen. De plugin herkent zelf alleen Meta-crawlers;
+ * scanners, scripts en onze eigen controles stuurden duizenden PageViews en tientallen
+ * AddToCarts zonder browser (gemeten 11 nov). Toevoegen via een link (?sim_duo=1,
+ * ?add-to-cart=, ?sim_add=) telt alleen als de klik van onze eigen site komt en de
+ * browser de pixel al had geladen (_fbp-cookie).
+ */
+add_filter( 'wc_facebook_crawler_user_agent_patterns', function ( $patronen ) {
+	return array_merge( (array) $patronen, array( 'bot/', 'bot;', 'bot)', 'spider', 'crawl', '+http', 'facebookexternalhit', 'facebookcatalog', 'curl/', 'wget', 'python', 'go-http-client', 'headlesschrome', 'okhttp', 'java/', 'libwww', 'node-fetch', 'axios', 'scrapy', 'lighthouse', 'sim-check' ) );
+} );
+add_filter( 'wc_facebook_is_crawler_request', function ( $is_crawler, $user_agent ) {
+	if ( '' === trim( (string) $user_agent ) ) {
+		return true;
+	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- alleen lezen of het een toevoeglink is
+	if ( isset( $_GET['sim_duo'] ) || isset( $_GET['add-to-cart'] ) || isset( $_GET['sim_add'] ) ) {
+		$eigen = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+		$van   = isset( $_SERVER['HTTP_REFERER'] ) ? (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), PHP_URL_HOST ) : '';
+		$eigen_site = '' !== $van && ( $van === $eigen || substr( $van, -strlen( '.' . $eigen ) ) === '.' . $eigen );
+		if ( empty( $_COOKIE['_fbp'] ) || ! $eigen_site ) {
+			return true;
+		}
+	}
+	return $is_crawler;
+}, 10, 2 );
+
+/**
+ * Het gratis 2+1-flesje is geen extra toevoeging van de klant: zonder deze uitzondering
+ * stuurt de plugin er een AddToCart met de volle prijs voor. sim_promo_reconcile roept
+ * dit aan rond het toevoegen van de gratis regel.
+ */
+function sim_fb_atc_callback() {
+	global $wp_filter;
+	if ( empty( $wp_filter['woocommerce_add_to_cart'] ) ) {
+		return null;
+	}
+	foreach ( $wp_filter['woocommerce_add_to_cart']->callbacks[40] ?? array() as $cb ) {
+		if ( is_array( $cb['function'] ) && is_object( $cb['function'][0] ) && 'inject_add_to_cart_event' === $cb['function'][1] ) {
+			return $cb['function'];
+		}
+	}
+	return null;
+}

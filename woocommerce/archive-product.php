@@ -6,8 +6,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
-// Zelfde drempel als de verzendvoortgang in de winkelwagen en de pijler (functions.php).
-$sim_drempel = 17.90;
+// Gratis verzending in NL: sinds 11 nov altijd (drempel 0, inc/meting.php).
 
 // 2+1 set alleen noemen zolang de actie loopt en de set leverbaar is.
 $sim_promo    = function_exists( 'sim_promo_active' ) && sim_promo_active();
@@ -51,7 +50,7 @@ $sim_duo_ok   = $sim_promo && $sim_duo && 'publish' === $sim_duo->get_status() &
 		<div class="cat-tekst">
 			<h2>Autoparfum kopen bij Tropical Fresh</h2>
 			<p>Onze autoparfums zijn sprays van 60 ml: twee tot drie sprays in het interieur en je hebt tot twee dagen geur per spraybeurt. Geen hangertje aan je spiegel; elke geur is vlekvrij getest op leer, stof en kunststof. Jij bepaalt zelf de intensiteit door vaker of minder vaak te sprayen.</p>
-			<p>De collectie is bewust klein: Creamy Vanilla is warm en zoet, Juicy Green Apple fris en fruitig. Twijfel je? De <a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">geurwijzer</a> helpt je in &eacute;&eacute;n vraag kiezen. Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> is de verzending in Nederland gratis en je hebt 14 dagen retourrecht. Tropical Fresh is een Nederlands merk uit Leiden.</p>
+			<p>De collectie is bewust klein: Creamy Vanilla is warm en zoet, Juicy Green Apple fris en fruitig. Twijfel je? De <a href="<?php echo esc_url( home_url( '/geurwijzer/' ) ); ?>">geurwijzer</a> helpt je in &eacute;&eacute;n vraag kiezen. De verzending is in Nederland altijd gratis en je hebt 14 dagen retourrecht. Tropical Fresh is een Nederlands merk uit Leiden.</p>
 
 			<h2>Koopgids: welk auto geurtje past bij jou?</h2>
 			<p>Auto geurtjes zijn er in veel vormen: een boompje aan de spiegel, een clip op het rooster, een geurhanger of een spray. Bij Tropical Fresh kies je bewust voor de spray. Je spuit een paar keer op de matten of onder de stoel, de geur verdeelt zich tijdens het rijden en er hangt niets in je zicht. Hoe die vormen zich tot elkaar verhouden, lees je in <a href="<?php echo esc_url( home_url( '/autoparfum/beste-autoparfum-kiezen/' ) ); ?>">beste autoparfum kiezen</a>.</p>
@@ -65,7 +64,7 @@ $sim_duo_ok   = $sim_promo && $sim_duo && 'publish' === $sim_duo->get_status() &
 			<p>Ruikt je auto nu nog naar rook, hond of vocht? Pak dan eerst de bron aan, want een geur erboven maskeert dat hooguit even. Het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan voor vieze geur in de auto</a> helpt je op weg en op de <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a> staan alle gidsen bij elkaar.</p>
 
 			<h3>Zo bestel je autoparfum</h3>
-			<p>Kies hierboven je geur of de set en zet hem in je mandje. Bij het afrekenen betaal je met iDEAL, Wero of kaart. Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> verzenden we gratis binnen Nederland en je hebt 14 dagen om je bestelling terug te sturen als de geur je toch niet bevalt. Wil je weten waar en hoeveel je spuit zodra het pakje binnen is? Lees dan <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">autoparfum spuiten: waar, hoeveel en wanneer</a>.</p>
+			<p>Kies hierboven je geur of de set en zet hem in je mandje. Bij het afrekenen betaal je met iDEAL, Wero of kaart. Binnen Nederland verzenden we altijd gratis en je hebt 14 dagen om je bestelling terug te sturen als de geur je toch niet bevalt. Wil je weten waar en hoeveel je spuit zodra het pakje binnen is? Lees dan <a href="<?php echo esc_url( home_url( '/autoparfum/autoparfum-spuiten-waar-en-hoeveel/' ) ); ?>">autoparfum spuiten: waar, hoeveel en wanneer</a>.</p>
 
 			<h2>Veelgestelde vragen over auto geurtjes</h2>
 			<h3>Wat is het verschil tussen een auto geurtje en autoparfum?</h3>
@@ -81,7 +80,7 @@ $sim_duo_ok   = $sim_promo && $sim_duo && 'publish' === $sim_duo->get_status() &
 			<h3>Hoe krijg ik een vieze autogeur weg voordat ik ga sprayen?</h3>
 			<p>Eerst de bron weg: natte matten, etensresten of een vol interieurfilter. Zolang die er zit, komt de autogeur steeds terug, hoe lekker het luchtje ook ruikt. Het <a href="<?php echo esc_url( home_url( '/autoparfum/vieze-geur-auto-verwijderen/' ) ); ?>">stappenplan voor vieze geur</a> en de <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-gids</a> helpen je stap voor stap.</p>
 			<h3>Wanneer is de verzending gratis?</h3>
-			<p>Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> binnen Nederland. Daaronder zie je de verzendkosten bij het afrekenen voordat je betaalt.</p>
+			<p>Altijd, op elke bestelling binnen Nederland. Naar België betaal je <?php echo wp_kses_post( wc_price( SIM_VERZENDKOSTEN_BE ) ); ?>; dat zie je bij het afrekenen voordat je betaalt.</p>
 		</div>
 		<?php endif; ?>
 	</div>

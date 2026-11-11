@@ -108,8 +108,7 @@ if ( $sim_duo && $sim_promo ) {
 <?php endif; ?>
 
 <?php
-// Gidsblok onder de wijzer: hoe je een autogeur kiest, plus FAQ (zelfde drempel als de pijler).
-$sim_drempel = 17.90;
+// Gidsblok onder de wijzer: hoe je een autogeur kiest, plus FAQ.
 ?>
 <section class="light page-wrap" style="padding-top: 0;">
 	<div class="wrap narrow">
@@ -145,7 +144,7 @@ $sim_drempel = 17.90;
 			<h3>Is een autogeur veilig voor leer en stof?</h3>
 			<p>Onze sprays zijn vlekvrij getest op leer, stof en kunststof. Spuit niet op schermen of glas en test bij twijfel eerst een onzichtbaar plekje.</p>
 			<h3>Wat als de geur me toch niet bevalt?</h3>
-			<p>Je hebt 14 dagen retourrecht. Vanaf <?php echo wp_kses_post( wc_price( $sim_drempel ) ); ?> is de verzending in Nederland gratis. Alles over gebruik, dosering en onze geuren lees je op de <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a>.</p>
+			<p>Je hebt 14 dagen retourrecht en de verzending is in Nederland altijd gratis. Alles over gebruik, dosering en onze geuren lees je op de <a href="<?php echo esc_url( home_url( '/autoparfum/' ) ); ?>">autoparfum-pagina</a>.</p>
 		</div>
 	</div>
 </section>

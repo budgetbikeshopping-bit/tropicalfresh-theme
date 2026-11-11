@@ -6,7 +6,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIM_VERSION', '1.5.18' );
+define( 'SIM_VERSION', '1.5.19' );
 
 /* ---------- setup ---------- */
 
@@ -473,7 +473,7 @@ add_action( 'wp_footer', function () {
 
 /**
  * Duo: Rank Math's productschema toont anders de laagste kindprijs (8,95) terwijl
- * de pagina de somprijs 17,90 laat zien. Zet de schema-prijs gelijk aan wat de
+ * de pagina de somprijs (setprijs) laat zien. Zet de schema-prijs gelijk aan wat de
  * klant echt betaalt (dynamisch berekend, zelfde som als de prijsweergave).
  */
 add_filter( 'rank_math/snippet/rich_snippet_product_entity', function ( $entity ) {
@@ -652,7 +652,15 @@ function sim_promo_reconcile() {
 	} elseif ( $free_key && $free_qty !== $target ) {
 		WC()->cart->set_quantity( $free_key, $target, true );
 	} elseif ( ! $free_key && $target > 0 ) {
+		// Geen Meta-AddToCart voor het gratis flesje (inc/meting.php).
+		$fb_atc = function_exists( 'sim_fb_atc_callback' ) ? sim_fb_atc_callback() : null;
+		if ( $fb_atc ) {
+			remove_action( 'woocommerce_add_to_cart', $fb_atc, 40 );
+		}
 		WC()->cart->add_to_cart( $ids['apple'], $target, 0, array(), array( 'sim_gratis' => true ) );
+		if ( $fb_atc ) {
+			add_action( 'woocommerce_add_to_cart', $fb_atc, 40, 4 );
+		}
 	}
 	$busy = false;
 }
@@ -757,11 +765,11 @@ add_action( 'template_redirect', function () {
 			$v    = wc_get_product( $ids['vanilla'] );
 			$a    = wc_get_product( $ids['apple'] );
 			$som  = ( $v && $a ) ? (float) wc_get_price_to_display( $v ) + (float) wc_get_price_to_display( $a ) : 0.0;
-			$gratis_vanaf = defined( 'SIM_GRATIS_VERZENDING_VANAF' ) ? (float) SIM_GRATIS_VERZENDING_VANAF : 17.90;
+			$gratis_vanaf = (float) SIM_GRATIS_VERZENDING_VANAF;
 			// Deze melding blijft bovenaan de kassa staan, ook als de klant daar naar België wisselt
 			// (audit 28 okt). Daarom altijd het land erbij, en naar België het tarief in plaats van 'gratis'.
 			if ( 'NL' !== sim_klant_land() ) {
-				$verzending = '. Verzending naar België: € 7,95';
+				$verzending = '. Verzending naar België: ' . wp_strip_all_tags( wc_price( SIM_VERZENDKOSTEN_BE ) );
 			} elseif ( round( $som, 2 ) >= round( $gratis_vanaf, 2 ) ) {
 				$verzending = ', met gratis verzending in Nederland';
 			} else {
@@ -843,17 +851,17 @@ add_action( 'woocommerce_before_cart', function () {
 } );
 
 function sim_verzend_voortgang() {
-	$drempel = 17.90;
+	$drempel = (float) SIM_GRATIS_VERZENDING_VANAF; // in NL sinds 11 nov altijd gratis (drempel 0)
 	$sub = (float) WC()->cart->get_displayed_subtotal(); // drempel telt VOOR korting, net als de verzendinstelling
 	if ( $sub <= 0 ) {
 		return;
 	}
 	if ( 'NL' !== sim_klant_land() ) {
-		echo '<div class="ship-progress"><span class="sp-label">Verzending naar België: &euro;&nbsp;7,95. Gratis verzending geldt in Nederland.</span></div>';
+		printf( '<div class="ship-progress"><span class="sp-label">Verzending naar België: %s. Gratis verzending geldt in Nederland.</span></div>', wp_kses_post( wc_price( SIM_VERZENDKOSTEN_BE ) ) );
 		return;
 	}
 	if ( $sub >= $drempel ) {
-		echo '<div class="ship-progress is-vrij"><span class="sp-label">Gratis verzending geregeld.</span><span class="sp-bar"><span class="sp-fill" style="width:100%"></span></span></div>';
+		echo '<div class="ship-progress is-vrij"><span class="sp-label">Gratis verzending in Nederland.</span><span class="sp-bar"><span class="sp-fill" style="width:100%"></span></span></div>';
 	} else {
 		$rest = $drempel - $sub;
 		$pct  = max( 8, min( 96, round( $sub / $drempel * 100 ) ) );

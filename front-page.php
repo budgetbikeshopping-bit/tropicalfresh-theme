@@ -37,7 +37,7 @@ $sim_promo = function_exists( 'sim_promo_active' ) && sim_promo_active();
  * als de gratis fles ook echt mee kan: sim_promo_reconcile() begrenst die op de
  * Apple-voorraad, dus bij beheerde voorraad moeten er minstens 2 Apples zijn.
  */
-$sim_drempel = 17.90; // gratis verzending vanaf; gelijk aan de verzendinstelling en de voortgangsbalk in de winkelwagen
+$sim_drempel = (float) SIM_GRATIS_VERZENDING_VANAF; // in NL sinds 11 nov altijd gratis (drempel 0); zie inc/meting.php
 $sim_set_ok  = $sim_promo && $sim_vanilla && $sim_apple
 	&& ( ! $sim_apple->managing_stock() || (int) $sim_apple->get_stock_quantity() >= 2 );
 $sim_losse   = array();
@@ -98,7 +98,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 <!-- TRUST -->
 <div class="trust">
 	<div class="wrap">
-		<div class="item"><b>Gratis verzending</b><span>in Nederland, vanaf &euro; 17,90</span></div>
+		<div class="item"><b>Gratis verzending</b><span>op elke bestelling in Nederland</span></div>
 		<div class="item"><b>Bezorging</b><span>doorgaans in 2 tot 4 werkdagen</span></div>
 		<div class="item"><b>14 dagen retourrecht</b><span>bedenktijd na ontvangst</span></div>
 		<div class="item"><b>Vlekvrij getest</b><span>op leer, stof en kunststof</span></div>
@@ -324,7 +324,7 @@ $sim_gelijk     = 1 === count( array_unique( array_map( fn( $x ) => (int) round(
 			<?php endif; ?>
 			<details class="acc"><summary>Waar spray ik het?</summary><div class="body">Bijvoorbeeld op de matten of onder de stoel. Elke geur is vlekvrij getest op leer, stof en kunststof.</div></details>
 			<details class="acc"><summary>Hoe lang blijft de geur hangen?</summary><div class="body">Tot twee dagen geur per spraybeurt. Daarna spray je gewoon opnieuw.</div></details>
-			<details class="acc"><summary>Hoe snel wordt mijn bestelling verzonden?</summary><div class="body">Je bestelling wordt doorgaans binnen 2 tot 4 werkdagen bezorgd, overal in Nederland. Vanaf &euro; 17,90 is de verzending gratis; daaronder betaal je &euro; 4,95 verzendkosten.</div></details>
+			<details class="acc"><summary>Hoe snel wordt mijn bestelling verzonden?</summary><div class="body">Je bestelling wordt doorgaans binnen 2 tot 4 werkdagen bezorgd, overal in Nederland. De verzending is in Nederland altijd gratis. Naar België betaal je <?php echo wp_kses_post( wc_price( SIM_VERZENDKOSTEN_BE ) ); ?>.</div></details>
 			<details class="acc"><summary>Wat als een geur niet bij mij past?</summary><div class="body">Je hebt 14 dagen retourrecht na ontvangst. Je mag een flesje uitproberen zoals in een winkel; is het meer gebruikt dan nodig om het te beoordelen, dan rekenen we de waardevermindering. Aanmelden kan via onze retourpagina.</div></details>
 		</div>
 	</div>

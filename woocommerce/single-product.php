@@ -22,12 +22,11 @@ while ( have_posts() ) :
 	$sim_is_duo = 'tropical-fresh-duo' === $product->get_slug();
 
 	/*
-	 * Verzendbedragen: dezelfde waarden als de verzendinstelling in WooCommerce
-	 * (gratis vanaf 17,90, daaronder 4,95). Eén plek in dit template, zodat alle
-	 * teksten op de productpagina hetzelfde zeggen.
+	 * Verzendbedragen: dezelfde waarden als de verzendinstelling in WooCommerce, centraal
+	 * in inc/meting.php (sinds 11 nov in NL altijd gratis: drempel 0).
 	 */
-	$sim_gratis_vanaf  = (float) apply_filters( 'sim_gratis_verzending_vanaf', 17.90 );
-	$sim_verzendkosten = (float) apply_filters( 'sim_verzendkosten', 4.95 );
+	$sim_gratis_vanaf  = (float) apply_filters( 'sim_gratis_verzending_vanaf', SIM_GRATIS_VERZENDING_VANAF );
+	$sim_verzendkosten = (float) apply_filters( 'sim_verzendkosten', SIM_VERZENDKOSTEN );
 
 	/*
 	 * 2+1 set: Creamy Vanilla + Juicy Green Apple, de extra Juicy Green Apple komt
@@ -66,11 +65,7 @@ while ( have_posts() ) :
 	$sim_is_set = isset( $sim_inhoud_map[ $product->get_slug() ] );
 	$sim_inhoud = $sim_inhoud_map[ $product->get_slug() ] ?? '60 ml';
 
-	$sim_verzend_regel = sprintf(
-		'Gratis verzending in Nederland vanaf %s, daaronder %s. België: € 7,95',
-		wc_price( $sim_gratis_vanaf ),
-		wc_price( $sim_verzendkosten )
-	);
+	$sim_verzend_regel = sprintf( 'Gratis verzending in heel Nederland. België: %s', wc_price( SIM_VERZENDKOSTEN_BE ) );
 	?>
 
 	<?php do_action( 'woocommerce_before_single_product' ); // notices ?>
@@ -110,13 +105,14 @@ while ( have_posts() ) :
 				Autoparfum &middot; <?php echo $sim_is_set ? $sim_inhoud : '60 ml spray'; // phpcs:ignore ?> &middot;
 				<?php echo $product->is_in_stock() ? 'Op voorraad' : 'Tijdelijk uitverkocht'; ?>
 			</span>
-			<h1><?php echo esc_html( $sim_short ); ?></h1>
+			<?php // Duo: korte kop zodat prijs en knop op mobiel in het eerste scherm staan (21 van 24 advertentiebezoekers vertrokken hier, 11 nov). ?>
+			<h1><?php echo esc_html( ( $sim_is_duo && $sim_set_ok ) ? '2+1 set autoparfum' : $sim_short ); ?></h1>
 			<div class="price-row">
 				<span class="price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
-				<span class="price-note">incl. btw</span>
+				<span class="price-note">incl. btw, gratis verzending in NL</span>
 			</div>
 			<?php if ( $sim_is_duo && $sim_set_ok ) : ?>
-				<p class="duo-uitleg"><b>2+1 set:</b> 3 flesjes van 60 ml, je betaalt er 2<?php echo $sim_set_gratis_verzending ? ', met gratis verzending in Nederland' : ''; ?>.</p>
+				<p class="duo-uitleg"><b>Je betaalt 2, je krijgt 3:</b> 1&times; Creamy Vanilla en 2&times; Juicy Green Apple van 60 ml<?php echo $sim_set_gratis_verzending ? ', gratis verzonden in Nederland' : ''; ?>.</p>
 				<?php
 				// Waarde-anker: wat dezelfde drie flesjes los kosten (Vanilla + 2x Apple, eigen losse prijzen),
 				// geen doorgestreepte van-prijs.
@@ -161,7 +157,7 @@ while ( have_posts() ) :
 						<div class="keuze is-set">
 							<p class="keuze-kop"><b><span class="set-tag">2+1 set</span> 3 flesjes</b><span><?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?><?php echo $sim_set_gratis_verzending ? ' &middot; gratis verzending in NL' : ''; ?></span></p>
 							<p class="set-inhoud"><?php echo esc_html( $sim_set_inhoud ); ?></p>
-							<a class="btn btn-primary set-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span>3 flesjes toevoegen &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
+							<a class="btn btn-primary set-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span>3 flesjes bestellen &middot; <?php echo wp_kses_post( wc_price( $sim_set_prijs ) ); ?></span></a>
 						</div>
 					</div>
 				<?php else : ?>
@@ -177,7 +173,7 @@ while ( have_posts() ) :
 							<?php endif; ?>
 						</div>
 						<?php // Aantal en prijs alleen in de knop als de 2+1 echt geleverd kan worden. ?>
-						<a class="btn btn-primary duo-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span><?php echo $sim_set_ok ? '3 flesjes toevoegen &middot; ' . wp_kses_post( wc_price( $sim_set_prijs ) ) : 'Voeg de complete set toe'; // phpcs:ignore ?></span></a>
+						<a class="btn btn-primary duo-add" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>"><span><?php echo $sim_set_ok ? '3 flesjes bestellen &middot; ' . wp_kses_post( wc_price( $sim_set_prijs ) ) : 'Voeg de complete set toe'; // phpcs:ignore ?></span></a>
 						<?php if ( $sim_set_ok ) : ?>
 							<p class="duo-set-note">Vaste combi-set. Het gratis flesje verschijnt automatisch in je winkelwagen.</p>
 						<?php endif; ?>
@@ -335,13 +331,19 @@ while ( have_posts() ) :
 	<div class="stickybuy">
 		<div><span class="t"><?php echo esc_html( ( $sim_is_duo && $sim_set_ok ) ? '2+1 set, 3 flesjes' : $sim_short ); ?></span><span class="p price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span></div>
 		<?php if ( $sim_is_duo ) : ?>
-			<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>">Toevoegen</a>
+			<a class="btn btn-primary" rel="nofollow" href="<?php echo esc_url( $sim_set_url ); ?>">Bestellen</a>
 		<?php else : ?>
 			<a class="btn btn-primary" rel="nofollow" data-sim-koop="" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>">Toevoegen</a>
 		<?php endif; ?>
 	</div>
 	<?php endif; ?>
 	<?php endif; ?>
+
+	<?php
+	// Standaard-WooCommerce-hook die dit template eerder oversloeg: hieraan hangt de Meta-plugin
+	// ViewContent (pixel + CAPI met hetzelfde event_id). Voor de Duo zet inc/meting.php de setprijs als waarde.
+	do_action( 'woocommerce_after_single_product' );
+	?>
 
 	<?php
 	// Echte productfoto's per geur (eigen opnames van de flesjes, vrijgesteld op een studio-
@@ -374,6 +376,8 @@ while ( have_posts() ) :
 	</section>
 	<?php endif; ?>
 
+	<?php // Niet op de set-pagina: daar landen de advertenties en leiden losse flesjes alleen af van de set. ?>
+	<?php if ( ! $sim_is_duo ) : ?>
 	<section class="others">
 		<div class="wrap">
 			<div class="section-head">
@@ -396,6 +400,7 @@ while ( have_posts() ) :
 			<?php endif; ?>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<?php
 endwhile;

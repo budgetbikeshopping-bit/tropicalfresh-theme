@@ -17,9 +17,9 @@ defined( 'ABSPATH' ) || exit;
 
 /* ---------- algemeen ---------- */
 
-/** Drempel voor gratis verzending (incl. btw); volgt een centrale constante als die bestaat. */
+/** Drempel voor gratis verzending in NL (incl. btw); de centrale constante staat in inc/meting.php. */
 function sim_verzend_drempel() {
-	return defined( 'SIM_GRATIS_VANAF' ) ? (float) SIM_GRATIS_VANAF : 17.90;
+	return (float) SIM_GRATIS_VERZENDING_VANAF;
 }
 
 /** Bedrijfsgegevens voor onder aan klantmails. */
@@ -313,6 +313,10 @@ function sim_nieuwsbrief_blok( $variant = 'footer' ) {
 	}
 	if ( 'artikel' === $variant ) {
 		$GLOBALS['sim_nl_artikel_getoond'] = true;
+	}
+	// Niet op de set-pagina: de code geldt niet voor de set en leidt de advertentiebezoeker af.
+	if ( 'footer' === $variant && function_exists( 'is_product' ) && is_product() && 'tropical-fresh-duo' === get_post_field( 'post_name', get_queried_object_id() ) ) {
+		return '';
 	}
 	$sub = 'Laat je e-mailadres achter en je ontvangt de code per mail. Geldt voor losse flesjes, niet op de 2+1 set. Daarna af en toe nieuws over onze geuren en aanbiedingen.';
 	ob_start();
