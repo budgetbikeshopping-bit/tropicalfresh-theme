@@ -122,9 +122,10 @@ add_action( 'sim_sint_portie', function () {
 	$sjabloon = (string) file_get_contents( get_template_directory() . '/assets/mail/sint-nov26.html' );
 	$afgemeld = array_map( 'strtolower', (array) get_option( 'sim_afmeldingen', array() ) );
 	$tekst    = '';
-	// Envelope-afzender op het eigen domein (SPF en DKIM lijnen dan uit op tropicalfresh.nl) en een tekstversie.
+	// Tekstversie naast de HTML. Geen eigen envelope-afzender: met Sender info@ kwam testmail 2 (11 nov)
+	// nooit aan. De server ondertekent nu als s691.lon1.mysecurecloudhost.com, dus DMARC faalt (p=none):
+	// Gmail levert in de inbox (testmail 3), Microsoft is strenger. Zie de Microsoft-rem hieronder.
 	$mailer_instellen = function ( $mailer ) use ( &$tekst ) {
-		$mailer->Sender  = 'info@tropicalfresh.nl';
 		$mailer->AltBody = $tekst;
 	};
 	add_action( 'phpmailer_init', $mailer_instellen );
@@ -135,7 +136,14 @@ add_action( 'sim_sint_portie', function () {
 		if ( ! $wachtrij ) {
 			break;
 		}
-		$aan = strtolower( trim( (string) array_shift( $wachtrij ) ) );
+		$aan = strtolower( trim( (string) $wachtrij[0] ) );
+		// Microsoft-rem: hotmail/live/outlook/msn pas als de ondertekening op tropicalfresh.nl klopt
+		// (optie sim_sint_ms_ok), anders belanden ze vooral in de ongewenste mail.
+		if ( preg_match( '/@(hotmail|live|outlook|msn)\./', $aan ) && ! get_option( 'sim_sint_ms_ok' ) ) {
+			set_transient( 'sim_sint_status', 'wacht op DKIM voor Microsoft-adressen', HOUR_IN_SECONDS );
+			break;
+		}
+		array_shift( $wachtrij );
 		update_option( 'sim_sint_wachtrij', $wachtrij, false ); // eerst uit de wachtrij, dan pas versturen
 		if ( ! is_email( $aan ) || in_array( $aan, $afgemeld, true ) ) {
 			continue;
