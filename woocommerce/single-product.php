@@ -116,8 +116,9 @@ while ( have_posts() ) :
 				<?php
 				// Waarde-anker: wat dezelfde drie flesjes los kosten (Vanilla + 2x Apple, eigen losse prijzen),
 				// geen doorgestreepte van-prijs.
-				if ( $sim_set_ok && $sim_set_a ) :
-					$sim_los_drie = $sim_set_prijs + (float) wc_get_price_to_display( $sim_set_a );
+				if ( $sim_set_ok && $sim_set_v && $sim_set_a ) :
+					// Vanilla + 2x Apple tegen de losse prijs (niet de setprijs + 1 flesje: de set heeft een vaste prijs).
+					$sim_los_drie = (float) wc_get_price_to_display( $sim_set_v ) + 2 * (float) wc_get_price_to_display( $sim_set_a );
 					?>
 				<p class="duo-anker">Los gekocht kosten deze drie flesjes <?php echo wp_kses_post( wc_price( $sim_los_drie ) ); ?>. In de set betaal je <?php echo wp_kses_post( wc_price( $sim_set_prijs / 3 ) ); ?> per flesje.</p>
 				<?php endif; ?>
