@@ -1008,3 +1008,9 @@ a.added_to_cart.wc-forward {
 .sim-snel-afrekenen .button.checkout-button {
   width: 100%; justify-content: center; background: var(--chloro-deep); border-color: var(--chloro-deep); color: var(--mineral); min-height: 50px;
 }
+/* controle 12 nov: zoekveld van de landkeuze ook 16px (geen iOS-zoom), afrekenknop in de wagen
+   gecentreerd, bestelknop met bedrag op een regel waar het past, en 'bezig' na de eerste tik. */
+.select2-container .select2-search__field { font-size: 16px; }
+.sim-snel-afrekenen .button.checkout-button { display: flex; align-items: center; }
+#payment .place-order #place_order { letter-spacing: 0.06em; }
+.pdp form.cart .single_add_to_cart_button.is-bezig { opacity: 0.6; pointer-events: none; }

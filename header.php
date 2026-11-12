@@ -26,7 +26,12 @@
 		</nav>
 		<div class="head-tools">
 			<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="hide-m">Account</a>
-			<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="cart-btn">Tas<span class="count sim-cart-count"><?php echo esc_html( WC()->cart ? WC()->cart->get_cart_contents_count() : 0 ); ?></span></a>
+			<a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="cart-btn">Tas<span class="count sim-cart-count"><?php
+				// Alleen op winkelwagen en afrekenen (nooit gecachet) het echte aantal. Elders komt de pagina uit
+				// de LiteSpeed-cache voor iedereen: daar stond anders de tas van een eerdere bezoeker (12 nov,
+				// 'Tas 3' op home). Het script in functions.php vult daar het echte aantal in.
+				echo esc_html( ( WC()->cart && ( is_cart() || is_checkout() ) ) ? WC()->cart->get_cart_contents_count() : 0 );
+				?></span></a>
 			<button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobnav">Menu</button>
 		</div>
 	</div>

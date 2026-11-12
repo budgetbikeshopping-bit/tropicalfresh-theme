@@ -147,6 +147,24 @@
     }
   }
 
+  /* dubbel tikken op 'Bestellen' voegde twee flesjes toe (12 nov): sinds de knop direct naar
+     afrekenen gaat, valt de winkelwagen als controlestap weg. Een tweede verzending negeren we
+     zolang de eerste loopt. Niet 'disabled' zetten: dan gaat de knopwaarde (add-to-cart) niet mee.
+     Na 'terug' (bfcache) staat de knop weer open. */
+  var koopForm = document.querySelector(".pdp form.cart");
+  if (koopForm) {
+    var koopBtn = koopForm.querySelector(".single_add_to_cart_button");
+    koopForm.addEventListener("submit", function (ev) {
+      if (koopForm.getAttribute("data-bezig")) { ev.preventDefault(); return; }
+      koopForm.setAttribute("data-bezig", "1");
+      if (koopBtn) koopBtn.classList.add("is-bezig");
+    });
+    window.addEventListener("pageshow", function () {
+      koopForm.removeAttribute("data-bezig");
+      if (koopBtn) koopBtn.classList.remove("is-bezig");
+    });
+  }
+
   /* losse knop in de stickybalk: via het echte koopformulier (POST) toevoegen, zodat
      herladen niet ongemerkt nog een flesje toevoegt. Zonder JS blijft de link werken. */
   var stickyLos = document.querySelector(".stickybuy [data-sim-koop]");

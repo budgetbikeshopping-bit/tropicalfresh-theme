@@ -48,20 +48,61 @@ add_filter( 'woocommerce_product_single_add_to_cart_text', function ( $tekst, $p
 	return ( $product instanceof WC_Product && $product->is_type( 'simple' ) ) ? 'Bestellen' : $tekst;
 }, 20, 2 );
 
-/** Korte bevestiging bovenaan afrekenen, zonder knop naar de winkelwagen. */
+/** Aantal gratis 2+1-flesjes in de winkelwagen (de regels die sim_promo_reconcile toevoegt). */
+function sim_kassa_gratis_aantal() {
+	$n = 0;
+	if ( function_exists( 'WC' ) && WC()->cart ) {
+		foreach ( WC()->cart->get_cart() as $sim_regel ) {
+			if ( ! empty( $sim_regel['sim_gratis'] ) ) {
+				$n += (int) $sim_regel['quantity'];
+			}
+		}
+	}
+	return $n;
+}
+
+/** Zin die bevestigt dat de 2+1 compleet is; het bedrag komt live uit sim_duo_setprijs(). */
+function sim_kassa_set_compleet_tekst() {
+	$sets = sim_kassa_gratis_aantal();
+	if ( $sets < 1 || ! function_exists( 'sim_duo_setprijs' ) ) {
+		return '';
+	}
+	$prijs = html_entity_decode( wp_strip_all_tags( wc_price( sim_duo_setprijs() ) ), ENT_QUOTES, 'UTF-8' );
+	return 1 === $sets
+		? sprintf( 'Je 2+1 set is compleet: 3 flesjes voor %s, de gratis Juicy Green Apple zit erbij.', $prijs )
+		: sprintf( 'Je %d sets van 2+1 zijn compleet: de %d gratis Juicy Green Apples zitten erbij.', $sets, $sets );
+}
+
+/**
+ * Korte bevestiging bovenaan afrekenen, zonder knop naar de winkelwagen. Alleen als er echt wordt
+ * doorgestuurd (geen foutmelding in de sessie); anders blijft de standaardmelding met knop staan.
+ */
 add_filter( 'wc_add_to_cart_message_html', function ( $message, $products = array() ) {
-	if ( ! sim_kassa_direct_request() ) {
+	if ( ! sim_kassa_direct_request() || wc_notice_count( 'error' ) > 0 ) {
 		return $message;
+	}
+	$in_wagen = array();
+	foreach ( WC()->cart ? WC()->cart->get_cart() : array() as $sim_regel ) {
+		if ( empty( $sim_regel['sim_gratis'] ) ) {
+			$sim_pid              = (int) $sim_regel['product_id'];
+			$in_wagen[ $sim_pid ] = ( $in_wagen[ $sim_pid ] ?? 0 ) + (int) $sim_regel['quantity'];
+		}
 	}
 	$namen = array();
 	foreach ( (array) $products as $sim_id => $sim_aantal ) {
 		$sim_p = wc_get_product( $sim_id );
 		if ( $sim_p ) {
 			$naam    = function_exists( 'sim_short_name' ) ? sim_short_name( $sim_p ) : $sim_p->get_name();
-			$namen[] = ( (int) $sim_aantal > 1 ? (int) $sim_aantal . '× ' : '' ) . $naam;
+			$totaal  = max( (int) $sim_aantal, (int) ( $in_wagen[ (int) $sim_id ] ?? 0 ) );
+			$namen[] = ( $totaal > 1 ? $totaal . '× ' : '' ) . $naam;
 		}
 	}
-	return $namen ? esc_html( implode( ', ', $namen ) . ' zit in je bestelling.' ) : $message;
+	if ( ! $namen ) {
+		return $message;
+	}
+	$tekst = implode( ', ', $namen ) . ' zit in je bestelling.';
+	$set   = sim_kassa_set_compleet_tekst();
+	return esc_html( $set ? $tekst . ' ' . $set : $tekst );
 }, 20, 2 );
 
 /*
@@ -77,10 +118,25 @@ function sim_kassa_fb_uitstel() {
 	if ( $klaar || ! class_exists( 'WC_Facebookcommerce_Utils' ) || ! is_callable( array( 'WC_Facebookcommerce_Utils', 'save_deferred_events' ) ) ) {
 		return;
 	}
+	// Alleen een klik vanaf de eigen site: bots volgen toevoeglinks zonder referrer en lieten anders per
+	// sessie een transient achter die nooit gelezen wordt (zelfde regel als het CAPI-botfilter in meting.php).
+	$eigen = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+	$van   = isset( $_SERVER['HTTP_REFERER'] ) ? (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), PHP_URL_HOST ) : '';
+	if ( '' === $van || ( $van !== $eigen && substr( $van, -strlen( '.' . $eigen ) ) !== '.' . $eigen ) ) {
+		return;
+	}
 	$klaar = true;
-	add_filter( 'pre_option_woocommerce_cart_redirect_after_add', function () {
+	// De optie geldt alleen rond de Meta-callback (woocommerce_add_to_cart, prioriteit 40), niet voor de
+	// hele request: anders sprong op een pagina met een mislukte toevoeging elke AJAX-knop naar afrekenen.
+	$ja = function () {
 		return 'yes';
-	} );
+	};
+	add_action( 'woocommerce_add_to_cart', function () use ( $ja ) {
+		add_filter( 'pre_option_woocommerce_cart_redirect_after_add', $ja );
+	}, 39 );
+	add_action( 'woocommerce_add_to_cart', function () use ( $ja ) {
+		remove_filter( 'pre_option_woocommerce_cart_redirect_after_add', $ja );
+	}, 41 );
 	add_action( 'shutdown', array( 'WC_Facebookcommerce_Utils', 'save_deferred_events' ), 5 );
 }
 add_action( 'wp_loaded', function () {
@@ -138,7 +194,7 @@ add_filter( 'gettext', function ( $vertaling, $tekst, $domein ) {
 	return $vertaling;
 }, 20, 3 );
 
-/** Privacytekst boven de knop: van vier regels naar een korte zin met link. */
+/** Privacytekst boven de knop: van vier regels naar een korte zin met link (staat nu hier, niet meer in Instellingen > Accounts en privacy). */
 add_filter( 'woocommerce_get_privacy_policy_text', function ( $tekst, $type = '' ) {
 	return 'checkout' === $type ? 'Hoe we met je gegevens omgaan, lees je in ons [privacy_policy].' : $tekst;
 }, 10, 2 );
@@ -158,16 +214,16 @@ add_action( 'wp_loaded', function () {
  * (gemeten 12 nov: 'Teststraat 1' gaf vijf adressen elders in het land). Het automatisch invullen door
  * de browser of iPhone blijft werken, de velden hebben de juiste autocomplete-attributen.
  */
-add_filter( 'pre_option_woocommerce_address_autocomplete_enabled', function () {
-	return 'no';
+add_filter( 'pre_option_woocommerce_address_autocomplete_enabled', function ( $pre ) {
+	return ( is_admin() && ! wp_doing_ajax() ) ? $pre : 'no'; // in wp-admin de echte instelling tonen en bewaren
 } );
 
 /*
  * Apple Pay en Google Pay vroegen verplicht een telefoonnummer omdat de instelling op 'verplicht' stond,
  * terwijl het gewone formulier het al optioneel had (functions.php). Nu overal optioneel.
  */
-add_filter( 'pre_option_woocommerce_checkout_phone_field', function () {
-	return 'optional';
+add_filter( 'pre_option_woocommerce_checkout_phone_field', function ( $pre ) {
+	return ( is_admin() && ! wp_doing_ajax() ) ? $pre : 'optional'; // in wp-admin de echte instelling tonen en bewaren
 } );
 
 /*

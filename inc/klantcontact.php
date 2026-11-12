@@ -378,6 +378,13 @@ add_action( 'template_redirect', function () {
 	nocache_headers();
 	do_action( 'litespeed_control_set_nocache', 'sim_add voegt toe aan de winkelwagen' );
 	$terug = isset( $_GET['terug'] ) && 'afrekenen' === sanitize_key( wp_unslash( $_GET['terug'] ) );
+	// Op afrekenen staat geen 2+1-blok meer zodra de set compleet is: zeg dan bovenaan dat het gelukt is.
+	if ( $terug && function_exists( 'sim_kassa_set_compleet_tekst' ) ) {
+		$sim_set_tekst = sim_kassa_set_compleet_tekst();
+		if ( $sim_set_tekst ) {
+			wc_add_notice( $sim_set_tekst, 'success' );
+		}
+	}
 	wp_safe_redirect( $terug ? wc_get_checkout_url() : wc_get_cart_url() );
 	exit;
 } );
@@ -409,7 +416,7 @@ function sim_winkelwagen_2plus1( $op_afrekenen = false ) {
 	}
 	if ( $gratis > 0 ) {
 		if ( $op_afrekenen ) {
-			return; // op afrekenen meldt de sim_duo-melding dit al, en de bestelling toont de gratis regel
+			return; // op afrekenen staat hierover al een melding bovenaan (sim_duo, sim_add of het koopformulier)
 		}
 		$txt = 1 === $gratis
 			? 'Je 2+1 set is compleet: de gratis Juicy Green Apple zit erbij.'
@@ -515,7 +522,7 @@ add_filter( 'woocommerce_order_button_text', function () {
 	if ( function_exists( 'WC' ) && WC()->cart && ! WC()->cart->is_empty() ) {
 		$bedrag = trim( html_entity_decode( wp_strip_all_tags( WC()->cart->get_total() ), ENT_QUOTES, 'UTF-8' ) );
 		if ( '' !== $bedrag ) {
-			$tekst .= ' · ' . $bedrag;
+			$tekst .= "\u{00A0}·\u{00A0}" . $bedrag; // vaste spaties: 'betalen · € 12,45' breekt niet midden in het bedrag
 		}
 	}
 	return $tekst;
@@ -534,6 +541,7 @@ add_filter( 'gettext', function ( $vertaling, $tekst, $domein ) {
 		'Coupon:'                                           => 'Kortingscode:',
 		'Coupon code'                                       => 'Kortingscode',
 		'Apply coupon'                                      => 'Code toepassen',
+		'Coupon "%s" cannot be applied because it does not exist.' => 'Kortingscode "%s" bestaat niet.',
 	);
 	return $sim_map[ $tekst ] ?? $vertaling;
 }, 10, 3 );
