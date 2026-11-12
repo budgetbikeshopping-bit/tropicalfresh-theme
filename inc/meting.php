@@ -20,7 +20,8 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'SIM_GRATIS_VERZENDING_VANAF' ) ) {
 	// Drempel voor gratis verzending in NL; gelijk houden met de WooCommerce-verzendzone en Merchant Center.
-	// Sinds 11 nov 2026 verzenden we in Nederland altijd gratis (besluit eigenaar), dus 0.
+	// Eigenaarsregel TF-P01 (bevestigd 12 nov 2026, EIGENAARSREGELS-TROPICALFRESH.md): in Nederland altijd
+	// gratis, dus 0. Niet wijzigen zonder nieuw akkoord van de eigenaar.
 	define( 'SIM_GRATIS_VERZENDING_VANAF', 0.0 );
 }
 if ( ! defined( 'SIM_VERZENDKOSTEN' ) ) {
@@ -28,9 +29,10 @@ if ( ! defined( 'SIM_VERZENDKOSTEN' ) ) {
 	define( 'SIM_VERZENDKOSTEN', 0.0 );
 }
 if ( ! defined( 'SIM_SETPRIJS' ) ) {
-	// Vaste prijs van de 2+1 set (3 flesjes, incl. btw). Besluit eigenaar 11 nov: het losse flesje gaat
-	// omhoog (12,45 incl. gratis verzending), de set blijft 19,90. In de winkelwagen zorgt de setkorting
-	// in functions.php dat Vanilla + Apple + gratis Apple samen precies deze prijs kosten.
+	// Vaste prijs van de 2+1 set (3 flesjes, incl. btw). Eigenaarsregel TF-P01 (bevestigd 12 nov 2026,
+	// EIGENAARSREGELS-TROPICALFRESH.md): los flesje 12,45 incl. gratis verzending, de set 19,90. Niet wijzigen
+	// zonder nieuw akkoord van de eigenaar. In de winkelwagen zorgt de setkorting in functions.php dat
+	// Vanilla + Apple + gratis Apple samen precies deze prijs kosten.
 	define( 'SIM_SETPRIJS', 19.90 );
 }
 if ( ! defined( 'SIM_VERZENDKOSTEN_BE' ) ) {
