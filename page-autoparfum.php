@@ -134,6 +134,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Hemelbekleding die rook en vocht vasthoudt:</strong> warme lucht stijgt op en het schuim in het dak werkt als een spons. Lees hoe je de <a href="<?php echo esc_url( home_url( '/autoparfum/hemelbekleding-schoonmaken-geur/' ) ); ?>">hemelbekleding schoonmaakt zonder dat de lijm loslaat</a>.</li>
 				<li><strong>Natte jassen, sneeuw en strooizout in de winter:</strong> vocht dat via schoenen en kleding binnenkomt blijft bij gesloten ramen in matten en stof zitten, en zout houdt het vast. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/winter-auto-strooizout-natte-kleding-geur/' ) ); ?>">zoutvlekken weghaalt en de auto in de winter fris houdt</a>.</li>
 				<li><strong>Scherpe of zoete lucht na een schoonmaakbeurt:</strong> reinigerresten en vocht in stof, hemel en roosters dampen bij warmte opnieuw uit. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/auto-ruikt-chemisch-na-schoonmaken/' ) ); ?>">reinigerslucht na het schoonmaken</a> kwijtraakt.</li>
+				<li><strong>Zure lucht uit de gordels:</strong> zweet en huidvet trekken in de geweven band en rollen mee de automaat in, waar het warm en donker is. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autogordels-schoonmaken-geur/' ) ); ?>">autogordels veilig schoonmaakt</a> zonder het weefsel te verzwakken.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -224,6 +225,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/ozonbehandeling-auto-geur/' ) ); ?>">Ozonbehandeling voor de auto: wat het doet, wanneer het zinvol is en wat je daarna doet</a>. Ozon breekt ingesleten rook- en schimmelgeur af, maar alleen in een auto die al schoon en droog is; daarna luchten, het interieurfilter vervangen en pas na een paar dagen een lichte geur.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/interieurfilter-vervangen-muffe-geur/' ) ); ?>">Interieurfilter vervangen: zelf doen tegen muffe geur uit de ventilatie</a>. Waar het filter zit, hoe je een verzadigd filter herkent, in vijf stappen zelf wisselen, hoe vaak het moet en wat een nieuw filter niet oplost.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/auto-ruikt-chemisch-na-schoonmaken/' ) ); ?>">Auto ruikt chemisch na schoonmaken: zo verdwijnt de reinigerslucht</a>. Waar de scherpe of zoete lucht vandaan komt, residu naspoelen, alles drogen, de ventilatie doorblazen en pas daarna een lichte spray.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autogordels-schoonmaken-geur/' ) ); ?>">Autogordels schoonmaken: geur en vuil uit veiligheidsgordels halen</a>. Waarom de band gaat ruiken, wat je nooit mag gebruiken, reinigen met een mild sopje, naspoelen, volledig laten drogen en de automaat schoon laten oprollen.</li>
 			</ul>
 		</div>
 	</div>
