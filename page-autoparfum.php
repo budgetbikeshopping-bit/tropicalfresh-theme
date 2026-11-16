@@ -136,6 +136,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Scherpe of zoete lucht na een schoonmaakbeurt:</strong> reinigerresten en vocht in stof, hemel en roosters dampen bij warmte opnieuw uit. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/auto-ruikt-chemisch-na-schoonmaken/' ) ); ?>">reinigerslucht na het schoonmaken</a> kwijtraakt.</li>
 				<li><strong>Zure lucht uit de gordels:</strong> zweet en huidvet trekken in de geweven band en rollen mee de automaat in, waar het warm en donker is. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autogordels-schoonmaken-geur/' ) ); ?>">autogordels veilig schoonmaakt</a> zonder het weefsel te verzwakken.</li>
 				<li><strong>Lucht van rotte eieren:</strong> soms komt die uit de techniek, zoals de katalysator of de accu, soms van iets bedorvens onder een stoel of van stilstaand water. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/rotte-eieren-lucht-auto-zwavelgeur/' ) ); ?>">de bron van een zwavelgeur opspoort</a> en wanneer de garage aan zet is.</li>
+				<li><strong>Brandlucht of schroeilucht:</strong> verbrand stof op de verwarming is onschuldig, een hete koppeling, rem of stekker niet altijd. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/brandlucht-in-auto-schroeilucht-oorzaken/' ) ); ?>">de soorten brandlucht uit elkaar houdt</a> en wanneer je direct stopt.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -228,6 +229,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/auto-ruikt-chemisch-na-schoonmaken/' ) ); ?>">Auto ruikt chemisch na schoonmaken: zo verdwijnt de reinigerslucht</a>. Waar de scherpe of zoete lucht vandaan komt, residu naspoelen, alles drogen, de ventilatie doorblazen en pas daarna een lichte spray.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autogordels-schoonmaken-geur/' ) ); ?>">Autogordels schoonmaken: geur en vuil uit veiligheidsgordels halen</a>. Waarom de band gaat ruiken, wat je nooit mag gebruiken, reinigen met een mild sopje, naspoelen, volledig laten drogen en de automaat schoon laten oprollen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/rotte-eieren-lucht-auto-zwavelgeur/' ) ); ?>">Rotte eierenlucht in de auto: oorzaken van zwavelgeur en wat je doet</a>. Techniek of interieur onderscheiden, katalysator en accu naar de garage, bedorven resten en stilstaand water opsporen, reinigen, drogen en ventileren.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/brandlucht-in-auto-schroeilucht-oorzaken/' ) ); ?>">Brandlucht in de auto: oorzaken van schroeilucht en wat je doet</a>. Wanneer je direct stopt, zes soorten schroeilucht herkennen, de bron opsporen en de geur daarna uit textiel, hemelbekleding en ventilatie halen.</li>
 			</ul>
 		</div>
 	</div>
