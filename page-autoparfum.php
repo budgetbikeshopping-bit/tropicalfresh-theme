@@ -141,6 +141,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Scherpe urinelucht of rottingsgeur:</strong> in de herfst en winter zoeken muizen een droge plek, vaak bij het interieurfilter of onder de motorkap. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/muizen-in-auto-geur-dode-muis/' ) ); ?>">een nest of dode muis veilig opruimt</a> en de lucht daarna uit het interieur haalt.</li>
 				<li><strong>Plasongelukje van kind of huisdier:</strong> de plek droogt op, maar de lucht komt bij vochtig weer terug. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/urinegeur-uit-auto-halen/' ) ); ?>">urinegeur uit stoel, mat en bekleding haalt</a> met het juiste middel en goed drogen.</li>
 				<li><strong>Vette waas op de ruiten:</strong> de film op de binnenkant van het glas bestaat uit rookresten, uitdamping en vet, dezelfde stoffen die je ruikt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/autoruiten-binnenkant-schoonmaken-waas/' ) ); ?>">de binnenkant van je autoruiten streeploos schoonmaakt</a> en waarom het glas daarna minder snel beslaat.</li>
+				<li><strong>Dof of plakkerig dashboard:</strong> stof en een oude laag cockpitspray houden geur vast en dampen uit zodra de zon erop staat. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/dashboard-schoonmaken-plakkerig-kunststof/' ) ); ?>">het dashboard en plakkerig kunststof schoonmaakt</a> zonder de toplaag te beschadigen.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -238,6 +239,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/muizen-in-auto-geur-dode-muis/' ) ); ?>">Muizen in de auto: geur van een nest of dode muis verwijderen</a>. Sporen herkennen, de plekken waar ze zitten, hygiënisch opruimen, urinelucht uit textiel en ventilatie halen, knaagschade controleren en nieuwe muizen voorkomen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/urinegeur-uit-auto-halen/' ) ); ?>">Urinegeur in de auto: plas van kind of huisdier uit stoel en bekleding halen</a>. Waarom de lucht terugkomt, vocht opnemen, het juiste middel kiezen, werken per materiaal, grondig drogen en oude plekken opsporen.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/autoruiten-binnenkant-schoonmaken-waas/' ) ); ?>">Autoruiten binnenkant schoonmaken: vette waas en aanslag van het glas halen</a>. Waar de film vandaan komt, wat je nodig hebt, streeploos werken in zeven stappen, de onderrand van de voorruit, de achterruit met verwarmingsdraden en getinte folie.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/dashboard-schoonmaken-plakkerig-kunststof/' ) ); ?>">Dashboard schoonmaken: plakkerig kunststof, stof en geur aanpakken</a>. Waarom kunststof dof en kleverig wordt, wat je nodig hebt, het stappenplan, roosters, scherm, stuur en bekerhouders, en wat je doet met plakkerige knoppen.</li>
 			</ul>
 		</div>
 	</div>
