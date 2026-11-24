@@ -81,7 +81,9 @@ function sim_pagina_heeft_cf7() {
 add_action( 'wp_enqueue_scripts', function () {
 	// PDP: de beschrijving is klassieke HTML; zodra er blokken in staan blijft de bibliotheek.
 	$sim_pdp_zonder_blokken = function_exists( 'is_product' ) && is_product() && ! has_blocks( get_queried_object_id() );
-	if ( sim_toont_geen_postinhoud() || $sim_pdp_zonder_blokken ) {
+	// Gidsartikelen onder /autoparfum/ zijn ook klassieke HTML (PSI 24 nov: blokbibliotheek 14 KB, vrijwel ongebruikt, 0,67 s blokkerend).
+	$sim_artikel_zonder_blokken = is_page() && 1674 === (int) wp_get_post_parent_id( get_queried_object_id() ) && ! has_blocks( get_queried_object_id() );
+	if ( sim_toont_geen_postinhoud() || $sim_pdp_zonder_blokken || $sim_artikel_zonder_blokken ) {
 		wp_dequeue_style( 'wp-block-library' );
 	}
 	if ( sim_toont_geen_postinhoud() ) {
