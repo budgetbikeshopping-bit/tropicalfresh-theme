@@ -145,6 +145,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Vislucht na gelekte vis of aas:</strong> visvocht zakt diep in de mat en ruikt bij warmte steeds opnieuw. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/vislucht-in-auto-verwijderen/' ) ); ?>">vislucht uit bekleding en kofferbak haalt</a> en waarom goed drogen de belangrijkste stap is.</li>
 				<li><strong>Bedompte lucht of beslagen ruiten:</strong> wie vergeet de recirculatieknop uit te zetten, blaast steeds dezelfde vochtige lucht rond. Lees <a href="<?php echo esc_url( home_url( '/autoparfum/recirculatie-auto-ventilatie-geur/' ) ); ?>">wanneer je recirculatie gebruikt en wanneer niet</a>, en waarom buitenlucht de standaard is.</li>
 				<li><strong>Vettige lucht rond de bestuurdersplek:</strong> huidvet, zweet en handcrème hopen zich op in de stuurrand en de pook en ruiken zodra het interieur warm wordt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/stuur-schoonmaken-leer-geur/' ) ); ?>">een leren, kunststof of alcantara stuur schoonmaakt</a>, inclusief pook en hendels.</li>
+				<li><strong>Zoetzure lucht naast je stoel:</strong> opgedroogde koffie in de bekerhouder, kruimels in de naden en een vergeten flesje in het armsteunvak gaan gisten zodra het warm wordt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/middenconsole-bekerhouders-schoonmaken-geur/' ) ); ?>">middenconsole en bekerhouders schoonmaakt</a>, inclusief deurvakken en plakkerige resten.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -246,6 +247,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/vislucht-in-auto-verwijderen/' ) ); ?>">Vislucht in de auto verwijderen: bekleding en kofferbak</a>. Waarom vislucht blijft hangen, wat je in de eerste tien minuten doet, het stappenplan met enzymreiniger en drogen, wat je beter niet doet en hoe je het voorkomt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/recirculatie-auto-ventilatie-geur/' ) ); ?>">Recirculatie in de auto: wanneer gebruik je het en wat doet het met geur</a>. Wat de recirculatiestand doet, wanneer hij handig is en wanneer niet, de link met een muffe airco, de automatische stand en praktische vuistregels.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/stuur-schoonmaken-leer-geur/' ) ); ?>">Stuur schoonmaken: vettige laag en geur van leer, kunststof en alcantara halen</a>. Waarom een stuur zo snel vies wordt, welk materiaal je hebt, het stappenplan, pook en hendels, en hoe het stuur langer schoon blijft.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/middenconsole-bekerhouders-schoonmaken-geur/' ) ); ?>">Middenconsole en bekerhouders schoonmaken: plakkerige resten en geur verwijderen</a>. Waarom de console gaat ruiken, wat je nodig hebt, het stappenplan in zeven stappen, vaste bekerhouders, pook, deurvakken en hoe je het netjes houdt.</li>
 			</ul>
 		</div>
 	</div>
