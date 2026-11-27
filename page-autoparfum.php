@@ -146,6 +146,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Bedompte lucht of beslagen ruiten:</strong> wie vergeet de recirculatieknop uit te zetten, blaast steeds dezelfde vochtige lucht rond. Lees <a href="<?php echo esc_url( home_url( '/autoparfum/recirculatie-auto-ventilatie-geur/' ) ); ?>">wanneer je recirculatie gebruikt en wanneer niet</a>, en waarom buitenlucht de standaard is.</li>
 				<li><strong>Vettige lucht rond de bestuurdersplek:</strong> huidvet, zweet en handcrème hopen zich op in de stuurrand en de pook en ruiken zodra het interieur warm wordt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/stuur-schoonmaken-leer-geur/' ) ); ?>">een leren, kunststof of alcantara stuur schoonmaakt</a>, inclusief pook en hendels.</li>
 				<li><strong>Zoetzure lucht naast je stoel:</strong> opgedroogde koffie in de bekerhouder, kruimels in de naden en een vergeten flesje in het armsteunvak gaan gisten zodra het warm wordt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/middenconsole-bekerhouders-schoonmaken-geur/' ) ); ?>">middenconsole en bekerhouders schoonmaakt</a>, inclusief deurvakken en plakkerige resten.</li>
+				<li><strong>Naalden en muffe lucht na de kerstboom:</strong> een echte boom laat naalden, hars en een natte stam achter in de kofferbak, en dat vocht ruikt een week later muf. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kerstboom-vervoeren-auto-naalden-hars/' ) ); ?>">een kerstboom vervoert zonder naalden en hars in je auto</a>, en hoe je daarna alles weer droog en schoon krijgt.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -248,6 +249,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/recirculatie-auto-ventilatie-geur/' ) ); ?>">Recirculatie in de auto: wanneer gebruik je het en wat doet het met geur</a>. Wat de recirculatiestand doet, wanneer hij handig is en wanneer niet, de link met een muffe airco, de automatische stand en praktische vuistregels.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/stuur-schoonmaken-leer-geur/' ) ); ?>">Stuur schoonmaken: vettige laag en geur van leer, kunststof en alcantara halen</a>. Waarom een stuur zo snel vies wordt, welk materiaal je hebt, het stappenplan, pook en hendels, en hoe het stuur langer schoon blijft.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/middenconsole-bekerhouders-schoonmaken-geur/' ) ); ?>">Middenconsole en bekerhouders schoonmaken: plakkerige resten en geur verwijderen</a>. Waarom de console gaat ruiken, wat je nodig hebt, het stappenplan in zeven stappen, vaste bekerhouders, pook, deurvakken en hoe je het netjes houdt.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kerstboom-vervoeren-auto-naalden-hars/' ) ); ?>">Kerstboom in de auto vervoeren: naalden en hars voorkomen</a>. Waarom een boom je interieur vies maakt, hoe je de auto voorbereidt, binnen of op het dak, en hoe je naalden, hars en vocht na afloop verwijdert.</li>
 			</ul>
 		</div>
 	</div>
