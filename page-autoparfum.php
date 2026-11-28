@@ -147,6 +147,7 @@ foreach ( $sim_products as $p ) {
 				<li><strong>Vettige lucht rond de bestuurdersplek:</strong> huidvet, zweet en handcrème hopen zich op in de stuurrand en de pook en ruiken zodra het interieur warm wordt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/stuur-schoonmaken-leer-geur/' ) ); ?>">een leren, kunststof of alcantara stuur schoonmaakt</a>, inclusief pook en hendels.</li>
 				<li><strong>Zoetzure lucht naast je stoel:</strong> opgedroogde koffie in de bekerhouder, kruimels in de naden en een vergeten flesje in het armsteunvak gaan gisten zodra het warm wordt. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/middenconsole-bekerhouders-schoonmaken-geur/' ) ); ?>">middenconsole en bekerhouders schoonmaakt</a>, inclusief deurvakken en plakkerige resten.</li>
 				<li><strong>Naalden en muffe lucht na de kerstboom:</strong> een echte boom laat naalden, hars en een natte stam achter in de kofferbak, en dat vocht ruikt een week later muf. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/kerstboom-vervoeren-auto-naalden-hars/' ) ); ?>">een kerstboom vervoert zonder naalden en hars in je auto</a>, en hoe je daarna alles weer droog en schoon krijgt.</li>
+				<li><strong>Bedompte lucht na de wintersport:</strong> natte skikleding en klamme skischoenen staan uren in een warme, gesloten auto, en thuis ruik je dat in matten en bekleding. Lees hoe je <a href="<?php echo esc_url( home_url( '/autoparfum/wintersport-auto-skikleding-geur/' ) ); ?>">natte skispullen slim vervoert en de auto na de wintersport weer droog krijgt</a>.</li>
 			</ul>
 			<p>Is de auto fris, dan doen een paar sprays op de matten of onder de stoel de rest.</p>
 
@@ -250,6 +251,7 @@ foreach ( $sim_products as $p ) {
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/stuur-schoonmaken-leer-geur/' ) ); ?>">Stuur schoonmaken: vettige laag en geur van leer, kunststof en alcantara halen</a>. Waarom een stuur zo snel vies wordt, welk materiaal je hebt, het stappenplan, pook en hendels, en hoe het stuur langer schoon blijft.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/middenconsole-bekerhouders-schoonmaken-geur/' ) ); ?>">Middenconsole en bekerhouders schoonmaken: plakkerige resten en geur verwijderen</a>. Waarom de console gaat ruiken, wat je nodig hebt, het stappenplan in zeven stappen, vaste bekerhouders, pook, deurvakken en hoe je het netjes houdt.</li>
 				<li><a href="<?php echo esc_url( home_url( '/autoparfum/kerstboom-vervoeren-auto-naalden-hars/' ) ); ?>">Kerstboom in de auto vervoeren: naalden en hars voorkomen</a>. Waarom een boom je interieur vies maakt, hoe je de auto voorbereidt, binnen of op het dak, en hoe je naalden, hars en vocht na afloop verwijdert.</li>
+				<li><a href="<?php echo esc_url( home_url( '/autoparfum/wintersport-auto-skikleding-geur/' ) ); ?>">Wintersport met de auto: skikleding en geur voorkomen</a>. Waarom natte skispullen zo ruiken, de auto klaarmaken voor vertrek, ventileren onderweg, skischoenen en kleding inpakken voor de terugweg en wat je thuis direct doet.</li>
 			</ul>
 		</div>
 	</div>
